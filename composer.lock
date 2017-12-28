@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "eace69a98f5339f44c717da874db5514",
+    "content-hash": "3464ba9b05af746bcdf288513dd2bf5b",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -81,6 +81,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/bestiejs/punycode.js/zipball/38c8d3131a82567bfef18da09f7f4db68c84f8a3",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3",
+                "shasum": null
+            },
+            "type": "bower-asset"
+        },
+        {
+            "name": "bower-asset/vue",
+            "version": "v2.5.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vuejs/vue.git",
+                "reference": "d982e344b39391fe91b6dd91d51b2f0310a45e77"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vuejs/vue/zipball/d982e344b39391fe91b6dd91d51b2f0310a45e77",
+                "reference": "d982e344b39391fe91b6dd91d51b2f0310a45e77",
                 "shasum": null
             },
             "type": "bower-asset"
@@ -625,6 +641,49 @@
                 "yii2"
             ],
             "time": "2017-11-15T09:42:42+00:00"
+        },
+        {
+            "name": "zh/yii2-qiniu-images",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pcyanglei/yii2-qiniu-images.git",
+                "reference": "edf202df78272b007cd090446be65434153ed67b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/pcyanglei/yii2-qiniu-images/edf202df78272b007cd090446be65434153ed67b.zip",
+                "reference": "edf202df78272b007cd090446be65434153ed67b",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/vue": "~2.4",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "zh\\qiniu\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "yanghu",
+                    "email": "127802495@qq.com"
+                }
+            ],
+            "description": "一款直传七牛的yii2图片widget",
+            "keywords": [
+                "images",
+                "yii2",
+                "七牛",
+                "多图"
+            ],
+            "time": "2017-11-28T06:23:04+00:00"
         }
     ],
     "packages-dev": [
@@ -3258,7 +3317,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "zh/yii2-qiniu-images": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
