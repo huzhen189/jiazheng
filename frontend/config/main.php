@@ -7,6 +7,7 @@ $params = array_merge(
 );
 
 return [
+    'language'=>'zh-CN',    //这个配置别漏了，选择中文语言包
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -40,6 +41,7 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            //'suffix' => '.html',    //默认访问.html文件
             'rules' => [
             ],
         ],

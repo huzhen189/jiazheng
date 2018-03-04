@@ -37,10 +37,12 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => '主页', 'url' => ['/site/index']],
-	['label' => '家政公司', 'url' => ['/hm-company/index']],
-	['label' => '七牛测试', 'url' => ['/test-h/index']],
+        ['label' => '省市区', 'url' => ['/region/index']],
+      	['label' => '家政公司', 'url' => ['/yx-company/index']],
+      	['label' => '七牛测试', 'url' => ['/test-h/index']],
     ];
     if (Yii::$app->user->isGuest) {
+        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'

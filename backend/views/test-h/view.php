@@ -31,11 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
 	    [
- 	   	'attribute'=>'img_url',
- 	   	'format' => ['image',['width'=>'60','height'=>'60',]],
- 	   	'value' => function($model){
- 	       		return $model->img_url;
- 	   	}
+   	   	'attribute'=>'img_url',
+   	   	'format' => ['image',['width'=>'60','height'=>'60',]],
+   	   	'value' => function($model){
+   	       		return $model->img_url;
+   	   	}
 	    ],
         ],
     ]) ?>

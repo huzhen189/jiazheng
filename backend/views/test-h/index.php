@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('app', 'Create Test H'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('支付测试', ['testpay'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -27,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
-	    [
+	           [
                 'attribute'=>'img_url',
                 'format' => ['image',['width'=>'30','height'=>'30',]],
                 'value' => function($model){
