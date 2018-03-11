@@ -61,6 +61,11 @@
 	<div id="top_main">
 		<div class="top_main_inner pr">
 			<div class="top_header clearfix">
+				<div class="logo">
+					<a titel="fecshop logo" href="http://localhost/advanced/frontend/web/index.php?r=index/index" style="">
+						<img src="/static/img/logo.jpg">
+					</a>
+				</div>
 				<div class="topSeachForm">
 					<form method="get" name="searchFrom" class="js_topSeachForm" action="https://fecshop.appfront.fancyecommerce.com/cn/catalogsearch/index">
 						<div class="top_seachBox">
@@ -72,9 +77,9 @@
 						</div>
 					</form>
 				</div>
-				<div class="logo">
+				<div class="logo yx_server">
 					<a titel="fecshop logo" href="http://localhost/advanced/frontend/web/index.php?r=index/index" style="">
-						<img src="/static/img/logo.png">
+						<img src="/static/img/yx_server.jpg">
 					</a>
 				</div>
 			</div>
@@ -84,8 +89,8 @@
 	<div class="top_menu"> 
 	   	<nav id="nav"> 
 		    <ul class="clearfix"> 
-		     	<li> 
-		     		<a href="http://localhost/advanced/frontend/web/index.php?r=index/index" class="nav_t">首页</a> 
+		     	<li style="width: 166px;display: flex;justify-content: center;"> 
+		     		<a href="http://localhost/advanced/frontend/web/index.php?r=index/index" class="nav_t">服务类型</a> 
 		     	</li> 
 		     	<li> 
 			     	<a href="http://localhost/advanced/frontend/web/index.php?r=index/index" class="nav_t">保洁</a> 
@@ -319,37 +324,6 @@
 		     			</div>
 		     		</div>
 		     	</li>
-		     	<li> 
-		     		<a href="http://localhost/advanced/frontend/web/index.php?r=index/index" class="nav_t">自定义菜单</a> 
-		      		<div class="sub_menu big_sub_menu clearfix"> 
-		       			<div class="trends_item clearfix"> 
-		        			<dl> 
-		         				<dt>
-		          					<a href="https://fecshop.appfront.fancyecommerce.com/cn/my-custom-menu-2.html">我的自定义菜单2</a>
-		         				</dt>
-		         				<a href="https://fecshop.appfront.fancyecommerce.com/cn/my-custom-menu-2.html"> </a>
-		        			</dl>
-		        			<a href="https://fecshop.appfront.fancyecommerce.com/cn/my-custom-menu-2.html"> </a>
-		        			<dl>
-					         	<a href="https://fecshop.appfront.fancyecommerce.com/cn/my-custom-menu-2.html"> </a>
-					         	<dt>
-		          					<a href="https://fecshop.appfront.fancyecommerce.com/cn/my-custom-menu-2.html"></a>
-		          					<a href="https://fecshop.appfront.fancyecommerce.com/cn/my-custom-menu-2.html">我的自定义菜单3</a>
-		         				</dt>
-		         				<a href="https://fecshop.appfront.fancyecommerce.com/cn/my-custom-menu-2.html"> </a>
-		         				<dd>
-						          	<a href="https://fecshop.appfront.fancyecommerce.com/cn/my-custom-menu-2.html"></a>
-						          	<a href="https://fecshop.appfront.fancyecommerce.com/cn/my-custom-menu-2.html">我的自定义菜单3</a>
-		         				</dd> 
-		         				<dd>
-		          				<a href="https://fecshop.appfront.fancyecommerce.com/cn/my-custom-menu-2.html">我的自定义菜单3</a>
-		         				</dd> 
-		        			</dl> 
-		       			</div> 
-				       	<div class="trends_img"> 
-				       	</div> 
-		      		</div> 
-		      	</li> 
 		    </ul> 
 		    <div class="nav_fullbg" style="display: none;"></div> 
 		    <div class="navmask" style="display: none;"></div> 
@@ -368,14 +342,14 @@
 		
 	</div>
 	<div>
-		<a href="#">原象简介</a> | 
-		<a href="#">原象公告</a> | 
-		<a href="#">招纳贤士</a> | 
-		<a href="#">联系我们</a> | 
-		<a href="#">客服热线：xxx-xxx-xxxx</a>
+		<a href=" ">关于原象</ a>  
+		<a href="http://47.95.7.204:8081/index/index#">常见问题</ a>  
+		<a href="http://47.95.7.204:8081/index/index#">服务协议</ a>  
+		<a href="http://47.95.7.204:8081/index/index#">联系客服</ a> 
+		<a href="http://47.95.7.204:8081/index/index#">客服热线：xxx-xxx-xxxx</ a>
 	</div>
 	<div>
-		Copyright © 2017 - 20xx 原象版权所有   深ICP备xxxxxxxxx号   深ICP证xxxxx-xxxx号   x市公安局xx分局备案编号：xxxxxxxxxxxxx
+		Copyright  2018 - 20xx 原象版权所有   粤ICP备18006463号   粤ICP证xxxxx-xxxx号   深圳市公安局xx分局备案编号：xxxxxxxxxxxxx
 	</div>
 </footer>
 </body>

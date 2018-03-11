@@ -1,0 +1,124 @@
+/* 二级菜单、轮播图、登陆 */
+.container .container-header {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+/* 二级菜单 */
+.container .container-header .menu_2 {
+    width: 190px;
+	height: 480px;
+    overflow-y: auto;
+	margin-right: 10px;
+	border: 2px solid red;
+}
+
+.container .container-header .menu_2 ul {
+	text-align: center;
+}
+
+.container-header .menu_2 li {
+	line-height: 32px;
+    height: 32px;
+    color: #666;
+}
+
+.container-header .menu_2 li a {
+	color: #3C3C3C;
+}
+
+/* 首页轮播 */
+.container .container-header .carous {
+	width: 800px;
+}
+
+.container .container-header .carous .carousel-control { 
+	display: flex;
+	font-size: 60px;
+	justify-content: center;
+	align-items: center;
+}
+
+/* 登陆 */
+.container .container-header .login{
+	width: 190px;
+	margin-left: 10px;
+}
+
+/* 精选公共 */
+.popular_server {
+	margin-bottom: 50px;
+}
+
+.popular_server .featured {
+	border-bottom: 2px solid rgb(172, 30, 35);
+    height: 60px;
+}
+
+.popular_server .featured h3 {
+	float: left;
+	color: rgb(172, 30, 35);
+}
+
+.popular_server .featured h5 {
+	float: right;
+    margin-top: 40px;
+    margin-right: 10px;
+}
+
+
+/* 精选商家 */
+.popular_server .rows {
+	margin-top: 20px;
+	margin-right: 0px;
+	margin-left: 0px;
+	display: flex;
+	flex-wrap: wrap;
+}
+.popular_server .rows .store {
+	height: 300px;
+	width: 25%;
+	margin-top: 11px;
+   	padding: 0;
+}
+.popular_server .rows .store .store_one {
+	height: 100%;
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #eee;
+}
+.popular_server .rows .store img {
+	width: 250px;
+   	height: 160px;
+}
+
+/* 精选服务 */
+.popular_server .staff {
+	height: 108px;
+    margin-top: 11px;
+   	padding: 0;
+}
+.popular_server .staff h4,.popular_server .staff p {
+	margin-top: 4px!important;
+	margin-bottom: 4px!important;
+}
+
+/* 个人的信息具体信息 */
+.popular_server .staff .staff_info {
+	height: 100%;
+	padding: 5px;
+	border: 1px solid #eee;
+	display: flex;
+}
+
+.popular_server .staff .staff_info .staff_info_img {
+	width: 40%;
+	text-align: center;
+}
+
+.popular_server .staff .staff_info .staff_info_intro {
+	width: 60%;
+	height: 76px;
+	margin: 0 11px;
+}

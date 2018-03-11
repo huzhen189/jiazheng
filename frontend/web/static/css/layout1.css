@@ -1,13 +1,13 @@
 body {
-	min-width: 1200px;
-	font: 1em/1.55 Verdana,Arial,Helvetica,sans-serif;
+    min-width: 1200px;
+    font: 1em/1.55 Verdana,Arial,Helvetica,sans-serif;
 }
 
 /*
-	top_nav的css
+    top_nav的css
 */
 #header #top_nav {
-	background-color: #e9203d;
+    background-color: #f5f5f5;
     font-size: 0.75em;
     height: 40px;
     line-height: 40px;
@@ -17,21 +17,21 @@ body {
 #header #top_nav .top_nav_inner {
     width: 1200px;
     height: 100%;
-	margin-left: auto;
+    margin-left: auto;
     margin-right: auto;
-    color: #fff;
+    color: #3c3c3c;
 }
 
 #header #top_nav .top_nav_inner .top_nav_left {
-	float: left;
+    float: left;
 }
 
 #header #top_nav .top_nav_inner .top_nav_right {
-	float: right;
+    float: right;
 }
 
 #header #top_nav .top_nav_inner .top_nav_right .login-text {
-	margin: 0 30px 0 10px;
+    margin: 0 30px 0 10px;
     width: auto;
 }
 
@@ -41,21 +41,21 @@ body {
 }
 
 #header #top_nav .top_nav_inner .top_nav_right .login-text a {
-	color: #eee;
+    color: #3c3c3c;
 }
 
 #header #top_nav .top_nav_inner .top_nav_right .t_r .top_account {
-    height: 40px;
+    height: 90px;
     width: 50px;
 }
 
 #header #top_nav .top_nav_inner .top_nav_right .t_r.top_account .top_account dt {
     display: block;
-    height: 40px;
+    height: 90px;
 }
 
 .top_nav_right .t_r a {
-    color: #eee;
+    color: #3c3c3c;
 }
 
 .top_account .mycoount {
@@ -68,7 +68,7 @@ body {
 }
 
 .top_account:hover dd {
-	display: block;
+    display: block;
 }
 
 .top_account dd {
@@ -88,7 +88,7 @@ body {
 }
 
 .top_nav_right .top_account dd a {
-    color: #222;
+    color: #3c3c3c;
 }
 
 .mywish a {
@@ -106,7 +106,7 @@ body {
 }
 
 #js_favour_num {
-    color: #fff;
+    color: #3c3c3c;
     float: left;
     margin-left: 10px;
 }
@@ -126,16 +126,16 @@ body {
 }
 
 #js_cart_items {
-    color: #fff;
+    color: #3c3c3c;
     float: left;
     margin-left: 6px;
 }
 
 /*
-	top_main的css
+    top_main的css
 */
 .top_main_inner {
-	width: 1200px;
+    width: 1200px;
     clear: both;
     height: auto;
     margin-left: auto;
@@ -150,19 +150,21 @@ body {
 }
 
 .top_header {
-    height: 40px;
+    height: 90px;
+    display: flex;
     padding-bottom: 20px;
 }
 
+/* 搜索框 */
 .topSeachForm {
-	float: left;
-	width: 100%;
+    width: 40%;
+    height: 100%;
+    display: flex;
 }
 
 .topSeachForm form {
-    float: right;
-    position: relative;
-    width: 310px;
+    width: 100%;
+    align-self: center;
 }
 
 .topSeachForm .top_seachBox {
@@ -206,140 +208,162 @@ body {
     width: 24px;
 }
 
-.t_hidden {
+.topSeachForm .t_hidden {
     font: 0px/0 Verdana;
 }
 
+/* logo */
 .logo {
-	float: left;
-	height: 40px;
-    margin-left: -100%;
-    width: 250px;
+    width: 30%;
+    height: 100%;
 }
 
-img {
+.logo img {
+    width: 190px;
+    height: 90px;
+    border: none;
+}
+
+/* 二维码 */
+.yx_server {
+    width: 30%;
+    height: 100%;
+    text-align: center;
+}
+.yx_server img {
+    width: 90px;
+    height: 90px;
     border: none;
 }
 
 /*
-	的css
+    top_menu的css
 */
-#nav {
-	position: relative;
-    margin: 0 auto;
-    min-height: 38px;
-    width: 1200px;
-    z-index: 999;
-	display: block;
+.top_menu {
+    padding-top: 10px;
+    background-color: rgb(172, 30, 35);;
 }
 
-#nav li:first-child {
+.top_menu #nav {
+    position: relative;
+    margin: 0 auto;
+    min-height: 28px;
+    width: 1200px;
+    z-index: 999;
+    display: block;
+}
+
+.top_menu #nav li:first-child {
     padding-left: 0 !important;
 }
 
-#nav li, #nav li a.nav_t {
+.top_menu #nav li, .top_menu #nav li a.nav_t {
     display: inline;
     float: left;
 }
 
-#nav li, #nav li a.nav_t {
+.top_menu #nav li, .top_menu #nav li a.nav_t {
     display: inline;
     float: left;
 }
 
-#nav li {
+.top_menu #nav li {
     padding: 0 20px;
     z-index: 1;
 }
 
-#nav ul li:hover .sub_menu.big_sub_menu {
+/*.top_menu #nav ul li:hover .sub_menu.big_sub_menu {
     display: block;
-}
+}*/
 
-#nav li, #nav li a.nav_t {
+.top_menu #nav li, .top_menu #nav li a.nav_t {
     display: inline;
     float: left;
 }
 
-#nav li a.nav_t {
+.top_menu #nav li a.nav_t {
     border-bottom: 2px solid transparent;
     color: #000;
     font: 14px/18px Arial;
     padding-bottom: 2px;
 }
 
-#nav li, #nav li a.nav_t {
+.top_menu #nav li, .top_menu #nav li a.nav_t {
     display: inline;
     float: left;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: sans-serif;
+    color: #fff;
 }
 
-#nav .big_sub_menu {
+.top_menu #nav .big_sub_menu {
     margin-left: 0;
     width: 1200px;
 }
 
-#nav .sub_menu, #nav li .point {
+.top_menu #nav .sub_menu, .top_menu #nav li .point {
     display: none;
     position: absolute;
     top: 20px;
     padding-top: 10px;
 }
 
-#nav .sub_menu {
+.top_menu #nav .sub_menu {
     background-color: #fff;
     font-family: Arial;
     padding: 6px 0 8px;
 }
 
-#nav .big_sub_menu, #nav .small_sub_menu {
+.top_menu #nav .big_sub_menu, .top_menu #nav .small_sub_menu {
     border-top: medium none;
     left: 0;
     padding-bottom: 20px;
     padding-top: 20px;
 }
 
-#nav .big_sub_menu, #nav .small_sub_menu {
+.top_menu #nav .big_sub_menu, .top_menu #nav .small_sub_menu {
     border: medium none;
 }
 
-#nav .big_sub_menu .trends_item {
+.top_menu #nav .big_sub_menu .trends_item {
     float: left;
     width: 620px;
 }
 
-#nav .big_sub_menu .trends_item dl:nth-of-type(1) {
+.top_menu #nav .big_sub_menu .trends_item dl:nth-of-type(1) {
     float: left;
     width: 320px;
 }
 
-#nav .big_sub_menu .trends_item dt {
+.top_menu #nav .big_sub_menu .trends_item dt {
     font-size: 15px;
     line-height: 30px;
 }
 
-#nav .big_sub_menu .trends_item dt {
-	text-transform: uppercase;
+.top_menu #nav .big_sub_menu .trends_item dt {
+    text-transform: uppercase;
 }
 
-#nav .sub_menu a {
+.top_menu #nav .sub_menu a {
     color: #333;
     font-size: 13px;
     font-weight: 400;
     line-height: 26px;
 }
 
-#nav .sub_menu a {
+.top_menu #nav .sub_menu a {
     color: #333;
     font-size: 13px;
     font-weight: 400;
     line-height: 26px;
 }
 
-#nav .sub_menu dd {
+.top_menu #nav .sub_menu dd {
     width: 100%;
 }
 
-#nav .big_sub_menu .trends_img {
+.top_menu #nav .big_sub_menu .trends_img {
     border-left: 1px solid #ddd;
     float: left;
     margin-left: -1px;
@@ -347,7 +371,7 @@ img {
     padding-left: 60px;
 }
 
-#nav .big_sub_menu .trends_img img {
+.top_menu #nav .big_sub_menu .trends_img img {
     height: 305px;
     vertical-align: top;
     width: 244px;
@@ -355,7 +379,7 @@ img {
 
 
 /*
-	main-container的css
+    main-container的css
 */
 .main-container {
     min-height: 600px;
