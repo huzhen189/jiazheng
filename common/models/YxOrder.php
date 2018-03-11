@@ -3,11 +3,12 @@
 namespace common\models;
 
 use Yii;
-
+use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "yx_order".
  *
- * @property int $order_id 订单id
+ * @property int $id 订单id
  * @property string $order_name 订单名称
  * @property string $address 收货地址
  * @property string $phone 联系电话
@@ -24,6 +25,20 @@ class YxOrder extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+     public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                // if you're using datetime instead of UNIX timestamp:
+                // 'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
     public static function tableName()
     {
         return 'yx_order';
@@ -35,13 +50,13 @@ class YxOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id', 'order_name', 'order_money', 'order_state', 'usera_id', 'usera_name'], 'required'],
-            [['order_id', 'order_money', 'order_state', 'usera_id', 'created_at', 'updated_at'], 'integer'],
+            [['order_name', 'order_money', 'order_state', 'usera_id', 'usera_name'], 'required'],
+            [['order_money', 'order_state', 'usera_id', 'created_at', 'updated_at'], 'integer'],
             [['order_name', 'usera_name'], 'string', 'max' => 50],
             [['address'], 'string', 'max' => 400],
             [['phone'], 'string', 'max' => 20],
             [['order_memo'], 'string', 'max' => 200],
-            [['order_id'], 'unique'],
+            [['id'], 'unique'],
         ];
     }
 
@@ -51,11 +66,11 @@ class YxOrder extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'order_id' => '订单id',
+            'id' => '订单id',
             'order_name' => '订单名称',
             'address' => '收货地址',
             'phone' => '联系电话',
-            'order_money' => '订单总金额',
+            'order_money' => '订单总金额(分)',
             'order_state' => '订单状态(1:执行中,2:完成,3:废除)',
             'order_memo' => '订单备注',
             'usera_id' => '顾客id',

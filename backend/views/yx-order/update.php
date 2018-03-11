@@ -6,10 +6,10 @@ use yii\helpers\Html;
 /* @var $model common\models\YxOrder */
 
 $this->title = Yii::t('app', 'Update Yx Order: {nameAttribute}', [
-    'nameAttribute' => $model->order_id,
+    'nameAttribute' => $model->id,
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Yx Orders'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->order_id, 'url' => ['view', 'id' => $model->order_id]];
+$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="yx-order-update">

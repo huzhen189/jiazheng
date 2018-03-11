@@ -39,7 +39,9 @@ AppAsset::register($this);
         ['label' => '主页', 'url' => ['/site/index']],
         ['label' => '省市区', 'url' => ['/region/index']],
       	['label' => '家政公司', 'url' => ['/yx-company/index']],
+        ['label' => '服务分类', 'url' => ['/yx-server/index']],
       	['label' => '七牛测试', 'url' => ['/test-h/index']],
+        ['label' => '订单支付', 'url' => ['/yx-order/index']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];

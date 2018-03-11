@@ -13,4 +13,9 @@ return [
         'version' => '?v=1.0.2',
         'fromtEndDomain' => 'http://main.huzhen.net.cn/',
     ],
+    'ping++' => [
+      'API_KEY' => 'sk_live_SG44i15CO0iDPCKG8408yTmT',
+      'PAPP_ID' => 'app_PirPm9r9Gqb99W1S',
+      'PRIVATE_KEY_DIR' => 'common/rsa_private_key.pem',
+    ],
 ];

@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'order_id',
+            'id',
             'order_name',
             'address',
             'phone',
@@ -37,7 +37,19 @@ $this->params['breadcrumbs'][] = $this->title;
             //'created_at',
             //'updated_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'header' => '操作', 'template' => '{view} {update} {delete} {pay}','options'=>['style'=>'width: 100px;'],
+              'buttons'=>[
+        				'pay'=> function ($url, $model, $key) {
+        					$options = [
+                    'title' => Yii::t('app', 'Pay'),
+                    'aria-label' => Yii::t('app', 'Pay'),
+        						'data-pjax' => '0',
+        						'style'=>'padding:0 5px',
+        					];
+        					return Html::a('<span class="glyphicon glyphicon-shopping-cart"></span>', $url, $options);
+        				},
+        			],
+            ],
         ],
     ]); ?>
 </div>
