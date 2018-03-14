@@ -5,14 +5,14 @@ namespace backend\controllers;
 use Yii;
 use common\models\YxOrder;
 use common\models\YxOrderSearch;
-use yii\web\Controller;
+use common\tools\CheckController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \Pingpp\Pingpp;
 /**
  * YxOrderController implements the CRUD actions for YxOrder model.
  */
-class YxOrderController extends Controller
+class YxOrderController extends CheckController
 {
     /**
      * @inheritdoc

@@ -6,13 +6,13 @@ use common\models\YxStaff;
 use common\models\YxStaffSearch;
 use Yii;
 use yii\filters\VerbFilter;
-use yii\web\Controller;
+use common\tools\CheckController;
 use yii\web\NotFoundHttpException;
 
 /**
  * YxStaffController implements the CRUD actions for YxStaff model.
  */
-class YxStaffController extends Controller
+class YxStaffController extends CheckController
 {
     /**
      * @inheritdoc
@@ -37,6 +37,7 @@ class YxStaffController extends Controller
     {
         $searchModel = new YxStaffSearch();
 
+        #在查询参数中添加公司ID
         $queryParams = Yii::$app->request->queryParams;
         if(!empty($company_id)){
             if (!isset($queryParams['YxStaffSearch'])) {
@@ -48,7 +49,6 @@ class YxStaffController extends Controller
             $queryParams['YxStaffSearch'] = ['company_id' => -1];
         }
 
-        print_r($queryParams);
         $dataProvider = $searchModel->search($queryParams);
 
         return $this->render('index', [
@@ -81,6 +81,24 @@ class YxStaffController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->company_id=$company_id;
+            #所有服务的ID，以逗号隔开，数组转字符串
+            $arr_staff_all_server_id=$model->staff_all_server_id;
+            $str_staff_all_server_id='';
+            foreach ($arr_staff_all_server_id as $key => $value) {
+                if($key==0){
+                    $str_staff_all_server_id=$value;
+                }else{
+                    $str_staff_all_server_id=$str_staff_all_server_id.','.$value;
+                }
+            }
+            $model->staff_all_server_id=$str_staff_all_server_id;
+
+
+            #修改搜索关键词
+            $str_server_id=$model->staff_all_server_id.','.$model->staff_main_server_id;
+            $model->staff_query=YxStaff::getAllServer($str_server_id);
+
+            #修改图片路径
             $model->staff_img = $model->staff_img[0];
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->staff_id]);
@@ -102,9 +120,28 @@ class YxStaffController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post())) {
+            
+            #所有服务的ID，以逗号隔开，数组转字符串
+            $arr_staff_all_server_id=$model->staff_all_server_id;
+            $str_staff_all_server_id='';
+            foreach ($arr_staff_all_server_id as $key => $value) {
+                if($key==0){
+                    $str_staff_all_server_id=$value;
+                }else{
+                    $str_staff_all_server_id=$str_staff_all_server_id.','.$value;
+                }
+            }
+            $model->staff_all_server_id=$str_staff_all_server_id;
+
+
+            #修改搜索关键词
+            $str_server_id=$model->staff_all_server_id.','.$model->staff_main_server_id;
+            $model->staff_query=YxStaff::getAllServer($str_server_id);
+
+            #修改图片路径
             $model->staff_img = $model->staff_img[0];
+
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->staff_id]);
             }

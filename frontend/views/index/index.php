@@ -3,7 +3,7 @@
 	use yii\bootstrap\Carousel;
 ?>
 <!-- 二级菜单、轮播、登陆 -->
-<?= Html::cssFile('/static/css/index.css') ?>
+<?= Html::cssFile('static/css/index.css') ?>
 <div class="container-header">
 	<div class="menu_2">
 		<nav>
@@ -112,16 +112,16 @@
 		<?php echo Carousel::widget([
 		    'items' => [
 		        [
-		        	'content' => '<img src="/static/img/carousel_1.jpg" style="height:480px;width:800px"/>',
+		        	'content' => '<img src="static/img/carousel_1.jpg" style="height:480px;width:800px"/>',
 		        	'caption' => '<h4>保洁</h4><p>爱家就要经常清洁它</p>',
 		        ],
 		        [
-		        	'content' => '<img src="/static/img/carousel_2.jpg" style="height:480px;width:800px"/>',
+		        	'content' => '<img src="static/img/carousel_2.jpg" style="height:480px;width:800px"/>',
 		        	'caption' => '<h4>保姆</h4><p>照顾家的好帮手</p>',
 		        ],
 		        // 包含图片和字幕的格式
 		        [
-		            'content' => '<img src="/static/img/carousel_3.jpg" style="height:480px;width:800px"/>',
+		            'content' => '<img src="static/img/carousel_3.jpg" style="height:480px;width:800px"/>',
 		            'caption' => '<h4>This is title</h4><p>This is the caption text</p>',
 		            //'options' => ['style:height:600px,width:1200px'],       //配置对应的样式
 		        ],
@@ -130,17 +130,17 @@
 	    ?>
 	</div>
 	<div class="login">
-    <div style="border: 1px dashed #ac1e23;
-    border-style: darkblue;
-    padding: 20px 30px 45px 30px;
-   	border-radius: 20px 20px 10px 10px;">
+    <div style="padding: 20px 10px 20px 10px;border: 1px solid rgb(172, 30, 35);-webkit-box-shadow: 0 1px 6px rgb(172, 30, 35);box-shadow: 0 1px 6px rgb(172, 30, 35);border-radius: 5px;">
     	<div>
     		<img src="//wwc.alicdn.com/avatar/getAvatar.do?userNick=幼稚完后&width=50&height=50&type=sns&_input_charset=UTF-8" />
-        	<a href="http://localhost:8080/">亲！登录</a>
     	</div>
-    	<div style="margin-top: 10px;">
-    		<button class="btn btn-info btn-sm" style="float: left;">注册</button>
-    		<button class="btn btn-warning btn-sm" style="float: right;">入驻</button>
+        <div style="margin-top:10px;margin-bottom:10px;">
+               <span style="color: rgb(172, 30, 35);">hello!你好</span>
+        </div>
+    	<div style="display: flex;flex-direction: row;justify-content: space-around;">
+                <button class="btn btn-info btn-sm">注册</button>
+    		<button class="btn btn-info btn-sm">登陆</button>
+    		<button class="btn btn-warning btn-sm">入驻</button>
     	</div>
     </div>
 </div>
@@ -150,7 +150,7 @@
 	<div class="featured">
 		<h3>精选商家</h3>
 		<h5>
-			<a href="#">更多</a>
+		     <a href="#" style="color: rgb(172, 30, 35);">更多</a>
 		</h5>
 	</div>
 	<!-- 商家 -->
@@ -290,7 +290,7 @@
 	<div class="featured">
 		<h3>精选服务</h3>
 		<h5>
-			<a href="#">更多</a>
+			<a href="#" style="color: rgb(172, 30, 35);">更多</a>
 		</h5>
 	</div>
 	<!-- 服务人员 -->

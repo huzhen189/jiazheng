@@ -14,6 +14,7 @@ use Yii;
  * @property int $server_state 服务的状态（1：使用，2：下架，0：删除）
  * @property string $server_memo 服务备注
  * @property int $server_sort 服务显示顺序
+ * @property string $server_unit 服务单位
  */
 class YxServer extends \yii\db\ActiveRecord
 {
@@ -35,6 +36,7 @@ class YxServer extends \yii\db\ActiveRecord
             [['server_type', 'server_parent', 'server_state', 'server_sort'], 'integer'],
             [['server_name'], 'string', 'max' => 50],
             [['server_memo'], 'string', 'max' => 1000],
+            [['server_unit'], 'string', 'max' => 255],
         ];
     }
 
@@ -52,6 +54,7 @@ class YxServer extends \yii\db\ActiveRecord
             'server_state' => '状态',
             'server_memo' => '备注',
             'server_sort' => '排序',
+            'server_unit' => '单位',
         ];
     }
 

@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use common\models\Region;
 use zh\qiniu\QiniuFileInput;
 
-$this->registerJsFile(Yii::$app->params['webuploader']['fromtEndDomain']."react/build/static/js/main.js");
+$this->registerJsFile(Yii::$app->params['webuploader']['fileDomain']."react/build/static/js/main.js");
 $this->registerJs(
    '
     function onProvinceChange(value){
@@ -49,7 +49,7 @@ $this->registerJs(
         });
     '
 );
-$this->registerCssFile(Yii::$app->params['webuploader']['fromtEndDomain']."react/build/static/css/main.css");
+$this->registerCssFile(Yii::$app->params['webuploader']['fileDomain']."react/build/static/css/main.css");
 $this->registerCss('
     .layout_row {
             display: flex;

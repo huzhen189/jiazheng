@@ -18,8 +18,8 @@ class YxStaffSearch extends YxStaff
     public function rules()
     {
         return [
-            [['staff_id', 'company_id', 'staff_sex', 'staff_age', 'staff_found'], 'integer'],
-            [['staff_name', 'staff_img', 'staff_idcard', 'staff_intro', 'staff_main_server', 'staff_all_server', 'staff_state', 'staff_memo', 'staff_login_ip', 'staff_login_time', 'staff_account', 'staff_password'], 'safe'],
+            [['staff_id', 'company_id', 'staff_sex', 'staff_age', 'staff_found', 'staff_main_server_id'], 'integer'],
+            [['staff_name', 'staff_img', 'staff_idcard', 'staff_intro', 'staff_main_server', 'staff_all_server', 'staff_state', 'staff_memo', 'staff_login_ip', 'staff_login_time', 'staff_account', 'staff_password','staff_all_server_id','staff_query'], 'safe'],
         ];
     }
 
@@ -64,20 +64,21 @@ class YxStaffSearch extends YxStaff
             'staff_sex' => $this->staff_sex,
             'staff_age' => $this->staff_age,
             'staff_found' => $this->staff_found,
+            'staff_main_server_id' => $this->staff_main_server_id,
         ]);
 
         $query->andFilterWhere(['like', 'staff_name', $this->staff_name])
             ->andFilterWhere(['like', 'staff_img', $this->staff_img])
             ->andFilterWhere(['like', 'staff_idcard', $this->staff_idcard])
             ->andFilterWhere(['like', 'staff_intro', $this->staff_intro])
-            ->andFilterWhere(['like', 'staff_main_server', $this->staff_main_server])
-            ->andFilterWhere(['like', 'staff_all_server', $this->staff_all_server])
             ->andFilterWhere(['like', 'staff_state', $this->staff_state])
             ->andFilterWhere(['like', 'staff_memo', $this->staff_memo])
             ->andFilterWhere(['like', 'staff_login_ip', $this->staff_login_ip])
             ->andFilterWhere(['like', 'staff_login_time', $this->staff_login_time])
             ->andFilterWhere(['like', 'staff_account', $this->staff_account])
-            ->andFilterWhere(['like', 'staff_password', $this->staff_password]);
+            ->andFilterWhere(['like', 'staff_password', $this->staff_password])
+            ->andFilterWhere(['like', 'staff_all_server_id', $this->staff_all_server_id])
+           ->andFilterWhere(['like', 'staff_query', $this->staff_query]);
 
         return $dataProvider;
     }

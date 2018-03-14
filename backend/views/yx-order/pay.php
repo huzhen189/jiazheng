@@ -5,9 +5,9 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\YxOrder */
-$this->registerJsFile(Yii::$app->params['webuploader']['fromtEndDomain']."pingpp-js/dist/pingpp.js");
+$this->registerJsFile(Yii::$app->params['webuploader']['fileDomain']."pingpp-js/dist/pingpp.js");
 
-$this->registerCssFile(Yii::$app->params['webuploader']['fromtEndDomain']."react/build/static/css/main.css");
+$this->registerCssFile(Yii::$app->params['webuploader']['fileDomain']."react/build/static/css/main.css");
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Yx Orders'), 'url' => ['index']];

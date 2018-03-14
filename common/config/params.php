@@ -4,14 +4,16 @@ return [
     'supportEmail' => '2587566052@qq.com',
     'user.passwordResetTokenExpire' => 3600,
     'qnConfig' => [
-        'accessKey' => 'rJdrEk_1qvrJEs_EOAt3pT9j-CiYQZdaKeZ4YWFY',
-        'secretKey' => 'jrc57rU4zzFNTfojGhCZYA2qPtzvVM3gOycqT5Le',
-        'scope'=>'yuanchuang',
-        'cdnUrl' => 'http://p1lq2tqed.bkt.clouddn.com',//外链域名
+        'accessKey' => 'vu94ycBYu5LDye6uNMxYgQqw67V03MV4tNzSf9GU',
+        'secretKey' => 'KGrnjp00BgDC3Wrq_F3qQ_M1SQiz3wAskOHUPinv',
+        'scope'=>'yuanxiang',
+        'cdnUrl' => 'http://p5ippdc3b.bkt.clouddn.com',//外链域名
     ],
     'webuploader' => [
         'version' => '?v=1.0.2',
-        'fromtEndDomain' => 'http://main.huzhen.net.cn/',
+        'fromtEndDomain' => 'http://www.yuanxiangwu.com/',
+        'backendEndDomain' => 'http://backend.yuanxiangwu.com/',
+        'fileDomain' => 'http://file.yuanxiangwu.com/',
     ],
     'ping++' => [
       'API_KEY' => 'sk_live_SG44i15CO0iDPCKG8408yTmT',

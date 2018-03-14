@@ -5,14 +5,14 @@ namespace backend\controllers;
 use Yii;
 use common\models\Region;
 use common\models\RegionSearch;
-use yii\web\Controller;
+use common\tools\CheckController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * RegionController implements the CRUD actions for Region model.
  */
-class RegionController extends Controller
+class RegionController extends CheckController
 {
     /**
      * @inheritdoc

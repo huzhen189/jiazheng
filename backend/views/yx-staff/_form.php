@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use zh\qiniu\QiniuFileInput;
-
+use common\models\YxServer;
 /* @var $this yii\web\View */
 /* @var $model common\models\YxStaff */
 /* @var $form yii\widgets\ActiveForm */
@@ -37,10 +37,6 @@ use zh\qiniu\QiniuFileInput;
 
 <!--     <?= $form->field($model, 'staff_found')->textInput(['maxlength' => true]) ?> -->
 
-    <?= $form->field($model, 'staff_main_server')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'staff_all_server')->textInput(['maxlength' => true]) ?>
-
     <?php $model->staff_state = $model->getCmpState(); ?>
     <?= $form->field($model, 'staff_state')->dropDownList($model->staff_state) ?>
 
@@ -53,6 +49,20 @@ use zh\qiniu\QiniuFileInput;
     <?= $form->field($model, 'staff_account')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'staff_password')->textInput(['maxlength' => true]) ?>
+
+    <?php $server_id = $model->getCmpServer(); ?>
+    <?= $form->field($model, 'staff_main_server_id')->dropDownList($server_id) ?>
+
+    <?php 
+        $server2_id = $model->getCmpServer(); 
+        foreach ($server2_id as $key => $value) {
+            if($key==$model->staff_main_server_id){
+                unset($server2_id[$key]);
+            }
+        }
+        $model->staff_all_server_id = explode(',', $model->staff_all_server_id);
+    ?>
+    <?= $form->field($model, 'staff_all_server_id')->checkboxList($server2_id);?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', '保存'), ['class' => 'btn btn-success']) ?>

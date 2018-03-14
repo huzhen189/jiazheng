@@ -19,8 +19,7 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
         "zh/yii2-qiniu-images": "dev-master",
-        "chenkby/yii2-region": "dev-master",
-        "pingplusplus/pingpp-php": "dev-master"
+        "chenkby/yii2-region": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

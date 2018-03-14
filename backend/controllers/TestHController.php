@@ -5,14 +5,14 @@ namespace backend\controllers;
 use Yii;
 use common\models\TestH;
 use common\models\TestHSearch;
-use yii\web\Controller;
+use common\tools\CheckController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * TestHController implements the CRUD actions for TestH model.
  */
-class TestHController extends Controller
+class TestHController extends CheckController
 {
     /**
      * @inheritdoc

@@ -5,14 +5,14 @@ namespace backend\controllers;
 use Yii;
 use common\models\YxServer;
 use common\models\YxServerSearch;
-use yii\web\Controller;
+use common\tools\CheckController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * YxServerController implements the CRUD actions for YxServer model.
  */
-class YxServerController extends Controller
+class YxServerController extends CheckController
 {
     /**
      * @inheritdoc
