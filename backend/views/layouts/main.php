@@ -4,64 +4,85 @@
 /* @var $content string */
 
 use backend\assets\AppAsset;
-use yii\helpers\Html;
+use common\widgets\Alert;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
-use common\widgets\Alert;
 
 AppAsset::register($this);
 ?>
-<?php $this->beginPage() ?>
+<?php $this->beginPage();?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="<?=Yii::$app->language;?>">
 <head>
-    <meta charset="<?= Yii::$app->charset ?>">
+    <meta charset="<?=Yii::$app->charset;?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
+    <?=Html::csrfMetaTags();?>
+    <title><?=Html::encode($this->title);?></title>
+    <?php $this->head();?>
 </head>
 <body>
-<?php $this->beginBody() ?>
+<?php $this->beginBody();?>
 
 <div class="wrap">
     <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+NavBar::begin([
+    'brandLabel' => '原象屋管理后台',
+    'brandUrl' => Yii::$app->homeUrl,
+    'options' => [
+        'class' => 'navbar-inverse navbar-fixed-top',
+    ],
+]);
+$menuItems = [
+    // ['label' => '主页', 'url' => ['/site/index']],
+
+    ['label' => '公司管理', 'url' => ['/yx-company/index']],
+    ['label' => '用户管理', 'url' => ['/yx-user/index']],
+    ['label' => '审核管理',
+        'url' => ['/yx-company-verify/index'],
+        'items' => [
+            ['label' => '公司审核', 'url' => ['/yx-company-verify/index']],
+            ['label' => '员工审核', 'url' => ['/yx-staff-verify/index']],
         ],
-    ]);
-    $menuItems = [
-        ['label' => '主页', 'url' => ['/site/index']],
-        ['label' => '省市区', 'url' => ['/region/index']],
-      	['label' => '家政公司', 'url' => ['/yx-company/index']],
-        ['label' => '服务分类', 'url' => ['/yx-server/index']],
-      	['label' => '七牛测试', 'url' => ['/test-h/index']],
-        ['label' => '订单支付', 'url' => ['/yx-order/index']],
-    ];
-    if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
-    } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
-    }
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $menuItems,
-    ]);
-    NavBar::end();
-    ?>
+    ],
+    ['label' => '分类管理', 'url' => ['/yx-server/index']],
+    // ['label' => '七牛测试', 'url' => ['/test-h/index']],
+    ['label' => '订单管理', 'url' => ['/yx-order/index']],
+    ['label' => '图片管理',
+        'url' => ['/yx-banner/index'],
+        'items' => [
+            ['label' => '轮播图', 'url' => ['/yx-banner/index']],
+            ['label' => '推荐左图', 'url' => ['/yx-recom-left/index']],
+            ['label' => '推荐右图', 'url' => ['/yx-recom-right/index']],
+            ['label' => '活动图', 'url' => ['/yx-activity/index']],
+        ],
+    ],
+
+    ['label' => '公告管理', 'url' => ['/yx-notice/index']],
+    ['label' => '地区管理', 'url' => ['/region/index']],
+    ['label' => '规则管理', 'url' => ['/yx-rules/index']],
+];
+if (Yii::$app->user->isGuest) {
+    $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+    $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+} else {
+    $menuItems[] = '<li>'
+    . Html::beginForm(['/site/logout'], 'post')
+    . Html::submitButton(
+        'Logout (' . Yii::$app->user->identity->username . ')',
+        ['class' => 'btn btn-link logout']
+    )
+    . Html::endForm()
+        . '</li>';
+}
+echo Nav::widget([
+    'options' => ['class' => 'navbar-nav navbar-right'],
+    'items' => $menuItems,
+]);
+NavBar::end();
+?>
 
     <div class="container">
         <?= Breadcrumbs::widget([

@@ -10,30 +10,58 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to login:</p>
-
-    <div class="row">
-        <div class="col-lg-5">
+<style>
+.control-label{
+  display: block;
+  margin-bottom: 0px;
+}
+.form-group {
+    margin-bottom: 0px;
+    height: 48px;
+    margin-top: 0px;
+}
+.help-block{
+  margin-top:0px;
+  margin-bottom: 0px;
+}
+.field-loginform-rememberme{
+  float: left;
+  margin-left: 62px;
+  margin-top: -10px;
+}
+</style>
+<div class="max_login">
+    <div class="min_login">
+        <div class="login_T">
+          <span>
+                <em>原象屋管理后台</em>
+                <strong>V1.0</strong>
+          </span>
+        </div>
+        <div class="login_C">
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+                <span style="position: relative;"><?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?></span>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
+                <span style="position: relative;"><?= $form->field($model, 'password')->passwordInput() ?></span>
 
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
+                <?= $form->field($model, 'rememberMe')->checkbox()->label('记住账号') ?>
 
-                <div style="color:#999;margin:1em 0">
-                    If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
+                <div style="color:#999;margin:0px;float: right;margin-right: 64px;">
+                    <?= Html::a('忘记密码', ['site/request-password-reset']) ?>
                 </div>
-                
+
                 <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                    <?= Html::submitButton('登录', ['class' => 'loginSubmit', 'name' => 'login-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>
         </div>
     </div>
 </div>
+
+<script>
+$(".field-loginform-username").find(".control-label").html('<em><img src="http://p6htqszz4.bkt.clouddn.com/login_name.png"></em>')
+$(".field-loginform-password").find(".control-label").html('<em><img src="http://p6htqszz4.bkt.clouddn.com/login_password.png"></em>')
+
+</script>

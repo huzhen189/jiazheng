@@ -1,164 +1,165 @@
 <?php
 	use yii\helpers\Html;
 	use yii\bootstrap\Tabs;
-	$babel = '<table class="table table-hover">
-				<thead>
-					<tr>
-					    <th>名称</th>
-					    <th>城市</th>
-					    <th>邮编</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-					    <td>Tanmay</td>
-					    <td>Bangalore</td>
-					    <td>560001</td>
-					</tr>
-					<tr>
-					    <td>Sachin</td>
-					    <td>Mumbai</td>
-					    <td>400003</td>
-					</tr>
-					<tr>
-					    <td>Uma</td>
-					    <td>Pune</td>
-					    <td>411027</td>
-					</tr>
-			    </tbody>
-		    </table>';
+	use common\models\YxStaff;
+	date_default_timezone_set('PRC');
 ?>
+<?= Html::cssFile('/static/css/staff.css') ?>
 
-<div class="staff_detail">
-	<div class="detail_cart">
+<div class="staff-detail">
+	<div class="detail-cart">
 		<div class="img">
-			<img src="static/img/user.jpg">
+			<img src="/static/img/staff/staff1.jpg">
 		</div>
 		<div class="detail">
-			<h3><b style="font-size: 20px;">黄小妹家政-易棵松</b></h3>
-			<h5 style="color: #e9203d;"><b>服务、热心</b></h5>
-			<div class="price">
-				<h5>原象服务价</h5>
-				<h3 style="color: #e9203d;">￥ 38.00</h3>
-				<h5>每小时</h5>
+			<h3><b style="font-size: 20px;"><?= $YxStaff->staff_name;?></b></h3>
+			<h5>ID： <span><?= $YxStaff->staff_number;?></span></h5>
+			<div class="detail-header">
+				<div class="detail-header-left">
+					<div class="price">
+						<p>价格：<span id="order_money" style="color: rgb(255, 90, 0);"><?= number_format($dataProvider[0]['server_price']/100,2);?></span>元/小时</p>
+					</div>
+					<div class="fraction">
+						<p>分数：<span style="color: rgb(255, 90, 0);"><?= number_format($YxStaff->staff_fraction/1000,2);?></span>分</p>
+					</div>
+					<div class="service">
+						<p>服务：<select class="server-price">
+							<?php foreach ($dataProvider as $key => $value): ?>
+								<option class="server-name" value="<?=$value['server_id']?>" price-data="<?=number_format($value['server_price']/100,2)?>"><?=$value['server_name']?></option>
+							<?php endforeach; ?>
+						</select></p>
+					</div>
+				</div>
+				<div class="detail-header-right">
+					<div class="IDcard">
+						<p>身份证：<?= $YxStaff->staff_idcard;?></p>
+					</div>
+					<div class="row age-sex">
+						<p class="col-md-6 col-lg-6">年龄：<?= date("Y")-date("Y",$YxStaff->staff_age);?>岁</p>
+						<p class="col-md-6 col-lg-6">性别：
+							<?php if($YxStaff->staff_sex==1) {
+									echo '男';
+							}else {
+								 	echo '女';
+							}?>
+						</p>
+					</div>
+					<div class="addre">
+						<p>籍贯：<?= $YxStaff->staff_address;?></p>
+					</div>
+				</div>
 			</div>
-			<div style="height: 100px;">
-				服务类型
+			<!-- 保姆的附加服务 -->
+			<div class="babysitter" style="margin: 5px;display:none;">
+				<div>您可以勾选以下服务要求：</div>
+				<div class="choose-server">
+					<div class="one-server"><input type="checkbox" name="server"> 保洁</div>
+					<div class="one-server"><input type="checkbox" name="server"> 日常烹饪</div>
+					<div class="one-server"><input type="checkbox" name="server"> 洗衣熨烫</div>
+					<div class="one-server"><input type="checkbox" name="server"> 收纳整理</div>
+					<div class="one-server"><input type="checkbox" name="server"> 绿植养护</div>
+					<div class="one-server"><input type="checkbox" name="server"> 照顾小孩</div>
+					<div class="one-server"><input type="checkbox" name="server"> 照顾老人</div>
+					<div class="one-server"><input type="checkbox" name="server"> 照顾宠物</div>
+					<div class="one-server"><input type="checkbox" name="server"> 住家</div>
+					<div class="one-server"><input type="checkbox" name="server"> 不住家</div>
+				</div>
 			</div>
-			<div>
-				<a href="#" class="btn" style="background-color: #ffeded;color: #e9203d;border: 1px solid;padding: 10px 40px;">立即下单</a>
-				<button class="btn" style="background-color: #e9203d;color: #fff;border: 1px solid;padding: 10px 40px;">加入购物车</button>
+			<!-- 月嫂的附加服务 -->
+			<div class="moonlight" style="margin: 5px;display:none;">
+				<div>您可以勾选以下服务要求：</div>
+				<div class="choose-server">
+					<div class="one-server"><input type="checkbox" name="server"> 住家</div>
+					<div class="one-server"><input type="checkbox" name="server"> 不住家</div>
+				</div>
+			</div>
+			<!-- 育儿嫂的附加服务 -->
+			<div class="parenting" style="margin: 5px;display:none;">
+				<div>您可以勾选以下服务要求：</div>
+				<div class="choose-server">
+					<div class="one-server"><input type="checkbox" name="server"> 1~3个月(宝宝年龄)</div>
+					<div class="one-server"><input type="checkbox" name="server"> 3~8个月(宝宝年龄)</div>
+					<div class="one-server"><input type="checkbox" name="server"> 8~12个月(宝宝年龄)</div>
+					<div class="one-server"><input type="checkbox" name="server"> 1岁以上(宝宝年龄)</div>
+					<div class="one-server"><input type="checkbox" name="server"> 住家</div>
+					<div class="one-server"><input type="checkbox" name="server"> 不住家</div>
+				</div>
+			</div>
+			<!-- 钟点工的附加服务 -->
+			<div class="long-hourly" style="margin: 5px;display:none;">
+				<div>您可以勾选以下服务要求：</div>
+				<div class="choose-server">
+				</div>
+			</div>
+			<div style="margin: 5px;">
+				<div class="date-hour">
+					<i>上门时间：</i>
+					<select id="date" style="height:25px;margin-right:10px;">
+						<?php
+							for ($i=0; $i < 7; $i++) {
+								echo '<option value="'.strtotime(date('Y-m-d',strtotime("+$i day"))).'">'.date('Y-m-d',strtotime("+$i day")).' '.YxStaff::getChineseWeek(date("w",strtotime("+$i day"))).'</option>';
+							}
+						?>
+					</select>
+					<select id="time" style="height:25px;margin-right:10px;">
+						<?php
+							for ($i=8; $i <= 22; $i++) {
+								echo '<option value="'.($i*3600).'">'.$i.'点</option>';
+							}
+						?>
+					</select>
+					<i>服务时长：</i>
+					<input style="height: 25px;" type="number" id="name" placeholder="请输入时长，例如1、2..">
+				</div>
+			</div>
+			<div style="margin: 5px;">
+				<button id="order" class="btn btn-danger" style="padding: 10px 40px;">立即下单</button>
+				<?php if (false) {
+					echo '<button id="reservation" class="btn btn-warning" style="padding: 10px 40px;">预约</button>';
+				}?>
 			</div>
 		</div>
 	</div>
-	<div class="detail_info">
-		<div class="staff_info">
+	<div class="detail-info">
+		<div class="staff-info">
 			<div style="text-align: center;">
-				<h3>商家详情</h3>
+				<h3 style="margin: 13px 0;">商家详情</h3>
 			</div>
 			<div>
 				<p><b>简介：</b>本公司是一个拥有上千优秀的服务人员，一直本着服务的态度而立足于行业中。</p>
 			</div>
-			<div>
-				<h4><b>公司执照：</b></h4>
-				<?= Html::a('<img src="static/img/license.jpg" style="width: 230px;height: 180px;margin-left: 3px;" />', ['store/license'], ['class' => 'profile-link','style' => 'text-align: center;']); ?>
-			</div>
-			<div>
-				<h4><b>相似服务人员：</b></h4>
-				<div class="other_staff">
-					<img src="static/img/user.jpg" />
-					<div>
-						<h5><b>易棵松</b></h5>
-						<p title="服务、热心">服务、热心</p>
+			<div style="margin-top:20px;">
+				<h4><b>原象推荐：</b></h4>
+				<?php foreach ($YxStaffArr as $value): ?>
+					<div class="other-staff">
+						<img src="<?= $value['staff_img']?>" alg="yuanxiang"/>
+						<div>
+							<h5><a href="/staff/index?staff_id=<?= $value['staff_id'] ?>"><?= $value['staff_name']?></a></h5>
+							<p title="<?= $value['staff_intro']?>"><?= $value['staff_intro']?></p>
+						</div>
 					</div>
-				</div>
-				<div class="other_staff">
-					<img src="static/img/user.jpg" />
-					<div>
-						<h5><b>易棵松</b></h5>
-						<p title="服务、热心">服务、热心</p>
-					</div>
-				</div>
-				<div class="other_staff">
-					<img src="static/img/user.jpg" />
-					<div>
-						<h5><b>易棵松</b></h5>
-						<p title="服务、热心">服务、热心</p>
-					</div>
-				</div>
-				<div class="other_staff">
-					<img src="static/img/user.jpg" />
-					<div>
-						<h5><b>易棵松</b></h5>
-						<p title="服务、热心">服务、热心</p>
-					</div>
-				</div>
+				<?php endforeach; ?>
 			</div>
 		</div>
 
-		<div class="staff_comment">
+		<div class="staff-comment">
 			<?php
 				echo Tabs::widget([
 				  'items' => [
 				      	[
 				           	'label' => '基本信息',
-				          	'content' => '<div class="tabs">
-				          		<table class="table table-bordered">
-									<tbody>
-										<tr>
-											<td>姓名</td>
-											<td>一棵树</td>
-										</tr>
-										<tr>
-											<td>性别</td>
-											<td>男</td>
-										</tr>
-										<tr>
-											<td>从业时间</td>
-											<td>10年</td>
-										</tr>
-										<tr>
-											<td>年龄</td>
-											<td>35</td>
-										</tr>
-										<tr>
-											<td>服务类型</td>
-											<td>清洁、月嫂</td>
-										</tr>
-										<tr>
-											<td>所属商家</td>
-											<td>腾讯</td>
-										</tr>
-										<tr>
-											<td>是否培训</td>
-											<td>是</td>
-										</tr>
-										<tr>
-											<td>身份认证</td>
-											<td>是</td>
-										</tr>
-										<tr>
-											<td>相关记录</td>
-											<td>荣获深圳市优秀市民</td>
-										</tr>
-									</tbody>
-								</table>
-				          	</div>',
+				          	'content' => $this->render('basic-info',['YxStaff'=>$YxStaff]),
 				          	'active' => true
 				      	],
-				      	[	
+				      	[
 				          	'label' => '成果显示',
-				          	'content' => '<div class="tabs">
-				         				第二个tab页
-				         			</div>',
+				          	'content' => $this->render('result',['YxStaff'=>$YxStaff]),
 				          	// 'headerOptions' => [...],
 				          	// 'options' => ['id' => 'myveryownID'],
 				      	],
 				      	[
 				          	'label' => '评论',
-				          	'content' => '<div class="tabs">
-				          				第三个tab页
-				          			</div>',
+				          	'content' => $this->render('comment',['model'=>$YxStaff]),
 				          	// 'url' => 'http://www.example.com',
 				      	],
 				  	],
@@ -166,63 +167,41 @@
 			?>
 		</div>
 	</div>
-	<?= Html::style('
-		.main.container {
-			border: 1px solid #e9e9e9;
-		}
-		.staff_detail .detail_cart {
-			margin: 10px 0;
-			display: flex;
-		}
-		.staff_detail .detail_cart .img img {
-			width: 300px;
-			height: 300px;
-			border: 1px solid #e9e9e9;
-		}
-		.staff_detail .detail_cart .detail {
-			width: 100%;
-			padding: 0 30px;
-		}
-		.staff_detail .detail_cart .detail .price {
-			height: 100px;
-			width: 100%;
-			padding: 5px 10px;
-			background-color: #e9e9e9;
-		}
-		.staff_detail .detail_cart h3,.staff_detail .detail_cart h4,.staff_detail .detail_cart h5 {
-			margin: 0 0 5px 0;
-			padding: 0;
-		}
-		.detail_info {
-			display: flex;
-		}
-		.staff_info {
-			width: 20%;
-			padding-left: 5px;
-			padding-right: 5px;
-			border: 1px solid #eee;
-		}
-		.staff_info .other_staff {
-			padding: 10px 0;
-			display: flex;
-			border-bottom: 1px solid #eee;
-		}
-		.staff_info .other_staff img {
-			width: 120px;
-			height: 100px;
-		}
-
-		.detail_info .staff_comment {
-			width: 80%;
-			border: 1px solid #eee;
-		}
-
-		.tabs {
-			margin: 40px 60px;
-			border: 1px solid #eee;
-		}
-		.tabs .table {
-			margin-bottom: 0px!important;
-		}
-	')?>
 </div>
+
+<script type="text/javascript">
+	window.onload = function() {
+		$(".server-price").change(function() {
+				$(".price span:first").text($(".server-price option:selected").attr('price-data'));
+		});
+
+		// function
+
+		// 默认选择当前时间（小时）+2
+		(function(){
+			var hour = now.getHours();
+			console.log(hour);
+			// $("#time")
+			// for ($i=8; $i <= 22; $i++) {
+			// 	echo '<option value="'.($i*3600).'">'.$i.'点</option>';
+			// }
+		})();
+
+		$("#order").click(function() {
+			// order_name：订单名
+			// address：地址
+			// phone：手机号码
+			// order_money：订单总金额
+			// var order_money = $(".")
+			// order_state：订单状态
+			// order_memo：订单备注
+			// yx_user_id：用户id
+			// user_name：用户名
+			// alert("下单");
+		})
+
+		$("#reservation").click(function() {
+			alert("预约");
+		})
+	}
+</script>

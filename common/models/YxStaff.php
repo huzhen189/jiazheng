@@ -5,6 +5,9 @@ namespace common\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use common\models\Region;
+use common\models\YxCompany;
+use common\models\YxStaffServer;
 
 /**
  * This is the model class for table "yx_staff".
@@ -24,11 +27,28 @@ use yii\db\ActiveRecord;
  * @property string $staff_memo 备注
  * @property string $staff_login_ip 服务人员登陆ip(记入最新的登陆ip,把上一次登录ip写入日志文件中)
  * @property string $staff_login_time 服务人员登陆时间(记入最新的登陆时间,把上一次登录时间写入日志文件中)
- * @property string $staff_account 服务人员的账号
- * @property string $staff_password 服务人员的密码
  * @property int $staff_main_server_id
         * @property string $staff_all_server_id
 * @property string $staff_query 搜索关键词
+* @property int $staff_fraction 分数
+* @property int $staff_base_fraction 服务人员基础分数
+* @property int $staff_history_fraction 员工历史运营分数
+* @property int $staff_clinch 员工总成交量
+* @property int $staff_price 员工总成交金额
+* @property int $staff_manage_time 从业时长
+* @property string $staff_idcard_front 身份证正面
+* @property string $staff_idcard_back 身份证反面
+* @property string $staff_address 籍贯
+* @property int $staff_educate 教育水平：0无，1小学，2初中，3高中，4专科，5本科，6本科以上
+* @property string $staff_skill 特长/技能
+* @property string $staff_crime_record 犯罪记录
+* @property string $staff_sin_record 不良习惯
+* @property string $staff_health_img 健康证
+    * @property int $staff_province 省
+* @property int $staff_city 市
+* @property int $staff_district 区
+* @property YxStaffImg[] $yxStaffImgs
+* @property YxStaffRes[] $yxStaffRes
  * @property YxStaffServer[] $yxStaffServers
  * @property YxServer[] $servers
  */
@@ -60,6 +80,9 @@ class YxStaff extends \yii\db\ActiveRecord
             ],
         ];
     }
+    // public function attributes(){
+    //     return
+    // }
     public static function tableName()
     {
         return 'yx_staff';
@@ -71,18 +94,19 @@ class YxStaff extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['staff_name', 'staff_sex', 'staff_age', 'staff_idcard', 'staff_state', 'staff_img', 'staff_account', 'staff_password'], 'required'],
-            [['company_id', 'staff_sex', 'staff_age', 'staff_found', 'staff_main_server_id'], 'integer'],
+            [['staff_name', 'staff_sex', 'staff_age', 'staff_idcard', 'staff_state', 'staff_img', 'staff_idcard_front', 'staff_idcard_back','staff_address', 'staff_health_img','staff_number','staff_province', 'staff_city', 'staff_district'], 'required'],
+            [['company_id', 'staff_sex', 'staff_found', 'staff_main_server_id','staff_fraction', 'staff_base_fraction', 'staff_history_fraction', 'staff_clinch', 'staff_price', 'staff_manage_time', 'staff_educate', 'staff_login_time','staff_province', 'staff_city', 'staff_district'], 'integer'],
             [['staff_name'], 'string', 'max' => 50],
             [['staff_idcard'], 'string', 'max' => 18],
-            [['staff_intro', 'staff_memo'], 'string', 'max' => 1000],
+            [['staff_intro', 'staff_memo','staff_query'], 'string', 'max' => 1000],
             [['staff_state'], 'string', 'max' => 1],
-            [['staff_login_ip', 'staff_login_time'], 'string', 'max' => 45],
-            [['staff_account'], 'string', 'max' => 11],
-            [['staff_password'], 'string', 'max' => 20],
+            [['staff_login_ip'], 'string', 'max' => 45],
+            [['staff_skill', 'staff_crime_record', 'staff_sin_record'], 'string', 'max' => 255],
             [['staff_all_server_id'], 'validateSASID'],
         ];
     }
+
+
     /**
      * [validateSASID 验证服务上限]
      * @Author   Yoon
@@ -98,6 +122,16 @@ class YxStaff extends \yii\db\ActiveRecord
             $this->addError($attribute, "最多选中四个服务");
             return false;
         }
+        $arr_server_id=explode(',', $staff_all_server_id);
+        if(!empty($arr_server_id)){
+            foreach ($arr_server_id as $key => $value) {
+                if($this->staff_main_server_id==$value){
+                    $this->addError($attribute, "主打服务与副服务不能相同");
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 
@@ -111,7 +145,7 @@ class YxStaff extends \yii\db\ActiveRecord
             'company_id' => '所属商家ID',
             'staff_name' => '姓名',
             'staff_sex' => '性别',
-            'staff_age' => '年龄',
+            'staff_age' => '出生日期',
             'staff_img' => '照片',
             'staff_idcard' => '身份证号码',
             'staff_intro' => '简介',
@@ -120,19 +154,48 @@ class YxStaff extends \yii\db\ActiveRecord
             'staff_memo' => '备注',
             'staff_login_ip' => '登陆ip',
             'staff_login_time' => '登陆时间',
-            'staff_account' => '账号',
-            'staff_password' => '密码',
             'companyName' => '所属公司',
-            'clinch' => '总成交量',
-            'price' => '总成交金额',
             'pre_clinch' => '上月成交量',
             'pre_price' => '上月成交金额',
             'staff_main_server_id' => '主打服务',
-            'staff_all_server_id' => '所有服务',
+            'staff_all_server_id' => '副服务',
            'staff_query' => '搜索关键词',
+            'staff_fraction' => '总分数',
+           'staff_base_fraction' => '基础分数',
+           'staff_history_fraction' => '历史运营分数',
+           'staff_clinch' => '总成交量',
+           'staff_price' => '总成交金额',
+           'staff_manage_time' => '从业时长',
+           'staff_idcard_front' => '身份证正面',
+           'staff_idcard_back' => '身份证反面',
+           'staff_address' => '籍贯',
+           'staff_educate' => '教育水平',
+           'staff_skill' => '特长/技能',
+           'staff_crime_record' => '犯罪记录',
+           'staff_sin_record' => '不良习惯',
+           'staff_health_img' =>'健康证',
+            'staff_province' => '省',
+           'staff_city' => '市',
+           'staff_district' => '区',
+           'staff_number' => '员工编号',
         ];
     }
 
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+   public function getYxStaffImgs()
+   {
+       return $this->hasMany(YxStaffImg::className(), ['staff_id' => 'staff_id']);
+   }
+
+   /**
+    * @return \yii\db\ActiveQuery
+    */
+   public function getYxStaffRes()
+   {
+       return $this->hasMany(YxStaffRes::className(), ['staff_id' => 'staff_id']);
+   }
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -183,6 +246,35 @@ class YxStaff extends \yii\db\ActiveRecord
     {
         return array(1 => '空闲', 2 => '工作中', 3 => '休假', 0 => '退出平台');
     }
+
+    public static function getStaffEducateName($models)
+    {
+        $types = self::getStaffEducate();
+        if (isset($types[$models])) {
+            return $types[$models];
+        }
+
+        return '未知';
+    }
+    public static function getStaffEducate()
+    {
+        return array(0=>'无',1=>'小学',2=>'初中',3=>'高中',4=>'专科',5=>'本科',6=>'本科以上');
+    }
+
+    public static function getStaffTimeName($models)
+    {
+        $types = self::getStaffTime();
+        if (isset($types[$models])) {
+            return $types[$models];
+        }
+
+        return '未知';
+    }
+    public static function getStaffTime()
+    {
+        return array(0=>'一年以下',1=>'一年以上',3=>'三年以上',5=>'五年以上');
+    }
+
     public static function getClinch($staff_id)
     {
         #根据公司ID，交易成功取订单条数；
@@ -225,6 +317,45 @@ class YxStaff extends \yii\db\ActiveRecord
         return $serverName;
     }
 
+    static public function getStaffNumber($region_id=0){
+        $type = Region::getOneType($region_id);
+        $sum = self::find()->where(['staff_district' => $region_id])->count();
+        $sum=$sum+1;
+        $number = '';
+        $arr_0=array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
+        $floor_int=$sum;
+        $count_26='';
+        do{
+
+            $mod_int=$floor_int%26;
+            $floor_int=$floor_int/26;
+            if($mod_int==0){
+                $mod_int=26;
+            }
+            $count_26=$arr_0[$mod_int-1].$count_26;
+            if($floor_int<26&&$floor_int>0&&$mod_int==26){
+                $count_26=$arr_0[$floor_int-1].$count_26;
+            }
+            if($floor_int<26&&$floor_int>0&&$mod_int!=26){
+                $count_26=$arr_0[$floor_int].$count_26;
+            }
+        }while ( $floor_int>26);
+
+        $count_26_len=strlen($count_26);
+
+        if($count_26_len==1){
+            $number=$type.'aa'.$count_26;
+        }elseif ($count_26_len==2) {
+            $number=$type.'a'.$count_26;
+        }elseif ($count_26_len==3) {
+            $number=$type.$count_26;
+        }
+        $number=preg_replace('# #','',$number);
+        return $number;
+    }
+
+
+
     public static function getPreClinch($staff_id)
     {
         #根据公司ID，交易成功，时间取订单条数；
@@ -239,5 +370,43 @@ class YxStaff extends \yii\db\ActiveRecord
     {
         #根据公司ID取订单，时间段，交易成功取订单金额，求和；
         return '上月交易成功金额';
+    }
+    // 得到服务人员名字(oyzx)
+    public static function getStaffName($staff_id) {
+      $staff = YxStaff::find()->where(['staff_id'=>$staff_id])->one();
+      return $staff['staff_name'];
+    }
+    // 得到服务人员所在公司名(oyzx)
+    public static function getCompanyName($staff_id) {
+      $YxStaff = YxStaff::find()->where(['staff_id'=>$staff_id])->one();
+      $company_name = YxCompany::find()->where(['id'=>$YxStaff['company_id']])->one();
+      return $company_name['name'];
+    }
+    // 得到服务人员的所有服务类型(字符串形式)(oyzx)
+    public static function getServerName($staff_id) {
+      $YxStaffServer = YxStaffServer::getServerAll($staff_id);
+      $serverName = "";
+      foreach ($YxStaffServer as $key => $value) {
+        if($key == 0) {
+          $serverName = $serverName.$value['server_name'];
+          continue;
+        }
+        $serverName = $serverName."、".$value['server_name'];
+      }
+      return $serverName;
+    }
+
+    // 在线英文星期转中文星期
+    public static function getChineseWeek($week) {
+      switch( $week ){
+        case 1 : return "星期一";
+        case 2 : return "星期二";
+        case 3 : return "星期三";
+        case 4 : return "星期四";
+        case 5 : return "星期五";
+        case 6 : return "星期六";
+        case 0 : return "星期日";
+        default : return "你输入有误！";
+      };
     }
 }

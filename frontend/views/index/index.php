@@ -1,286 +1,225 @@
 <?php
 	use yii\helpers\Html;
 	use yii\bootstrap\Carousel;
+	use yii\bootstrap\Tabs;
 ?>
 <!-- 二级菜单、轮播、登陆 -->
-<?= Html::cssFile('static/css/index.css') ?>
-<div class="container-header">
-	<div class="menu_2">
+<?= Html::cssFile('/static/css/index.css') ?>
+<div class="container_header">
+	<div class="header_left">
 		<nav>
 			<ul>
 				<li>
-					<a href="#">基础保洁</a> / 
-					<a href="#">深度保洁</a>
+					<a href="/other-services/index?server_id=72&sort=default" target="_blank" title="保姆">保姆</a> / <a href="/basic-clean/index?server_id=74&sort=default" title="擦玻璃">擦玻璃</a>
 				</li>
 				<li>
-					<a href="#">长期/周期保洁</a> /
-					<a href="#">新居开荒</a>
+					<a href="/other-services/index?server_id=82&sort=default"  target="_blank" title="月嫂">月嫂</a> / <a href="/basic-clean/index?server_id=73&sort=default"  target="_blank" title="长期钟点工">长期钟点工</a>
 				</li>
 				<li>
-					<a href="#">厨房保养</a> /
-					<a href="#">卫生间保养</a>
+					<a href="/other-services/index?server_id=83&sort=default"  target="_blank" title="育儿嫂">育儿嫂</a> / <a href="/other-services/index?server_id=26&sort=default"  target="_blank" title="消毒柜清洗">消毒柜清洗</a>
 				</li>
 				<li>
-					<a href="#">擦玻璃</a> /
-					<a href="#">油烟机清洗</a>
+					<a href="/basic-clean/index?server_id=65&sort=default" target="_blank" title="日常保洁">日常保洁</a> / <a href="/special-clean/index?server_id=34&sort=default"  target="_blank" title="厨房保养">厨房保养</a>
 				</li>
 				<li>
-					<a href="#">灶台清洗</a>  /
-					<a href="#">热水器清洗</a>
+					<a href="/special-clean/index?server_id=78&sort=default"  target="_blank" title="深度保洁">深度保洁</a> / <a href="/special-clean/index?server_id=87&sort=default"  target="_blank" title="开荒保洁">开荒保洁</a>
 				</li>
 				<li>
-					<a href="#">电烤箱清洗</a> /
-					<a href="#">微波炉清洗</a> 
+					<a href="/other-services/index?server_id=75&sort=default"  target="_blank" title="沙发保养">沙发保养</a> / <a href="/other-services/index?server_id=39&sort=default"  target="_blank" title="地板打蜡">地板打蜡</a>
 				</li>
 				<li>
-					<a href="#">消毒柜清洗</a> /
-					<a href="#">洗衣机清洗</a>
+					<a href="/other-services/index?server_id=29&sort=default"  target="_blank" title="空调清洗">空调清洗</a> / <a href="/other-services/index?server_id=47&sort=default"  target="_blank" title="空调维修">空调维修</a>
 				</li>
 				<li>
-					<a href="#">冰箱清洗</a> /
-					<a href="#">空调清洗</a> 
+					<a href="/other-services/index?server_id=28&sort=default"  target="_blank" title="冰箱清洗">冰箱清洗</a> / <a href="/other-services/index?server_id=50&sort=default"  target="_blank" title="冰箱维修">冰箱维修</a>
 				</li>
 				<li>
-					<a href="#">饮水机清洗</a> /
-					<a href="#">除螨</a>
+					<a href="/other-services/index?server_id=48&sort=default"  target="_blank" title="马桶维修">马桶维修</a> / <a href="/other-services/index?server_id=45&sort=default"  target="_blank" title="管道疏通">管道疏通</a>
 				</li>
 				<li>
-					<a href="#">沙发保养</a> /
-					<a href="#">地板打蜡</a>
+					<a href="/other-services/index?server_id=22&sort=default"  target="_blank" title="灶台清洗">灶台清洗</a> / <a href="/other-services/index?server_id=56&sort=default"  target="_blank" title="电路维修">电路维修</a>
 				</li>
 				<li>
-					<a href="#">住家保姆</a> /
-					<a href="#">不住家保姆</a>
+					<a href="/other-services/index?server_id=57&sort=default"  target="_blank" title="普通门开锁">普通门开锁</a> / <a href="/other-services/index?server_id=23&sort=default"  target="_blank" title="热水器清洗">热水器清洗</a>
 				</li>
 				<li>
-					<a href="#">老人陪护</a> /
-					<a href="#">长期做饭</a>
+					<a href="/other-services/index?server_id=58&sort=default"  target="_blank" title="普通门换锁">普通门换锁</a> / <a href="/other-services/index?server_id=52&sort=default"  target="_blank" title="热水器维修">热水器维修</a>
 				</li>
 				<li>
-					<a href="#">固定钟点工</a> /
-					<a href="#">月嫂</a>
+					<a href="/other-services/index?server_id=21&sort=default"  target="_blank" title="油烟机清洗">油烟机清洗</a> / <a href="/other-services/index?server_id=51&sort=default"  target="_blank" title="油烟机维修">油烟机维修</a>
 				</li>
 				<li>
-					<a href="#">育儿嫂</a> /
-					<a href="#">管道疏通</a>
+					<a href="/other-services/index?server_id=27&sort=default"  target="_blank" title="洗衣机清洗">洗衣机清洗</a> / <a href="/other-services/index?server_id=53&sort=default"  target="_blank" title="洗衣机维修">洗衣机维修</a>
 				</li>
 				<li>
-					<a href="#">空调加氟</a> /
-					<a href="#">空调维修</a>
+					<a href="/other-services/index?server_id=25&sort=default"  target="_blank" title="微波炉清洗">微波炉清洗</a> / <a href="/other-services/index?server_id=54&sort=default"  target="_blank" title="微波炉维修">微波炉维修</a>
 				</li>
 				<li>
-					<a href="#">马桶维修</a> /
-					<a href="#">水龙头更换</a>
-				</li>
-				<li>
-					<a href="#">冰箱维修</a> /
-					<a href="#">油烟机维修</a>
-				</li>
-				<li>
-					<a href="#">热水器维修</a> /
-					<a href="#">洗衣机维修</a>
-				</li>
-				<li>
-					<a href="#">微波炉维修</a> /
-					<a href="#">电视机维修</a>
-				</li>
-				<li>
-					<a href="#">电路维修</a> /
-					<a href="#">普通门开锁</a>
-				</li>
-				<li>
-					<a href="#">球锁更换</a> /
-					<a href="#">撞锁更换</a>
-				</li>
-				<li>
-					<a href="#">执手锁更换</a> /
-					<a href="#">防盗门开锁</a>
-				</li>
-				<li>
-					<a href="#">防盗门A级锁芯更换</a>
-				</li>
-				<li>
-					<a href="#">防盗门B级锁芯更换</a>
-				</li>
-				<li>
-					<a href="#">防盗门C级锁芯更换</a>
+					<a href="/other-services/index?server_id=30&sort=default"  target="_blank" title="饮水机清洗">饮水机清洗</a> / <a href="/other-services/index?server_id=55&sort=default"  target="_blank" title="电视机维修">电视机维修</a>
 				</li>
 			</ul>
 		</nav>
 	</div>
-	<div class="carous">
-		<?php echo Carousel::widget([
-		    'items' => [
-		        [
-		        	'content' => '<img src="static/img/carousel_1.jpg" style="height:480px;width:800px"/>',
-		        	'caption' => '<h4>保洁</h4><p>爱家就要经常清洁它</p>',
-		        ],
-		        [
-		        	'content' => '<img src="static/img/carousel_2.jpg" style="height:480px;width:800px"/>',
-		        	'caption' => '<h4>保姆</h4><p>照顾家的好帮手</p>',
-		        ],
-		        // 包含图片和字幕的格式
-		        [
-		            'content' => '<img src="static/img/carousel_3.jpg" style="height:480px;width:800px"/>',
-		            'caption' => '<h4>This is title</h4><p>This is the caption text</p>',
-		            //'options' => ['style:height:600px,width:1200px'],       //配置对应的样式
-		        ],
-		    ]
-		]);
-	    ?>
+	<div class="header_center1">
+		<div class="header_center1_top">
+			<?php echo Carousel::widget([
+			    'items' => [
+			        [
+			        	'content' => '<a href="#"><img src="'.$YxBanner[0]->banner_pic.'" /></a>',
+			        	'caption' => '',
+			        ],
+			        [
+			        	'content' => '<a href="#"><img src="'.$YxBanner[1]->banner_pic.'" /></a>',
+			        	'caption' => '',
+			        ],
+			        [
+			            'content' => '<a href="#"><a href="#"><img src="'.$YxBanner[2]->banner_pic.'" /></a>',
+			            'caption' => '',
+			            //'options' => ['style:height:600px,width:1200px'],       //配置对应的样式
+			        ],
+			        [
+			            'content' => '<a href="#"><img src="'.$YxBanner[3]->banner_pic.'" /></a>',
+			            'caption' => '',
+			        ],
+			    ]
+			]);
+		    ?>
+		</div>
+		<div class="header_center1_bottom">
+			<div class="banner_text">
+				<span>原象屋精选</span>
+			</div>
+			<div class="banner_img">
+				<a href="#"><img src="<?= $YxRecomLeft[0]->recom_left_pic; ?>"></a>
+				<a href="#"><img src="<?= $YxRecomLeft[1]->recom_left_pic; ?>"></a>
+				<a href="#"><img src="<?= $YxRecomLeft[2]->recom_left_pic; ?>"></a>
+				<a href="#"><img src="<?= $YxRecomLeft[3]->recom_left_pic; ?>"></a>
+			</div>
+		</div>
 	</div>
-	<div class="login">
-    <div style="padding: 20px 10px 20px 10px;border: 1px solid rgb(172, 30, 35);-webkit-box-shadow: 0 1px 6px rgb(172, 30, 35);box-shadow: 0 1px 6px rgb(172, 30, 35);border-radius: 5px;">
-    	<div>
-    		<img src="//wwc.alicdn.com/avatar/getAvatar.do?userNick=幼稚完后&width=50&height=50&type=sns&_input_charset=UTF-8" />
-    	</div>
-        <div style="margin-top:10px;margin-bottom:10px;">
-               <span style="color: rgb(172, 30, 35);">hello!你好</span>
-        </div>
-    	<div style="display: flex;flex-direction: row;justify-content: space-around;">
-                <button class="btn btn-info btn-sm">注册</button>
-    		<button class="btn btn-info btn-sm">登陆</button>
-    		<button class="btn btn-warning btn-sm">入驻</button>
-    	</div>
-    </div>
-</div>
-</div>
-<!-- 精选商检 -->
-<div class="popular_server">
-	<div class="featured">
-		<h3>精选商家</h3>
-		<h5>
-		     <a href="#" style="color: rgb(172, 30, 35);">更多</a>
-		</h5>
+	<div class="header_center2">
+		<div class="banner1">
+			<img src="<?= $YxActivity->activity_pic; ?>" />
+		</div>
+		<div class="banner_text">
+			<span>今日推荐</span>
+		</div>
+		<div class="banner2">
+			<img src="<?= $YxRecomRight->recom_right_pic; ?>" />
+		</div>
 	</div>
-	<!-- 商家 -->
-	<div class="rows">
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/store1.png', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹家政</h3>
-					<span>服务优先服务优先服务优先服务优先服务优先服</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
-			</div>
+	<div class="header_right">
+			<?php
+				if (Yii::$app->user->isGuest) {
+					echo '<div class="login">
+						    	<div>
+						    		<img src="/static/img/yks.jpg" style="width:80px;height:80px;border-radius: 50%;" />
+						    	</div>
+						    	<div class="buttons">
+					            <button class="btn btn-info" style="padding: 1.5px 30px;"><a href="/site/signup" class="header-title" style="color:#fff;font-size:14px;">注册</a></button>
+						    			<button class="btn btn-info" style="padding: 1.5px 22.5px;"><a href="/site/login" class="header-title" style="color:#fff;font-size:14px;">登录</a></button>
+						    			<button class="btn btn-warning" style="padding: 1.5px 22.5px;">入驻</button>
+						    	</div>
+						    </div>';
+				}else {
+					echo '<div class="login">
+						    	<div>
+						    		<img src="/static/img/yks.jpg" style="width:80px;height:80px;border-radius: 50%;" />
+						    	</div>
+						    	<div class="buttons">
+
+						    	</div>
+						    </div>';
+				}
+			?>
+
+	    <div class="switch">
+	    	<?php
+				echo Tabs::widget([
+				  'items' => [
+				      	[
+				           	'label' => '规则',
+				          	'content' => '<div class="tabs" style="height: 88px;border-bottom: 1px solid #eee;display: flex;flex-direction: column;align-items: center;justify-content: center;">
+				          			<div>
+				          				<a href="#" style="color:rgb(255, 90, 0);text-decoration:none;">《原象屋平台服务协议》</a>
+				         				<a href="#"style="color:rgb(255, 90, 0);text-decoration:none;">《常见问题》</a>
+				          			</div>
+				         			<div style="margin-top:5px;margin-bottom:5px;">
+				         				<a href="#" style="color:#3C3C3C;text-decoration:none;">《第三方家庭服务协议》</a>
+				         				<a href="#" style="color:#3C3C3C;text-decoration:none;">《服务协议》</a>
+				         			</div>
+				         			<div>
+				         				<a href="#" style="color:#3C3C3C;text-decoration:none;">《法律声明及隐私权政策》</a>
+				         				<a href="#" style="color:#3C3C3C;text-decoration:none;">《退款条约》</a>
+				         			</div>
+				         		</div>',
+				          	'active' => true
+				      	],
+				      	[
+				          	'label' => '公告',
+				          	'content' => '<div class="tabs" style="height: 88px;border-bottom: 1px solid #eee;">
+
+				         			</div>',
+				      	],
+				      	[
+				          	'label' => '安全',
+				          	'content' => '<div class="tabs" style="height: 88px;border-bottom: 1px solid #eee;">
+
+				         			</div>',
+				      	]
+				  	],
+			]);
+			?>
 		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/store1.png', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹家政</h3>
-					<span>服务优先服务优先服务优先服务优先服务优先服</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
+		<div class="server-icon">
+			<div class="server-one">
+				<img src="/static/img/icon/1.png">
+				<a href="/basic-clean/index?server_id=65&sort=default" target="_blank" title="日常保洁">日常保洁</a>
 			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/store1.png', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹家政</h3>
-					<span>服务优先服务优先服务优先服务优先服务优先服</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
+			<div class="server-one">
+				<img src="/static/img/icon/2.png">
+				<a href="/other-services/index?server_id=69&sort=default" target="_blank" title="月嫂">月嫂</a>
 			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/store1.png', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹家政</h3>
-					<span>服务至上</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
+			<div class="server-one">
+				<img src="/static/img/icon/3.png">
+				<a href="/other-services/index?server_id=70&sort=default" target="_blank" title="育儿嫂">育儿嫂</a>
 			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/store1.png', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹家政</h3>
-					<span>服务优先服务优先服务优先服务优先服务优先服</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
+			<div class="server-one">
+				<img src="/static/img/icon/4.png">
+				<a href="/basic-clean/index?server_id=36&sort=default" target="_blank" title="擦玻璃">擦玻璃</a>
 			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/store1.png', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹家政</h3>
-					<span>服务优先服务优先服务优先服务优先服务优先服</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
+
+			<div class="server-one">
+				<img src="/static/img/icon/5.png">
+				<a href="/other-services/index?server_id=71&sort=default" target="_blank" title="保姆">保姆</a>
 			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/store1.png', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹家政</h3>
-					<span>服务优先服务优先服务优先服务优先服务优先服</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
+			<div class="server-one">
+				<img src="/static/img/icon/6.png">
+				<a href="/other-services/index?server_id=45&sort=default" target="_blank" title="管道疏通">管道疏通</a>
 			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/store1.png', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹家政</h3>
-					<span>服务至上</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
+			<div class="server-one">
+				<img src="/static/img/icon/7.png">
+				<a href="/other-services/index?server_id=88&sort=default" target="_blank" title="家电维修">家电维修</a>
+			</div>
+			<div class="server-one">
+				<img src="/static/img/icon/8.png">
+				<a href="/special-clean/index?server_id=66&sort=default" target="_blank" title="专项保洁">专项保洁</a>
+			</div>
+			<div class="server-one">
+				<img src="/static/img/icon/9.png">
+				<a href="/special-clean/index?server_id=89&sort=default" target="_blank" title="沙发护理">沙发护理</a>
+			</div>
+			<div class="server-one">
+				<img src="/static/img/icon/10.png">
+				<a href="/other-services/index?server_id=58&sort=default" target="_blank" title="普通门换锁">普通门换锁</a>
+			</div>
+			<div class="server-one">
+				<img src="/static/img/icon/11.png">
+				<a href="/other-services/index?server_id=18&sort=default" target="_blank" title="维修">维修</a>
+			</div>
+			<div class="server-one">
+				<img src="/static/img/icon/12.png">
+				<a href="/other-services/index?server_id=39&sort=default" target="_blank" title="地板打蜡">地板打蜡</a>
 			</div>
 		</div>
 	</div>
@@ -289,139 +228,73 @@
 <div class="popular_server">
 	<div class="featured">
 		<h3>精选服务</h3>
-		<h5>
-			<a href="#" style="color: rgb(172, 30, 35);">更多</a>
-		</h5>
+		<!-- <h5>
+			<a href="#" style="color: rgb(255, 90, 0);">更多</a>
+		</h5> -->
 	</div>
 	<!-- 服务人员 -->
 	<div class="rows">
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/user.jpg', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹</h3>
-					<span>服务优先服务优先服务优先服务优先服务优先服</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
-			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/user.jpg', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹</h3>
-					<span>服务优先服务优先服务优先服务优先服务优先服</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
+		<?php foreach ($YxStaff as $item): ?>
+			<div class="store">
+				<div class="store_one">
+					<div class="img" style="text-align: center;">
+						<img src="<?= $item->staff_img?>" class="img-thumbnail" alt="Yuanxiang"/>
+					</div>
+					<div class="name">
+						<h4 title="<?= $item->staff_name ?>"><?= $item->staff_name ?></h4>
+						<h4 title="分数：<?= $item->staff_fraction ?>">分数：<?= $item->staff_fraction ?></h4>
+						<p title="简介：<?= $item->staff_intro?>">简介：<?= $item->staff_intro?></p>
+					</div>
+					<div class="detail">
+						<div class="pop-ups">
+							<a href="/staff/index?staff_id=<?= $item->staff_id?>">查看详情</a>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/user.jpg', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹</h3>
-					<span>服务优先服务优先服务优先服务优先服务优先服</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
-			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/user.jpg', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹</h3>
-					<span>服务至上</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
-			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/user.jpg', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹</h3>
-					<span>服务优先服务优先服务优先服务优先服务优先服</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
-			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/user.jpg', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹</h3>
-					<span>服务优先服务优先服务优先服务优先服务优先服</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
-			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/user.jpg', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹</h3>
-					<span>服务优先服务优先服务优先服务优先服务优先服</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
-			</div>
-		</div>
-		<div class="store">
-			<div class="store_one">
-				<div style="text-align: center;">
-					<a href="#">
-						<?= Html::img('@web/static/img/user.jpg', ['alt' => 'My logo',"class"=>"img-thumbnail"]) ?>
-					</a>
-				</div>
-				<div style="margin: 0 11px;height: 76px;">
-					<h3>黄小妹</h3>
-					<span>服务至上</span>
-				</div>
-				<div style="text-align: center;">
-					<button class="btn btn-primary">查看详情</button>
-				</div>
-			</div>
-		</div>
+		<?php endforeach; ?>
 	</div>
 </div>
+
+<!-- 精选商家 -->
+<div class="popular_server">
+	<div class="featured">
+		<h3>精选商家</h3>
+		<!-- <h5>
+		     <a href="#" style="color: rgb(255, 90, 0);">更多</a>
+		</h5> -->
+	</div>
+	<!-- 商家 -->
+	<div class="rows">
+		<?php foreach ($YxCompany as $item): ?>
+			<div class="store">
+				<div class="store_one">
+					<div class="img">
+						<img src="<?= $item->business_licences?>" class="img-thumbnail" alt='Yuanxiang' />
+					</div>
+					<div class="name">
+						<h4 title="<?= $item->name ?>"><?= $item->name ?></h4>
+						<h4 title="分数：<?= $item->total_fraction ?>">分数：<?= $item->total_fraction ?></h4>
+						<p title="简介：<?= $item->introduction?>">简介：<?= $item->introduction?></p>
+					</div>
+					<div class="detail">
+						<div class="pop-ups">
+							<a href="/company/staff?company_id=<?= $item->id?>">查看详情</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		<?php endforeach; ?>
+	</div>
+</div>
+
+<script type="text/javascript">
+	window.onload = function() {
+		$(".store").mouseenter(function(){
+	  	this.querySelector(".detail").style.display = "block";
+	  });
+	  $(".store").mouseleave(function(){
+	  	this.querySelector(".detail").style.display = "none";
+	  });
+	}
+</script>

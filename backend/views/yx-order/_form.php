@@ -22,9 +22,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'order_state')->textInput() ?>
 
+    <?= $form->field($model, 'is_delete')->textInput() ?>
+
     <?= $form->field($model, 'order_memo')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'usera_id')->textInput() ?>
+    <?= $form->field($model, 'yx_user_id')->textInput() ?>
 
     <?= $form->field($model, 'usera_name')->textInput(['maxlength' => true]) ?>
 

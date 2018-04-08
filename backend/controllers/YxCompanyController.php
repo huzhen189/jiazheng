@@ -5,6 +5,10 @@ namespace backend\controllers;
 use Yii;
 use common\models\YxCompany;
 use common\models\YxCompanySearch;
+use common\models\YxStaff;
+
+
+
 use common\tools\CheckController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -67,7 +71,43 @@ class YxCompanyController extends CheckController
         $model = new YxCompany();
 
         if ($model->load(Yii::$app->request->post())) {
+            #主打服务的ID，以逗号隔开，数组转字符串
+            if (!empty($model->main_server_id)) {
+                $arr_main_server_id = $model->main_server_id;
+                $str_main_server_id = '';
+                foreach ($arr_main_server_id as $key => $value) {
+                    if ($key == 0) {
+                        $str_main_server_id = $value;
+                    } else {
+                        $str_main_server_id = $str_main_server_id . ',' . $value;
+                    }
+                }
+                $model->main_server_id = $str_main_server_id;
+            }
+            #副服务的ID，以逗号隔开，数组转字符串
+            if (!empty($model->all_server_id)) {
+                $arr_all_server_id = $model->all_server_id;
+                $str_all_server_id = '';
+                foreach ($arr_all_server_id as $key => $value) {
+                    if ($key == 0) {
+                        $str_all_server_id = $value;
+                    } else {
+                        $str_all_server_id = $str_all_server_id . ',' . $value;
+                    }
+                }
+                $model->all_server_id = $str_all_server_id;
+            }
+
+            #修改搜索关键词
+            $str_server_id = $model->all_server_id . ',' . $model->main_server_id;
+            if(empty($model->all_server_id)){
+                $str_server_id=$model->main_server_id;
+            }
+            $model->query = YxStaff::getAllServer($str_server_id);
             $model->business_licences = $model->business_licences[0];
+            $model->image = $model->image[0];
+            #商家编码
+            $model->number=YxCompany::getCmpNumber($model->district);
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -90,7 +130,41 @@ class YxCompanyController extends CheckController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
+            #主打服务的ID，以逗号隔开，数组转字符串
+            if (!empty($model->main_server_id)) {
+                $arr_main_server_id = $model->main_server_id;
+                $str_main_server_id = '';
+                foreach ($arr_main_server_id as $key => $value) {
+                    if ($key == 0) {
+                        $str_main_server_id = $value;
+                    } else {
+                        $str_main_server_id = $str_main_server_id . ',' . $value;
+                    }
+                }
+                $model->main_server_id = $str_main_server_id;
+            }
+            #副服务的ID，以逗号隔开，数组转字符串
+            if (!empty($model->all_server_id)) {
+                $arr_all_server_id = $model->all_server_id;
+                $str_all_server_id = '';
+                foreach ($arr_all_server_id as $key => $value) {
+                    if ($key == 0) {
+                        $str_all_server_id = $value;
+                    } else {
+                        $str_all_server_id = $str_all_server_id . ',' . $value;
+                    }
+                }
+                $model->all_server_id = $str_all_server_id;
+            }
+
+            #修改搜索关键词
+            $str_server_id = $model->all_server_id . ',' . $model->main_server_id;
+            if(empty($model->all_server_id)){
+                $str_server_id=$model->main_server_id;
+            }
+            $model->query = YxStaff::getAllServer($str_server_id);
             $model->business_licences = $model->business_licences[0];
+            $model->image = $model->image[0];
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }

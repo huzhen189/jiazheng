@@ -6,12 +6,12 @@
       { type: 'A' },
       { type: 'A' }
     ],
-    templateKey: 'type',
+    switch: 'type',
     alias: 'item'
   },
   children: [{
     type: 'cell-slot',
-    attr: { append: 'tree', templateType: 'A' },
+    attr: { append: 'tree', case: 'A' },
     children: [{
       type: 'div',
       attr: {
@@ -22,26 +22,17 @@
       },
       children: [{
         type: 'text',
-        style: {
-          height: '80px',
-          fontSize: '60px',
-          color: '#41B883'
-        },
+        classList: ['output'],
         attr: {
           value: { '@binding': 'output' }
         }
       }, {
         type: 'input',
         event: ['input'],
-        style: {
-          fontSize: '50px',
-          color: '#666666',
-          borderWidth: '2px',
-          borderColor: '#41B883'
-        },
+        classList: ['input'],
         attr: {
           type: 'text',
-          value: 0
+          value: 'No binding'
         }
       }]
     }]

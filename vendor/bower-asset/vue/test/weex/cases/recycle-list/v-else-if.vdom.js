@@ -6,12 +6,12 @@
       { type: 'A' },
       { type: 'A' }
     ],
-    templateKey: 'type',
+    switch: 'type',
     alias: 'item'
   },
   children: [{
     type: 'cell-slot',
-    attr: { append: 'tree', templateType: 'A' },
+    attr: { append: 'tree', case: 'A' },
     children: [{
       type: 'image',
       attr: {
@@ -27,7 +27,7 @@
     }, {
       type: 'image',
       attr: {
-        '[[match]]': '!(!(item.sourceA) && (item.sourceB))',
+        '[[match]]': '!(item.sourceA || item.sourceB)',
         src: { '@binding': 'item.placeholder' }
       }
     }]

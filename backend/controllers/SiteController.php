@@ -66,6 +66,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        //return $this->redirect(['/yx-company/index']);
         return $this->render('index');
     }
 

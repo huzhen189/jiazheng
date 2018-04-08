@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\models\Region;
 use zh\qiniu\QiniuFileInput;
-
+use common\models\YxStaff;
 $this->registerJsFile(Yii::$app->params['webuploader']['fileDomain']."react/build/static/js/main.js");
 $this->registerJs(
    '
@@ -66,7 +66,14 @@ $this->registerCss('
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-
+    <?= $form->field($model, 'image')->widget(QiniuFileInput::className(),[
+        'uploadUrl' => 'https://upload-z2.qiniup.com/', //文件上传地址 不同地区的空间上传地址不一样 参见官方文档
+        'qlConfig' => Yii::$app->params['qnConfig'],
+        'clientOptions' => [
+            'max' => 1,//最多允许上传图片个数  默认为3
+            'accept' => 'image/jpeg,image/png'//上传允许类型
+        ],
+    ]) ?>
     <?= $form->field($model, 'province')->widget(\chenkby\region\Region::className(),[
         'model'=>$model,
         'url'=> \yii\helpers\Url::toRoute(['get-region']),
@@ -109,7 +116,6 @@ $this->registerCss('
     <?= $form->field($model, 'wechat')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'number')->textInput(['maxlength' => true]) ?>
-
     <?php $model->status = $model->getCmpStatus(); ?>
     <?= $form->field($model, 'status')->dropDownList($model->status) ?>
 
@@ -122,9 +128,36 @@ $this->registerCss('
         ],
     ]) ?>
 
+    <?= $form->field($model, 'introduction')->textarea(['rows' => 6]) ?>
+
     <?php $model->models = $model->getCmpModels(); ?>
     <?= $form->field($model, 'models')->dropDownList($model->models) ?>
 
+    <?php 
+        $server_id = $model->getCmpServer();
+        $model->main_server_id = explode(',', $model->main_server_id);
+    ?>
+    <?= $form->field($model, 'main_server_id')->checkboxList($server_id);?>
+
+    <?php 
+        $server2_id = $model->getCmpServer();
+        if(!empty($arr_main_server_id)){
+            foreach ($arr_main_server_id as $key => $value) {
+                unset($server2_id[$key]);
+            }  
+        }
+        $model->all_server_id = explode(',', $model->all_server_id);
+    ?>
+   <?= $form->field($model, 'all_server_id')->checkboxList($server2_id);?>
+
+   <?php $manage_time = YxStaff::getStaffTime(); ?>
+   <?= $form->field($model, 'manage_time')->dropDownList($manage_time) ;?>
+
+    <?= $form->field($model, 'banck_card')->textInput(['maxlength' => true]) ?>
+
+   <?= $form->field($model, 'alipay')->textInput(['maxlength' => true]) ?>
+
+ <?= $form->field($model, 'business_code')->textInput(['maxlength' => true]) ?>
     <div class="form-group">
         <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
     </div>

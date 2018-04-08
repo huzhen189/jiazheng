@@ -2,11 +2,12 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use zh\qiniu\QiniuFileInput;
 /* @var $this yii\web\View */
 /* @var $model common\models\YxServer */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+
 
 <div class="yx-server-form">
 
@@ -14,17 +15,43 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'server_name')->textInput(['maxlength' => true]) ?>
 
-<!--     <?= $form->field($model, 'server_type')->textInput() ?> -->
+    <?php $server_type = $model->getCmpType(); ?>
+    <?= $form->field($model, 'server_type')->dropDownList($server_type, [
+        'onchange' => 'serverType()',
+    ])->label('分类级别');?> 
     
-    <?php $parent_list = $model->getCmpParent(); ?>
-    <?= $form->field($model, 'server_parent')->dropDownList($parent_list) ?>
+    <?php $parent_list = $model->getLvServer(1,0); ?>
+    <?= $form->field($model, 'one_server')->dropDownList($parent_list, [
+        'onchange' => '$.post("/yx-server/serverlink?server_id='. '"+$(this).val(),function(data){
+            $("select#yxserver-server_parent").html(data);
+        });',
+    ]);?>
+
+    <?php
+        $parent_list = $model->getLvServer(2,$model->one_server); 
+    ?>
+    <?= $form->field($model, 'server_parent')->dropDownList($parent_list)->label('二级分类') ?>
     
     <?php $state_list = $model->getCmpState(); ?>
     <?= $form->field($model, 'server_state')->dropDownList($state_list) ?>
 
     <?= $form->field($model, 'server_memo')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'server_sort')->textInput() ?>
+    <?= $form->field($model, 'server_unit')->textInput(['maxlength' => true]) ?> 
+    
+    <?= $form->field($model, 'server_class')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'server_pic')->widget(QiniuFileInput::className(),[
+        'uploadUrl' => 'https://upload-z2.qiniup.com/', //文件上传地址 不同地区的空间上传地址不一样 参见官方文档
+        'qlConfig' => Yii::$app->params['qnConfig'],
+        'clientOptions' => [
+            'max' => 1,//最多允许上传图片个数  默认为3
+            'accept' => 'image/jpeg,image/png'//上传允许类型
+        ],
+    ]) ?>
+ 
+    <?php $mans = $model->getMans(); ?>
+   <?= $form->field($model, 'server_mans')->dropDownList($mans) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', '保存'), ['class' => 'btn btn-success']) ?>
@@ -33,3 +60,23 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+<script >
+    
+    
+    var serverType = function(){
+            var server_type=$("#yxserver-server_type").val();
+            if(server_type==1){
+                $(".field-yxserver-one_server").hide();
+                $(".field-yxserver-server_parent").hide();
+            }
+            if(server_type==2){
+                $(".field-yxserver-one_server").show();
+                $(".field-yxserver-server_parent").hide();
+            }
+            if(server_type==3){
+                $(".field-yxserver-one_server").show();
+                $(".field-yxserver-server_parent").show();
+            }
+    }
+    window.onload=serverType();
+</script>

@@ -3,10 +3,12 @@
 namespace backend\controllers;
 
 use common\models\YxStaff;
+use common\models\YxStaffImg;
+use common\models\YxStaffImgSearch;
 use common\models\YxStaffSearch;
+use common\tools\CheckController;
 use Yii;
 use yii\filters\VerbFilter;
-use common\tools\CheckController;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -37,15 +39,15 @@ class YxStaffController extends CheckController
     {
         $searchModel = new YxStaffSearch();
 
-        #ÔÚ²éÑ¯²ÎÊýÖÐÌí¼Ó¹«Ë¾ID
+        #åœ¨æŸ¥è¯¢å‚æ•°ä¸­æ·»åŠ å…¬å¸ID
         $queryParams = Yii::$app->request->queryParams;
-        if(!empty($company_id)){
+        if (!empty($company_id)) {
             if (!isset($queryParams['YxStaffSearch'])) {
                 $queryParams['YxStaffSearch'] = ['company_id' => $company_id];
             } else {
                 $queryParams['YxStaffSearch'] = array_merge($queryParams['YxStaffSearch'], ['company_id' => $company_id]);
-            }  
-        }else{
+            }
+        } else {
             $queryParams['YxStaffSearch'] = ['company_id' => -1];
         }
 
@@ -65,8 +67,21 @@ class YxStaffController extends CheckController
      */
     public function actionView($id)
     {
+        $searchModel = new YxStaffImgSearch();
+        $searchModel2 = new YxStaffImgSearch();
+        $model = $this->findModel($id);
+        $staff_id = $model->staff_id;
+        #èµ„æ ¼è¯ä¹¦æŸ¥è¯¢å‚æ•°
+        $queryParams = Yii::$app->request->queryParams;
+        $queryParams['YxStaffImgSearch'] = ['staff_id' => $staff_id];
+        $queryParams['YxStaffImgSearch'] = array_merge($queryParams['YxStaffImgSearch'], ['verify_state' => 3]);
+        $dataProvider = $searchModel->search($queryParams);
+
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -78,35 +93,56 @@ class YxStaffController extends CheckController
     public function actionCreate($company_id)
     {
         $model = new YxStaff();
+        $model2 = new YxStaffImg();
+        $InsertParams = Yii::$app->request->post();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->company_id=$company_id;
-            #ËùÓÐ·þÎñµÄID£¬ÒÔ¶ººÅ¸ô¿ª£¬Êý×é×ª×Ö·û´®
-            $arr_staff_all_server_id=$model->staff_all_server_id;
-            $str_staff_all_server_id='';
-            foreach ($arr_staff_all_server_id as $key => $value) {
-                if($key==0){
-                    $str_staff_all_server_id=$value;
-                }else{
-                    $str_staff_all_server_id=$str_staff_all_server_id.','.$value;
+            $model->company_id = $company_id;
+            $model->staff_age = strtotime($model->staff_age);
+            #æ‰€æœ‰æœåŠ¡çš„IDï¼Œä»¥é€—å·éš”å¼€ï¼Œæ•°ç»„è½¬å­—ç¬¦ä¸²
+            if (!empty($model->staff_all_server_id)) {
+                $arr_staff_all_server_id = $model->staff_all_server_id;
+                $str_staff_all_server_id = '';
+                foreach ($arr_staff_all_server_id as $key => $value) {
+                    if ($key == 0) {
+                        $str_staff_all_server_id = $value;
+                    } else {
+                        $str_staff_all_server_id = $str_staff_all_server_id . ',' . $value;
+                    }
                 }
+                $model->staff_all_server_id = $str_staff_all_server_id;
             }
-            $model->staff_all_server_id=$str_staff_all_server_id;
 
+            #ä¿®æ”¹æœç´¢å…³é”®è¯
+            $str_server_id = $model->staff_all_server_id . ',' . $model->staff_main_server_id;
+            if (empty($model->staff_all_server_id)) {
+                $str_server_id = $model->staff_main_server_id;
+            }
+            $model->staff_query = YxStaff::getAllServer($str_server_id);
 
-            #ÐÞ¸ÄËÑË÷¹Ø¼ü´Ê
-            $str_server_id=$model->staff_all_server_id.','.$model->staff_main_server_id;
-            $model->staff_query=YxStaff::getAllServer($str_server_id);
-
-            #ÐÞ¸ÄÍ¼Æ¬Â·¾¶
+            #ä¿®æ”¹å›¾ç‰‡è·¯å¾„
             $model->staff_img = $model->staff_img[0];
+            $model->staff_idcard_front = $model->staff_idcard_front[0];
+            $model->staff_idcard_back = $model->staff_idcard_back[0];
+            $model->staff_health_img = $model->staff_health_img[0];
+            $model->staff_number=YxStaff::getStaffNumber($model->staff_district);
             if ($model->save()) {
+                if (isset($InsertParams['YxStaffImg'])) {
+                    foreach ($InsertParams['YxStaffImg']['image'] as $key => $value) {
+                        $new_model2 = new YxStaffImg();
+                        $new_model2->staff_id = $model->staff_id;
+                        $new_model2->image = $value;
+                        $new_model2->verify_state = 3;
+                        $new_model2->save();
+                    }
+                }
                 return $this->redirect(['view', 'id' => $model->staff_id]);
             }
         }
 
         return $this->render('create', [
             'model' => $model,
+            'model2' => $model2,
         ]);
     }
 
@@ -120,35 +156,88 @@ class YxStaffController extends CheckController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post())) {
-            
-            #ËùÓÐ·þÎñµÄID£¬ÒÔ¶ººÅ¸ô¿ª£¬Êý×é×ª×Ö·û´®
-            $arr_staff_all_server_id=$model->staff_all_server_id;
-            $str_staff_all_server_id='';
-            foreach ($arr_staff_all_server_id as $key => $value) {
-                if($key==0){
-                    $str_staff_all_server_id=$value;
-                }else{
-                    $str_staff_all_server_id=$str_staff_all_server_id.','.$value;
-                }
+        $UpdataParams = Yii::$app->request->post();
+
+        #å–ç›¸å…³è¯ä¹¦
+        $staff_type1_model2 = YxStaffImg::find()->where(['staff_id' => $id, 'verify_state' => 3])->all();
+        if (!empty($staff_type1_model2)) {
+            $memory = array();
+            $memory['image'] = array();
+            foreach ($staff_type1_model2 as $key => $value) {
+                array_push($memory['image'], $value['image']);
             }
-            $model->staff_all_server_id=$str_staff_all_server_id;
+            $type1_model2 = $staff_type1_model2[0];
+            $type1_model2->image = $memory['image'];
+        } else {
+            $type1_model2 = new YxStaffImg();
+        }
+        $model->staff_age = date('Y-m-d');
+        #å‘˜å·¥çš„ä¿®æ”¹
+        if ($model->load(Yii::$app->request->post())) {
+            $model->staff_age = strtotime($model->staff_age);
 
+            #æ‰€æœ‰æœåŠ¡çš„IDï¼Œä»¥é€—å·éš”å¼€ï¼Œæ•°ç»„è½¬å­—ç¬¦ä¸²
+            if (!empty($model->staff_all_server_id)) {
+                $arr_staff_all_server_id = $model->staff_all_server_id;
+                $str_staff_all_server_id = '';
+                foreach ($arr_staff_all_server_id as $key => $value) {
+                    if ($key == 0) {
+                        $str_staff_all_server_id = $value;
+                    } else {
+                        $str_staff_all_server_id = $str_staff_all_server_id . ',' . $value;
+                    }
+                }
+                $model->staff_all_server_id = $str_staff_all_server_id;
+            }
 
-            #ÐÞ¸ÄËÑË÷¹Ø¼ü´Ê
-            $str_server_id=$model->staff_all_server_id.','.$model->staff_main_server_id;
-            $model->staff_query=YxStaff::getAllServer($str_server_id);
+            #ä¿®æ”¹æœç´¢å…³é”®è¯
+            $str_server_id = $model->staff_all_server_id . ',' . $model->staff_main_server_id;
+            if (empty($model->staff_all_server_id)) {
+                $str_server_id = $model->staff_main_server_id;
+            }
+            $model->staff_query = YxStaff::getAllServer($str_server_id);
 
-            #ÐÞ¸ÄÍ¼Æ¬Â·¾¶
+            #ä¿®æ”¹å›¾ç‰‡è·¯å¾„
             $model->staff_img = $model->staff_img[0];
-
+            $model->staff_idcard_front = $model->staff_idcard_front[0];
+            $model->staff_idcard_back = $model->staff_idcard_back[0];
+            $model->staff_health_img = $model->staff_health_img[0];
             if ($model->save()) {
+                #ç›¸å…³è¯ä¹¦çš„ä¿®æ”¹
+                if ($UpdataParams) {
+                    $count_model2 = count($staff_type1_model2);
+                    if (isset($UpdataParams['YxStaffImg'])) {
+                        $count_params = count($UpdataParams['YxStaffImg']['image']);
+                        foreach ($UpdataParams['YxStaffImg']['image'] as $key => $value) {
+                            if (isset($staff_type1_model2[$key])) {
+                                $staff_type1_model2[$key]['image'] = $value;
+                                $staff_type1_model2[$key]->save();
+                            } else {
+                                $insert_ysi_model = new YxStaffImg();
+                                $insert_ysi_model->staff_id = $id;
+                                $insert_ysi_model->image = $value;
+                                $insert_ysi_model->verify_state = 3;
+                                $insert_ysi_model->save();
+                            }
+                        }
+                        if ($count_model2 > $count_params) {
+                            for ($key = $key + 1; $key < $count_model2; $key++) {
+                                $staff_type1_model2[$key]->delete();
+                            }
+                        }
+                    } else if (isset($staff_type1_model2)) {
+                        foreach ($staff_type1_model2 as $key => $value) {
+                            $staff_type1_model2[$key]->delete();
+                        }
+                    }
+                }
                 return $this->redirect(['view', 'id' => $model->staff_id]);
             }
         }
 
         return $this->render('update', [
             'model' => $model,
+            'model2' => $type1_model2,
         ]);
     }
 
@@ -161,9 +250,11 @@ class YxStaffController extends CheckController
      */
     public function actionDelete($id)
     {
+        $model=$this->findModel($id);
+        $company_id=$model->company_id;
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index','company_id'=>$company_id]);
     }
 
     /**
@@ -180,5 +271,14 @@ class YxStaffController extends CheckController
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+    public function actions()
+    {
+        $actions=parent::actions();
+        $actions['get-region']=[
+            'class'=>\chenkby\region\RegionAction::className(),
+            'model'=>\common\models\Region::className()
+        ];
+        return $actions;
     }
 }

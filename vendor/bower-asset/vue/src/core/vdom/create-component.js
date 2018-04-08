@@ -32,26 +32,23 @@ import {
   renderRecyclableComponentTemplate
 } from 'weex/runtime/recycle-list/render-component-template'
 
-// hooks to be invoked on component VNodes during patch
+// inline hooks to be invoked on component VNodes during patch
 const componentVNodeHooks = {
-  init (
-    vnode: VNodeWithData,
-    hydrating: boolean,
-    parentElm: ?Node,
-    refElm: ?Node
-  ): ?boolean {
-    if (!vnode.componentInstance || vnode.componentInstance._isDestroyed) {
-      const child = vnode.componentInstance = createComponentInstanceForVnode(
-        vnode,
-        activeInstance,
-        parentElm,
-        refElm
-      )
-      child.$mount(hydrating ? vnode.elm : undefined, hydrating)
-    } else if (vnode.data.keepAlive) {
+  init (vnode: VNodeWithData, hydrating: boolean): ?boolean {
+    if (
+      vnode.componentInstance &&
+      !vnode.componentInstance._isDestroyed &&
+      vnode.data.keepAlive
+    ) {
       // kept-alive components, treat as a patch
       const mountedNode: any = vnode // work around flow
       componentVNodeHooks.prepatch(mountedNode, mountedNode)
+    } else {
+      const child = vnode.componentInstance = createComponentInstanceForVnode(
+        vnode,
+        activeInstance
+      )
+      child.$mount(hydrating ? vnode.elm : undefined, hydrating)
     }
   },
 
@@ -107,7 +104,7 @@ export function createComponent (
   context: Component,
   children: ?Array<VNode>,
   tag?: string
-): VNode | void {
+): VNode | Array<VNode> | void {
   if (isUndef(Ctor)) {
     return
   }
@@ -185,8 +182,8 @@ export function createComponent (
     }
   }
 
-  // merge component management hooks onto the placeholder node
-  mergeHooks(data)
+  // install component management hooks onto the placeholder node
+  installComponentHooks(data)
 
   // return a placeholder vnode
   const name = Ctor.options.name || tag
@@ -211,15 +208,11 @@ export function createComponent (
 export function createComponentInstanceForVnode (
   vnode: any, // we know it's MountedComponentVNode but flow doesn't
   parent: any, // activeInstance in lifecycle state
-  parentElm?: ?Node,
-  refElm?: ?Node
 ): Component {
   const options: InternalComponentOptions = {
     _isComponent: true,
-    parent,
     _parentVnode: vnode,
-    _parentElm: parentElm || null,
-    _refElm: refElm || null
+    parent
   }
   // check inline-template render functions
   const inlineTemplate = vnode.data.inlineTemplate
@@ -230,23 +223,26 @@ export function createComponentInstanceForVnode (
   return new vnode.componentOptions.Ctor(options)
 }
 
-function mergeHooks (data: VNodeData) {
-  if (!data.hook) {
-    data.hook = {}
-  }
+function installComponentHooks (data: VNodeData) {
+  const hooks = data.hook || (data.hook = {})
   for (let i = 0; i < hooksToMerge.length; i++) {
     const key = hooksToMerge[i]
-    const fromParent = data.hook[key]
-    const ours = componentVNodeHooks[key]
-    data.hook[key] = fromParent ? mergeHook(ours, fromParent) : ours
+    const existing = hooks[key]
+    const toMerge = componentVNodeHooks[key]
+    if (existing !== toMerge && !(existing && existing._merged)) {
+      hooks[key] = existing ? mergeHook(toMerge, existing) : toMerge
+    }
   }
 }
 
-function mergeHook (one: Function, two: Function): Function {
-  return function (a, b, c, d) {
-    one(a, b, c, d)
-    two(a, b, c, d)
+function mergeHook (f1: any, f2: any): Function {
+  const merged = (a, b) => {
+    // flow complains about extra args which is why we use any
+    f1(a, b)
+    f2(a, b)
   }
+  merged._merged = true
+  return merged
 }
 
 // transform component v-model info (value and callback) into

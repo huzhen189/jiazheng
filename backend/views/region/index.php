@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel common\models\RegionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Regions');
+$this->title = Yii::t('app', '地区列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="region-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Region'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', '新增'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -29,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'parent_id',
             'level',
+            'type',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

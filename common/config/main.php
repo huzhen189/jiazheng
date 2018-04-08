@@ -6,8 +6,15 @@ return [
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => 'localhost',
+            'port' => 6379,
+            'database' => 0,
+        ],
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            //'class' => 'yii\caching\FileCache',
+            'class' => 'yii\redis\Cache',
         ],
         "urlManager" => [
             //用于表明urlManager是否启用URL美化功能，在Yii1.1中称为path格式URL，

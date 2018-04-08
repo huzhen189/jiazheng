@@ -58,7 +58,9 @@ export function compileVue (source, componentName) {
 
     const name = 'test_case_' + (Math.random() * 99999999).toFixed(0)
     const generateCode = styles => (`
+      try { weex.document.registerStyleSheets("${name}", [${JSON.stringify(styles)}]) } catch(e) {};
       var ${name} = Object.assign({
+        _scopeId: "${name}",
         style: ${JSON.stringify(styles)},
         render: function () { ${res.render} },
         ${res['@render'] ? ('"@render": function () {' + res['@render'] + '},') : ''}
@@ -114,17 +116,23 @@ function omitUseless (object) {
   if (isObject(object)) {
     delete object.ref
     for (const key in object) {
-      if (key.charAt(0) !== '@' && (isEmptyObject(object[key]) || object[key] === undefined)) {
+      omitUseless(object[key])
+      if (key === '@styleScope' ||
+        key === '@templateId' ||
+        key === 'bindingExpression') {
         delete object[key]
       }
-      omitUseless(object[key])
+      if (key.charAt(0) !== '@' &&
+        (isEmptyObject(object[key]) || object[key] === undefined)) {
+        delete object[key]
+      }
     }
   }
   return object
 }
 
 export function getRoot (instance) {
-  return omitUseless(instance.document.body.toJSON())
+  return omitUseless(instance.$getRoot())
 }
 
 // Get all binding events in the instance
@@ -141,14 +149,14 @@ export function getEvents (instance) {
       node.children.forEach(recordEvent)
     }
   }
-  recordEvent(instance.document.body.toJSON())
+  recordEvent(instance.$getRoot())
   return events
 }
 
 export function fireEvent (instance, ref, type, event = {}) {
   const el = instance.document.getRef(ref)
   if (el) {
-    instance.document.fireEvent(el, type, event = {})
+    instance.document.fireEvent(el, type, event)
   }
 }
 
@@ -158,9 +166,14 @@ export function createInstance (id, code, ...args) {
   context.registerModules({
     timer: ['setTimeout', 'setInterval']
   })
-  const instance = context.createInstance(id, `// { "framework": "Vue" }\n${code}`, ...args)
+  const instance = context.createInstance(id, `// { "framework": "Vue" }\n${code}`, ...args) || {}
+  instance.document = context.getDocument(id)
+  instance.$getRoot = () => context.getRoot(id)
   instance.$refresh = (data) => context.refreshInstance(id, data)
-  instance.$destroy = () => context.destroyInstance(id)
+  instance.$destroy = () => {
+    delete instance.document
+    context.destroyInstance(id)
+  }
   instance.$triggerHook = (id, hook, args) => {
     instance.document.taskCenter.triggerHook(id, 'lifecycle', hook, { args })
   }

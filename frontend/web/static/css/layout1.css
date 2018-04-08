@@ -1,236 +1,29 @@
-body {
-    min-width: 1250px;
-    font: 1em/1.55 Verdana,Arial,Helvetica,sans-serif;
-}
-
-/*
-    top_nav的css
-*/
-#header #top_nav {
-    background-color: #f5f5f5;
-    font-size: 0.75em;
-    height: 40px;
-    line-height: 40px;
-    width: 100%;
-}
-
-#header #top_nav .top_nav_inner {
-    width: 1200px;
-    height: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    color: #3c3c3c;
-}
-
-#header #top_nav .top_nav_inner .top_nav_left {
-    float: left;
-}
-
-#header #top_nav .top_nav_inner .top_nav_right {
-    float: right;
-}
-
-#header #top_nav .top_nav_inner .top_nav_right .login-text {
-    margin: 0 30px 0 10px;
-    width: auto;
-}
-
-.top_nav_right .t_r {
-    float: left;
-    width: 90px;
-}
-
-#header #top_nav .top_nav_inner .top_nav_right .login-text a {
-    color: #3c3c3c;
-}
-
-#header #top_nav .top_nav_inner .top_nav_right .t_r .top_account {
-    height: 90px;
-    width: 50px;
-}
-
-#header #top_nav .top_nav_inner .top_nav_right .t_r.top_account .top_account dt {
-    display: block;
-    height: 90px;
-}
-
-.top_nav_right .t_r a {
-    color: #3c3c3c;
-}
-
-.top_account .mycoount {
-    background: rgba(0, 0, 0, 0) url(../img/toptip.png) no-repeat scroll left top;
-    display: inline-block;
-    height: 25px;
-    margin-right: 15px;
-    margin-top: 8px;
-    width: 24px;
-}
-
-.top_account:hover dd {
-    display: block;
-}
-
-.top_account dd {
-    margin: -9px 0 0 -9px;
-    padding: 0 16px 0px 16px;
-    position: absolute;
-    background: #fff;
-    border: 1px solid #aaa;
-    display: none; 
-    border-radius: 4px;
-    -webkit-box-shadow: 0 1px 6px rgba(0,0,0,.2);
-    box-shadow: 0 1px 6px rgba(0,0,0,.2);
-    z-index: 9999999;
-}
-
-.top_nav_right .t_r.top_account {
-    height: 40px;
-    width: 80px;
-}
-
-.top_nav_right .top_account dd a {
-    color: #3c3c3c;
-}
-
-.header-title {
-    font-size: 15px;
-    color: #3c3c3c;
-}
-
-#js_favour_num {
-    color: #3c3c3c;
-    float: left;
-    margin-left: 10px;
-}
-
-
-#js_cart_items {
-    color: #3c3c3c;
-    float: left;
-    margin-left: 6px;
-}
-
-/*
-    top_main的css
-*/
-.top_main_inner {
-    width: 1200px;
-    clear: both;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-    padding-top: 20px;
-    position: relative;
-    z-index: 19;
-}
-
-.pr {
-    position: relative;
-}
-
-.top_header {
-    height: 90px;
-    display: flex;
-    padding-bottom: 20px;
-}
-
-/* 搜索框 */
-.topSeachForm {
-    width: 40%;
-    height: 100%;
-    display: flex;
-}
-
-.topSeachForm form {
-    width: 100%;
-    align-self: center;
-}
-
-.topSeachForm .top_seachBox {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    height: 24px;
-    padding: 5px 27px 5px 9px;
-}
-
-.topSeachForm .searchInput {
-    width: 250px;
-}
-
-.fl {
-    display: inline;
-    float: left;
-}
-
-.topSeachForm .searchArea {
-    background-color: #fff;
-    border: medium none;
-    font-size: 12px;
-    height: 24px;
-    line-height: 24px;
-    outline: 0 none;
-    width: 100%;
-}
-
-.topSeachForm .seachBtn {
-    cursor: pointer;
-}
-
-.topSeachForm .seachBtn {
-    background: rgba(0, 0, 0, 0) url(../img/toptip.png) no-repeat scroll -80px 0;
-    border: medium none;
-    cursor: pointer;
-    display: inline;
-    float: right;
-    height: 25px;
-    margin-right: -20px;
-    width: 24px;
-}
-
-.topSeachForm .t_hidden {
-    font: 0px/0 Verdana;
-}
-
-/* logo */
-.logo {
-    width: 30%;
-    height: 100%;
-}
-
-.logo img {
-    width: 190px;
-    height: 90px;
-    border: none;
-}
-
-/* 二维码 */
-.yx_server {
-    width: 30%;
-    height: 100%;
-    text-align: center;
-}
-.yx_server img {
-    width: 90px;
-    height: 90px;
-    border: none;
-}
-
 /*
     top_menu的css
 */
 .top_menu {
-    padding-top: 10px;
-    background-color: rgb(172, 30, 35);;
+    padding-top: 5px;
+    background-color: rgb(255, 90, 0);
 }
 
 .top_menu #nav {
     position: relative;
     margin: 0 auto;
-    min-height: 28px;
+    min-height: 23px;
     width: 1200px;
     z-index: 999;
     display: block;
+}
+
+.top_menu #nav .clearfix .frist_li {
+    width: 200px;
+    display:-webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content:center;
+    justify-content: center;
 }
 
 .top_menu #nav li:first-child {
@@ -355,36 +148,4 @@ body {
     height: 305px;
     vertical-align: top;
     width: 244px;
-}
-
-
-/*
-    main-container的css
-*/
-.main-container {
-    min-height: 600px;
-}
-
-.main.container {
-    width: 1200px;
-    min-width: 1200px;
-    margin: auto;
-}
-
-
-/*
-    footer的css
- */
-#footer {
-    height: 200px;
-    width: 100%;
-    min-width: 1230px;
-    text-align: center;
-    margin-top: 50px;
-    padding: 20px 0;
-    background-color: #eee;
-}
-
-#footer a {
-    color: #333333!important;
 }

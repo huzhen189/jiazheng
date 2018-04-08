@@ -5,12 +5,12 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Region */
 
-$this->title = Yii::t('app', 'Update Region: {nameAttribute}', [
+$this->title = Yii::t('app', '{nameAttribute}', [
     'nameAttribute' => $model->name,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Regions'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '地区列表'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('app', '修改');
 ?>
 <div class="region-update">
 

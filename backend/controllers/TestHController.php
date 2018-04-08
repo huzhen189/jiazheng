@@ -6,6 +6,7 @@ use Yii;
 use common\models\TestH;
 use common\models\TestHSearch;
 use common\tools\CheckController;
+use common\tools\Message;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -38,9 +39,12 @@ class TestHController extends CheckController
         $searchModel = new TestHSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $result = Message::SendSignUpCodeMessage('15700842681');
+        return;
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'result' => $result,
         ]);
     }
 
@@ -52,6 +56,7 @@ class TestHController extends CheckController
      */
     public function actionView($id)
     {
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);

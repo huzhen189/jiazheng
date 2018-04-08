@@ -18,8 +18,8 @@ class YxServerSearch extends YxServer
     public function rules()
     {
         return [
-            [['server_id', 'server_type', 'server_parent', 'server_state', 'server_sort'], 'integer'],
-            [['server_name', 'server_memo', 'server_unit'], 'safe'],
+            [['server_id', 'server_type', 'server_parent', 'server_state', 'server_sort', 'server_mans'], 'integer'],
+            [['server_name', 'server_memo', 'server_unit', 'server_pic','server_class'], 'safe'],
         ];
     }
 
@@ -64,11 +64,14 @@ class YxServerSearch extends YxServer
             'server_parent' => $this->server_parent,
             'server_state' => $this->server_state,
             'server_sort' => $this->server_sort,
+            'server_mans' => $this->server_mans, 
         ]);
 
         $query->andFilterWhere(['like', 'server_name', $this->server_name])
             ->andFilterWhere(['like', 'server_memo', $this->server_memo])
-            ->andFilterWhere(['like', 'server_unit', $this->server_unit]);
+            ->andFilterWhere(['like', 'server_unit', $this->server_unit])
+            ->andFilterWhere(['like', 'server_pic', $this->server_pic])
+            ->andFilterWhere(['like', 'server_class', $this->server_class]);
 
         return $dataProvider;
     }

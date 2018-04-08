@@ -25,8 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            // 'id',
             'name',
+           //         'image',
+           // 'total_fraction',
             [
                 'attribute'=>'provinceName',
                 'value' => function($model) {
@@ -72,16 +74,34 @@ $this->params['breadcrumbs'][] = $this->title;
            // ],
             //'models',
             //'introduction:ntext',
-
+            //'main_server_id', 
+           //'all_server_id', 
+           //'query:ntext',
+            //'base_fraction',
+           //'history_fraction',
+           //'clinch',
+           //'price',
+           //'manage_time',
+           //'banck_card',
+           //'alipay',
+          //'business_code',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作', 
-                'template' => '{view} {update} {delete} {waiter-list}',
+                'template' => '{view} {update} {delete} {waiter-list} {res-list} {server-list}',
                 'buttons'=>[
                     'waiter-list'=>function($url,$model){
                         $url="/yx-staff/index?company_id=".$model->id;
                         return Html::a('<span class="glyphicon glyphicon-user"></span>', $url, ['title' => '服务者列表', 'target' => '_blank']);
-                    }
+                    },
+                    'res-list'=> function ($url, $model) {
+                        $url = "/yx-cmp-res/index?company_id=" . $model->id;
+                        return Html::a('<span class="glyphicon glyphicon-th-large"></span>', $url, ['title' => '公司成果列表', 'target' => '_blank']);
+                    },
+                    'server-list'=> function ($url, $model) {
+                        $url = "/yx-cmp-server/index?company_id=" . $model->id;
+                        return Html::a('<span class="glyphicon glyphicon-list"></span>', $url, ['title' => '服务列表', 'target' => '_blank']);
+                    },
                 ]
             ],
         ],

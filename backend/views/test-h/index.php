@@ -39,3 +39,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
+<<?php
+    //$result = json_decode($res, true); //接受一个 JSON 格式的字符串并且把它转换为 PHP 变量
+    // $access_token = $result['access_token'];
+    // echo $access_token;//
+    // echo '<br>';//
+    // print_r($result);
+     echo $result; 
+ ?>

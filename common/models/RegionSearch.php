@@ -19,7 +19,7 @@ class RegionSearch extends Region
     {
         return [
             [['id', 'parent_id', 'level'], 'integer'],
-            [['name'], 'safe'],
+            [['name', 'type'], 'safe'],
         ];
     }
 
@@ -64,7 +64,9 @@ class RegionSearch extends Region
             'level' => $this->level,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+              ->andFilterWhere(['like', 'type', $this->type]);
+
 
         return $dataProvider;
     }

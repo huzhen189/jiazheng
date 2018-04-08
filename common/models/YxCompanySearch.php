@@ -21,8 +21,8 @@ class YxCompanySearch extends YxCompany
     public function rules()
     {
         return [
-            [['id', 'created_at', 'updated_at', 'status', 'models'], 'integer'],
-            [['name', 'address', 'telephone', 'charge_phone', 'charge_man', 'wechat', 'number', 'introduction','provinceName','cityName','districtName'], 'safe'],
+            [['id','total_fraction', 'created_at', 'updated_at', 'status', 'models', 'cmp_user_id', 'base_fraction', 'history_fraction', 'clinch', 'price', 'manage_time', 'banck_card'], 'integer'],
+            [['name', 'image', 'address', 'telephone', 'charge_phone', 'charge_man', 'wechat', 'number', 'introduction','provinceName','cityName','districtName', 'all_server_id', 'query', 'main_server_id','alipay', 'business_code'], 'safe'],
             [['longitude', 'latitude', 'operating_radius'], 'number'],
         ];
     }
@@ -74,6 +74,8 @@ class YxCompanySearch extends YxCompany
             'updated_at' => $this->updated_at,
             'status' => $this->status,
             'models' => $this->models,
+            'manage_time' => $this->manage_time, 
+            'banck_card' => $this->banck_card,
         ]);
 
         $query->andFilterWhere(['like', 'yx_company.name', $this->name])
@@ -84,7 +86,12 @@ class YxCompanySearch extends YxCompany
             ->andFilterWhere(['like', 'wechat', $this->wechat])
             ->andFilterWhere(['like', 'number', $this->number])
             ->andFilterWhere(['like', 'business_licences', $this->business_licences])
-            ->andFilterWhere(['like', 'introduction', $this->introduction]);
+            ->andFilterWhere(['like', 'introduction', $this->introduction])
+            ->andFilterWhere(['like', 'all_server_id', $this->all_server_id])
+            ->andFilterWhere(['like', 'main_server_id', $this->main_server_id]) 
+            ->andFilterWhere(['like', 'query', $this->query])
+            ->andFilterWhere(['like', 'alipay', $this->alipay])
+            ->andFilterWhere(['like', 'business_code', $this->business_code]);
 
         $query->join('INNER JOIN','region rA','yx_company.province=rA.id');
         $query->join('INNER JOIN','region rB','yx_company.city=rB.id');

@@ -267,6 +267,17 @@ describe('SSR: renderToString', () => {
     })
   })
 
+  it('v-show directive merge with style', done => {
+    renderVmWithOptions({
+      template: '<div :style="[{lineHeight: 1}]" v-show="false"><span>inner</span></div>'
+    }, res => {
+      expect(res).toContain(
+        '<div data-server-rendered="true" style="line-height:1;display:none;"><span>inner</span></div>'
+      )
+      done()
+    })
+  })
+
   it('v-show directive not passed to child', done => {
     renderVmWithOptions({
       template: '<foo v-show="false"></foo>',
@@ -571,6 +582,60 @@ describe('SSR: renderToString', () => {
       }
     }, result => {
       expect(result).toContain('<span data-server-rendered="true" class="b">testAsync</span>')
+      done()
+    })
+  })
+
+  it('renders async component (functional, single node)', done => {
+    renderVmWithOptions({
+      template: `
+        <div>
+          <test-async></test-async>
+        </div>
+      `,
+      components: {
+        testAsync (resolve) {
+          setTimeout(() => resolve({
+            functional: true,
+            render (h) {
+              return h('span', { class: ['b'] }, 'testAsync')
+            }
+          }), 1)
+        }
+      }
+    }, result => {
+      expect(result).toContain('<div data-server-rendered="true"><span class="b">testAsync</span></div>')
+      done()
+    })
+  })
+
+  it('renders async component (functional, multiple nodes)', done => {
+    renderVmWithOptions({
+      template: `
+        <div>
+          <test-async></test-async>
+        </div>
+      `,
+      components: {
+        testAsync (resolve) {
+          setTimeout(() => resolve({
+            functional: true,
+            render (h) {
+              return [
+                h('span', { class: ['a'] }, 'foo'),
+                h('span', { class: ['b'] }, 'bar')
+              ]
+            }
+          }), 1)
+        }
+      }
+    }, result => {
+      expect(result).toContain(
+        '<div data-server-rendered="true">' +
+          '<span class="a">foo</span>' +
+          '<span class="b">bar</span>' +
+        '</div>'
+      )
       done()
     })
   })
@@ -1142,6 +1207,25 @@ describe('SSR: renderToString', () => {
       `
     }, result => {
       expect(result).toContain(`<div id="a\nb"></div>`)
+      done()
+    })
+  })
+
+  it('should expose ssr helpers on functional context', done => {
+    let called = false
+    renderVmWithOptions({
+      template: `<div><foo/></div>`,
+      components: {
+        foo: {
+          functional: true,
+          render (h, ctx) {
+            expect(ctx._ssrNode).toBeTruthy()
+            called = true
+          }
+        }
+      }
+    }, () => {
+      expect(called).toBe(true)
       done()
     })
   })

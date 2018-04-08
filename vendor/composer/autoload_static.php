@@ -7,8 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInit68ac20a40d7a62a34acdc3a257baa85c
 {
     public static $files = array (
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
@@ -23,6 +23,7 @@ class ComposerStaticInit68ac20a40d7a62a34acdc3a257baa85c
         'y' => 
         array (
             'yii\\swiftmailer\\' => 16,
+            'yii\\redis\\' => 10,
             'yii\\gii\\' => 8,
             'yii\\faker\\' => 10,
             'yii\\debug\\' => 10,
@@ -50,16 +51,13 @@ class ComposerStaticInit68ac20a40d7a62a34acdc3a257baa85c
             'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\DomCrawler\\' => 29,
-            'Symfony\\Component\\Debug\\' => 24,
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
             'Symfony\\Component\\BrowserKit\\' => 29,
         ),
         'P' => 
         array (
-            'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
-            'Pingpp\\' => 7,
         ),
         'G' => 
         array (
@@ -95,6 +93,10 @@ class ComposerStaticInit68ac20a40d7a62a34acdc3a257baa85c
         'yii\\swiftmailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-swiftmailer/src',
+        ),
+        'yii\\redis\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-redis/src',
         ),
         'yii\\gii\\' => 
         array (
@@ -158,10 +160,6 @@ class ComposerStaticInit68ac20a40d7a62a34acdc3a257baa85c
         array (
             0 => __DIR__ . '/..' . '/symfony/dom-crawler',
         ),
-        'Symfony\\Component\\Debug\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/debug',
-        ),
         'Symfony\\Component\\CssSelector\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/css-selector',
@@ -174,17 +172,9 @@ class ComposerStaticInit68ac20a40d7a62a34acdc3a257baa85c
         array (
             0 => __DIR__ . '/..' . '/symfony/browser-kit',
         ),
-        'Psr\\Log\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
-        ),
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
-        ),
-        'Pingpp\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pingplusplus/pingpp-php/lib',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -220,8 +210,8 @@ class ComposerStaticInit68ac20a40d7a62a34acdc3a257baa85c
         ),
         'Codeception\\' => 
         array (
-            0 => __DIR__ . '/..' . '/codeception/stub/src',
-            1 => __DIR__ . '/..' . '/codeception/base/src/Codeception',
+            0 => __DIR__ . '/..' . '/codeception/base/src/Codeception',
+            1 => __DIR__ . '/..' . '/codeception/stub/src',
         ),
     );
 

@@ -2,7 +2,126 @@ html,
 body {
     height: 100%;
 }
+body{
+    margin:0;
+    padding:0;
+    font-family:"微软雅黑";
+}
+.max_login{
+    width:100%;
+    height:650px;
+    background-image: url(http://p6htqszz4.bkt.clouddn.com/background_1.jpg);
+    background-repeat:no-repeat;
+    background-size:100% 100%;
+    -moz-background-size:100% 100%;
+}
 
+.min_login{
+    width:520px;
+    height:378px;
+    margin:0px auto;
+    padding-top: 100px;
+}
+.login_T{
+    width:520px;
+    height:70px;
+    border-radius:5px 5px 0px 0px;
+}
+.login_T span{
+    margin:0 auto;
+}
+.login_T span h2{
+    font-size: 30px;
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0,0,0,.2);
+    margin:0px;
+}
+.login_C{
+    width:520px;
+    height:248px;
+    border-radius:0px 0px 5px 5px;
+    padding-top:40px;
+}
+.login_C span{
+    display:block;
+    width:396px;
+    height:48px;
+    border:1px solid #ededed;
+    border-radius:4px;
+     /* overflow:hidden; */
+     margin:0 auto;
+     margin-bottom:20px;
+ }
+.login_C span em{
+    display:block;
+    float:left;
+    width:56px;
+    height:48px;
+    border-right:1px solid #ededed;
+    background-color:#fafafa;
+    text-align:center;}
+.login_C span em img{
+    width:20px;
+    height:20px;
+    margin-top:14px;
+}
+.login_C span input{
+    width:329px;
+    height:48px;
+    line-height: 48px;
+    border:0;
+    float:left;
+    padding:0;
+    margin:0;
+    padding-left:10px;
+    font-size:14px;
+    color:#666;
+    border-radius: 0px;
+}
+.login_C a{
+  color: #ef4300;
+}
+.login_C  .loginSubmit{
+    background-color:#ef4300;
+    border-radius:5px;
+    margin:60px auto 0px;
+    display:block;
+    width:390px;
+    height:48px;
+    line-height:48px;
+    color:#FFF;
+    text-align:center;
+    font-size:18px;
+    text-decoration:none;
+    -moz-box-shadow:0px 0px 10px #e9f7ff;
+    -webkit-box-shadow:0px 0px 10px #e9f7ff;
+    box-shadow:0px 0px 10px #e9f7ff;
+    border: none;
+}
+.login_C .checkbox label{
+    color: #ffffff;
+    padding-left: 30px;
+}
+.login_C .checkbox input{
+    height: 20px;
+    width: 20px;
+    margin: 0px;
+    margin-left: -30px;
+}
+.login_C .help-block {
+    color: green;
+    font-size: 14px;
+}
+#signupform-code,#passwordresetrequestform-code{
+    width: 140px;
+}
+#signupform-getcode,#passwordresetrequestform-getcode{
+    float: right;
+    margin-top: 24px;
+}
 .wrap {
     min-height: 100%;
     height: auto;

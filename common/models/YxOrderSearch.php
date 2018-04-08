@@ -18,7 +18,7 @@ class YxOrderSearch extends YxOrder
     public function rules()
     {
         return [
-            [['id', 'order_money', 'order_state', 'usera_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'order_money', 'order_state', 'yx_user_id', 'created_at', 'updated_at','status'], 'integer'],
             [['order_name', 'address', 'phone', 'order_memo', 'usera_name'], 'safe'],
         ];
     }
@@ -56,13 +56,13 @@ class YxOrderSearch extends YxOrder
             // $query->where('0=1');
             return $dataProvider;
         }
-
+        $yx_user_id = isset($params['yx_user_id']) ? $params['yx_user_id'] : $this->yx_user_id;
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'order_money' => $this->order_money,
             'order_state' => $this->order_state,
-            'usera_id' => $this->usera_id,
+            'yx_user_id' => $yx_user_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);

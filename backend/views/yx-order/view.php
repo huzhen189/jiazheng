@@ -7,7 +7,13 @@ use yii\widgets\DetailView;
 /* @var $model common\models\YxOrder */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Yx Orders'), 'url' => ['index']];
+$queryParams = Yii::$app->request->queryParams;
+$index_url='index';
+if(isset($queryParams['yx_user_id'])){
+    $index_url='index?yx_user_id='.$queryParams['yx_user_id'];
+}
+
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '订单列表'), 'url' => [$index_url]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="yx-order-view">
@@ -15,11 +21,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Yii::t('app', '修改'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', '删除'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                'confirm' => Yii::t('app', '您确定删除此项吗?'),
                 'method' => 'post',
             ],
         ]) ?>
@@ -35,10 +41,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_money',
             'order_state',
             'order_memo',
-            'usera_id',
             'usera_name',
-            'created_at',
-            'updated_at',
+        [
+            'attribute' => 'created_at',
+            'value' => function ($model) {
+                return date('Y-m-d H:i', $model->created_at);
+            },
+        ],
+        [
+            'attribute' => 'updated_at',
+            'value' => function ($model) {
+                return date('Y-m-d H:i', $model->updated_at);
+            },
+        ],  
         ],
     ]) ?>
 

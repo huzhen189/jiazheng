@@ -41,7 +41,12 @@ $company_id = $queryParams['company_id'];
                 return YxStaff::getCmpSexName($model->staff_sex);
             },
         ],
-        'staff_age',
+        [
+            'attribute' => 'staff_age',
+            'value' => function ($model) {
+                return date('Y-m-d', $model->staff_age);
+            },
+        ],
         //'staff_img',
         'staff_idcard',
         //'staff_intro',
@@ -58,19 +63,21 @@ $company_id = $queryParams['company_id'];
         //'staff_memo',
         //'staff_login_ip',
         //'staff_login_time',
-        //'staff_account',
-        //'staff_password',
         //'staff_main_server_id',
         //'staff_all_server_id',
         //'staff_query:ntext',
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => '操作',
-            'template' => '{view} {update} {delete} {server-list}',
+            'template' => '{view} {update} {delete} {server-list} {res-list}',
             'buttons' => [
                 'server-list' => function ($url, $model) {
                     $url = "/yx-staff-server/index?staff_id=" . $model->staff_id;
                     return Html::a('<span class="glyphicon glyphicon-list"></span>', $url, ['title' => '已选服务列表', 'target' => '_blank']);
+                },
+                'res-list'=> function ($url, $model) {
+                    $url = "/yx-staff-res/index?staff_id=" . $model->staff_id;
+                    return Html::a('<span class="glyphicon glyphicon-th-large"></span>', $url, ['title' => '员工成果列表', 'target' => '_blank']);
                 },
             ],
         ],

@@ -12,15 +12,6 @@ return array (
       '@zh/qiniu' => $vendorDir . '/zh/yii2-qiniu-images',
     ),
   ),
-  'yiisoft/yii2-bootstrap' => 
-  array (
-    'name' => 'yiisoft/yii2-bootstrap',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@yii/bootstrap' => $vendorDir . '/yiisoft/yii2-bootstrap/src',
-    ),
-  ),
   'yiisoft/yii2-swiftmailer' => 
   array (
     'name' => 'yiisoft/yii2-swiftmailer',
@@ -28,6 +19,15 @@ return array (
     'alias' => 
     array (
       '@yii/swiftmailer' => $vendorDir . '/yiisoft/yii2-swiftmailer/src',
+    ),
+  ),
+  'yiisoft/yii2-bootstrap' => 
+  array (
+    'name' => 'yiisoft/yii2-bootstrap',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@yii/bootstrap' => $vendorDir . '/yiisoft/yii2-bootstrap/src',
     ),
   ),
   'yiisoft/yii2-debug' => 
@@ -55,6 +55,15 @@ return array (
     'alias' => 
     array (
       '@yii/faker' => $vendorDir . '/yiisoft/yii2-faker/src',
+    ),
+  ),
+  'yiisoft/yii2-redis' => 
+  array (
+    'name' => 'yiisoft/yii2-redis',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@yii/redis' => $vendorDir . '/yiisoft/yii2-redis/src',
     ),
   ),
 );

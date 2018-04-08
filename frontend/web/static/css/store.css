@@ -1,0 +1,173 @@
+.store-detail {
+	display: flex;
+	width: 100%;
+	margin-top: 20px;
+}
+.store-info {
+	width: 20%;
+	padding-left: 5px;
+	padding-right: 5px;
+	border: 1px solid #eee;
+}
+.store-info .other-store {
+	padding: 10px 0;
+	display: flex;
+	border-bottom: 1px solid #eee;
+}
+.store-info .other-store img {
+	width: 120px;
+	height: 100px;
+}
+.store-info .other-store .other-store-info {
+	width: 110px;
+	padding: 5px 0;
+}
+.store-info .other-store .other-store-info h5 {
+	overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.store-info .other-store .other-store-info p {
+	height: 50px;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	overflow: hidden;
+}
+.store-pro {
+	width: 80%;
+	border: 1px solid #eee;
+}
+
+/* 条件选择 */
+.store-condition {
+	height: 80px;
+}
+
+.store-condition .condition-row {
+	height: 41px;
+}
+.store-condition .condition-inner {
+	height: 39px;
+	background-color: #f5f5f5;
+  border-bottom: 1px solid #e8e8e8;
+	display:-webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+	display: flex;
+  -webkit-flex-direction:row;
+  flex-direction: row;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}
+.store-condition .condition-inner .condition-left {
+	height: 39px;
+}
+.store-condition .condition-inner  ul {
+	float: left;
+  line-height: 39px;
+  margin: 0;
+  padding: 0;
+}
+.store-condition .condition-inner  li {
+	float: left;
+}
+.store-condition .condition-inner  li a {
+  height: 39px;
+  margin-left: -1px;
+  padding: 0 19px;
+  float: left;
+  display: block;
+  border-left: solid 1px #f5f5f5;
+  border-right: solid 1px #f5f5f5;
+  text-decoration: none;
+  color: #6d6d6d;
+}
+.store-condition .condition-inner  li.active {
+	position: relative;
+  z-index: 1;
+  background-color: #fff;
+}
+.store-condition .condition-inner  li.active a {
+	border-color: #e5e5e5;
+  color: rgb(255, 90, 0);
+}
+.store-condition .condition-inner .condition-right {
+	float: right;
+}
+.store-condition .select-server {
+	height: 40px;
+	padding: 0 19px;
+	border-bottom: 1px solid #e8e8e8;
+	display: flex;
+	align-items: center;
+}
+
+/* 服务人员信息 */
+.content {
+	margin-top: 20px;
+}
+.content .row {
+	margin-right: 0px;
+	margin-left: 0px;
+}
+
+/* 每一个服务人员的css */
+.content .staff {
+	height: 250px;
+	margin-bottom: 20px;
+  padding: 0;
+}
+.content .staff .staff-one {
+	height: 100%;
+	margin: 5px;
+	text-align: center;
+	border: 1px solid #eee;
+	border-radius: 5px;
+}
+.content .staff .staff-one .img {
+	text-align: center;
+}
+.content .staff .staff-one .img img {
+	width: 200px;
+	height: 110px;
+}
+.content .staff .staff-one h3 {
+	margin: 8px;
+}
+.content .staff .staff-one .staff-info {
+	height: 83px;
+	padding: 8px 8px 0 8px;
+	background-color: #ff5a00;
+}
+.content .staff .staff-one .staff-info div,.content .staff .staff-one .staff-info a {
+	color: #fff;
+}
+.content .staff .staff-one .staff-info .see-details {
+	margin-top: 5px;
+}
+.content .staff .staff-one .staff-info .staff-servers {
+	overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 服务人员鼠标移动的css */
+.content .staff .staff-one.active {
+	border: 1px solid rgb(255, 90, 0);
+}
+.content .staff .staff-one .staff-info {
+	padding-top: 5px;
+	visibility: hidden;
+	background-color: rgb(255, 55, 0);
+	color: #ffffff;
+}
+.content .staff .staff-one  .staff-info.block {
+	visibility: visible;
+}
+
+.page {
+	float: right;
+	margin-right: 20px;
+}

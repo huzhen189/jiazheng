@@ -3,7 +3,7 @@ namespace frontend\models;
 
 use yii\base\Model;
 use yii\base\InvalidParamException;
-use common\models\User;
+use common\models\YxUser;
 
 /**
  * Password reset form
@@ -11,9 +11,9 @@ use common\models\User;
 class ResetPasswordForm extends Model
 {
     public $password;
-
+    public $repassword;
     /**
-     * @var \common\models\User
+     * @var \common\models\YxUser
      */
     private $_user;
 
@@ -28,11 +28,11 @@ class ResetPasswordForm extends Model
     public function __construct($token, $config = [])
     {
         if (empty($token) || !is_string($token)) {
-            throw new InvalidParamException('Password reset token cannot be blank.');
+            throw new InvalidParamException('缺少必要参数token');
         }
-        $this->_user = User::findByPasswordResetToken($token);
+        $this->_user = YxUser::findByPasswordResetToken($token);
         if (!$this->_user) {
-            throw new InvalidParamException('Wrong password reset token.');
+            throw new InvalidParamException('token参数错误');
         }
         parent::__construct($config);
     }
@@ -43,11 +43,18 @@ class ResetPasswordForm extends Model
     public function rules()
     {
         return [
-            ['password', 'required'],
-            ['password', 'string', 'min' => 6],
+            [['password','repassword'], 'required'],
+            [['password','repassword'], 'string', 'min' => 6, 'max' => 20],
+            [['repassword'], 'compare', 'compareAttribute' => 'password', 'message' => '两次输入的密码不一致！'],
         ];
     }
-
+    public function attributeLabels()
+    {
+        return [
+            'password' => '密码',
+            'repassword' => '确认密码',
+        ];
+    }
     /**
      * Resets password.
      *
