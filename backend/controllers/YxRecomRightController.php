@@ -7,12 +7,13 @@ use common\models\YxRecomRight;
 use common\models\YxRecomRightSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use common\tools\CheckController;
 use yii\filters\VerbFilter;
 
 /**
  * YxRecomRightController implements the CRUD actions for YxRecomRight model.
  */
-class YxRecomRightController extends Controller
+class YxRecomRightController extends CheckController
 {
     /**
      * @inheritdoc

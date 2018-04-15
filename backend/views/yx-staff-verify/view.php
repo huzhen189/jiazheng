@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use common\models\Region;
+
 /* @var $this yii\web\View */
 /* @var $model common\models\YxStaffVerify */
 
@@ -173,6 +174,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'staff_skill',
         'staff_crime_record',
         'staff_sin_record',
+        'staff_train',
         [
             'attribute' => 'staff_health_img',
             'format' => ['image', ['width' => '200', 'height' => '200']],
@@ -207,7 +209,12 @@ $this->params['breadcrumbs'][] = $this->title;
 if ($model->staff_verify_state == 1) {
 
     ?>
-        <?=Html::a(Yii::t('app', '通过审核'), ['pass', 'id' => $model->id], ['class' => 'btn btn-success']);?>
+        <?=Html::a('通过审核', '#', [
+            'id' => 'ext',
+            'data-toggle' => 'modal',
+            'data-target' => '#ext-modal',
+            'class' => 'btn btn-success',
+        ]);?>
         <?=Html::a('驳回审核', '#', [
         'id' => 'deny',
         'data-toggle' => 'modal',
@@ -240,4 +247,18 @@ $js = <<<JS
 JS;
 $this->registerJs($js);
 Modal::end();
+
+Modal::begin([
+    'id' => 'ext-modal',
+    'header' => '<h4 class="modal-title">额外审核加分</h4>',
+]);
+$verify=Yii::$app->request->csrfToken;
+$id=$model->id;
+$js = <<<JS
+    var data='<form class="form-horizontal myform" action="/yx-staff-verify/pass?id={$id}" method="post" enctype="multipart/form-data"><input name="_csrf-backend" type="hidden" id="_csrf-backend" value="{$verify}"><div class="form-group"><div class="col-sm-12"><input class="form-control" name="ext_fraction" type="number" min="0" max="3" step="0.001" value="{$ext_fraction}"></input></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-12"><button type="submit" class="btn btn-warning">提交</button></div></div></form>'
+    $('.modal-body').html(data);
+JS;
+$this->registerJs($js);
+Modal::end();
+
 ?>

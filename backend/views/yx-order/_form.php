@@ -28,7 +28,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'yx_user_id')->textInput() ?>
 
-    <?= $form->field($model, 'usera_name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'user_name')->textInput(['maxlength' => true]) ?>
+ 
+   <?= $form->field($model, 'is_delete')->textInput() ?> 
+ 
+   <?= $form->field($model, 'time_start')->textInput() ?> 
+ 
+   <?= $form->field($model, 'time_end')->textInput() ?> 
+ 
+   <?= $form->field($model, 'yx_staff_id')->textInput() ?> 
+ 
+   <?= $form->field($model, 'yx_company_id')->textInput() ?> 
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

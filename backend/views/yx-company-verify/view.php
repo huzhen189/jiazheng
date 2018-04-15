@@ -123,11 +123,31 @@ $this->params['breadcrumbs'][] = $this->title;
                 return $model->image;
             },
         ],
-       'total_fraction',
-       'base_fraction',
-       'history_fraction',
+        [
+            'attribute' => 'total_fraction',
+            'value' => function ($model) {
+                return $model->total_fraction /1000;
+            },
+        ],
+        [
+            'attribute' => 'base_fraction',
+            'value' => function ($model) {
+                return $model->base_fraction /1000;
+            },
+        ],
+        [
+            'attribute' => 'history_fraction',
+            'value' => function ($model) {
+                return $model->history_fraction /1000;
+            },
+        ],
        'clinch',
-       'price',
+        [
+            'attribute' => 'price',
+            'value' => function ($model) {
+                return $model->price /1000;
+            },
+        ],
         [
             'attribute' => 'manage_time',
             'value' => function ($model) {
@@ -144,7 +164,12 @@ $this->params['breadcrumbs'][] = $this->title;
             if($model->verify_sate==1){
 
          ?>
-        <?=Html::a(Yii::t('app', '通过审核'), ['pass', 'id' => $model->id], ['class' => 'btn btn-success']);?>
+        <?=Html::a('通过审核', '#', [
+            'id' => 'ext',
+            'data-toggle' => 'modal',
+            'data-target' => '#ext-modal',
+            'class' => 'btn btn-success',
+        ]);?>
         <?=Html::a('驳回审核', '#', [
             'id' => 'deny',
             'data-toggle' => 'modal',
@@ -159,17 +184,7 @@ $this->params['breadcrumbs'][] = $this->title;
 Modal::begin([
     'id' => 'deny-modal',
     'header' => '<h4 class="modal-title">驳回建议</h4>',
-    //'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">提交</a>',
 ]);
-// $requestUrl = Url::toRoute('test');
-// $js = <<<JS
-//     $.get('{$requestUrl}', {},
-//         function (data) {
-//             $('.modal-body').html(data);
-//             console.log(data);
-//         }
-//     );
-// JS;
 $verify=Yii::$app->request->csrfToken;
 $js = <<<JS
     var data='<form class="form-horizontal myform" method="post" enctype="multipart/form-data"><input name="_csrf-backend" type="hidden" id="_csrf-backend" value="{$verify}"><div class="form-group"><div class="col-sm-12"><textarea class="form-control" name="verify_memo" rows="12"></textarea></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-12"><button type="submit" class="btn btn-warning">提交</button></div></div></form>'
@@ -177,4 +192,20 @@ $js = <<<JS
 JS;
 $this->registerJs($js);
 Modal::end();
+
+
+Modal::begin([
+    'id' => 'ext-modal',
+    'header' => '<h4 class="modal-title">额外审核加分</h4>',
+]);
+$verify=Yii::$app->request->csrfToken;
+$id=$model->id;
+$js = <<<JS
+    var data='<form class="form-horizontal myform" action="/yx-company-verify/pass?id={$id}" method="post" enctype="multipart/form-data"><input name="_csrf-backend" type="hidden" id="_csrf-backend" value="{$verify}"><div class="form-group"><div class="col-sm-12"><input class="form-control" name="ext_fraction" type="number" min="0" max="5" step="0.001" value="{$ext_fraction}"></input></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-12"><button type="submit" class="btn btn-warning">提交</button></div></div></form>'
+    $('.modal-body').html(data);
+JS;
+$this->registerJs($js);
+Modal::end();
+
+
 ?>

@@ -18,7 +18,7 @@ class YxRulesSearch extends YxRules
     public function rules()
     {
         return [
-            [['rules_id'], 'integer'],
+            [['rules_id','rules_type'], 'integer'],
             [['rules_title', 'rules_content'], 'safe'],
         ];
     }
@@ -60,6 +60,7 @@ class YxRulesSearch extends YxRules
         // grid filtering conditions
         $query->andFilterWhere([
             'rules_id' => $this->rules_id,
+            'rules_type' => $this->rules_type,
         ]);
 
         $query->andFilterWhere(['like', 'rules_title', $this->rules_title])

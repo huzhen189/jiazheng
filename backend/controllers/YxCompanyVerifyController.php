@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\YxCompanyVerify;
 use common\models\YxCompanyVerifySearch;
+use common\tools\CheckController;
 use common\models\YxStaff;
 use common\models\YxCmpUser;
 use Yii;
@@ -16,7 +17,7 @@ use common\models\YxCompany;
 /**
  * YxCompanyVerifyController implements the CRUD actions for YxCompanyVerify model.
  */
-class YxCompanyVerifyController extends Controller
+class YxCompanyVerifyController extends CheckController
 {
     /**
      * @inheritdoc
@@ -57,15 +58,25 @@ class YxCompanyVerifyController extends Controller
      */
     public function actionView($id)
     {
+        $model=$this->findModel($id);
+        $company_model='';
+        $ext_fraction=0;
+        if(isset($model->company_id)){
+            $company_model=YxCompany::findOne($model->company_id);
+            if($company_model){
+                $ext_fraction=$company_model->ext_fraction/1000;
+            }
+        }
         if(Yii::$app->request->post()){
             $params=Yii::$app->request->post();
-            $model=$this->findModel($id);
+            
             $model->verify_sate=2;
             $model->verify_memo=$params['verify_memo'];
             $model->save();
         }
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'ext_fraction'=>$ext_fraction,
         ]);
     }
 
@@ -185,14 +196,34 @@ class YxCompanyVerifyController extends Controller
     public function actionPass($id)
     {
         $model = $this->findModel($id);
+        $params=Yii::$app->request->post();
+        $ext_fraction=$params['ext_fraction'];
+        if(empty($ext_fraction)){
+            $ext_fraction=0;
+        }
         $model->verify_sate=3;
+        $base_fraction=70;
         if(!empty($model->company_id)){
         $company_model=YxCompany::find()->where(['id'=>$model->company_id])->one();
     }else{
         $company_model=new YxCompany();
-        
-        
     }
+
+        if($model['manage_time']==1){
+            $base_fraction=$base_fraction+1;
+        }
+        if($model['manage_time']==3||$model['manage_time']==5){
+            $base_fraction=$base_fraction+2;
+        }
+        if($model['models']==1){
+            $base_fraction=$base_fraction+1;
+        }
+        if(!empty($model['business_licences']&&!empty($model['business_code']))){
+            $base_fraction=$base_fraction+2;
+        }
+        if(!empty($params['ext_fraction'])){
+            $base_fraction=$base_fraction+$ext_fraction;
+        }
         $company_model['name']=$model['name'];
         $company_model['province']=$model['province'];
         $company_model['city']=$model['city'];
@@ -216,17 +247,18 @@ class YxCompanyVerifyController extends Controller
         $company_model['query']=$model['query'];
         $company_model['cmp_user_id']=$model['cmp_user_id'];
         $company_model['image']=$model['image'];
-
-        $company_model['total_fraction']=$model['total_fraction'];
-        $company_model['base_fraction']=$model['base_fraction'];
-        $company_model['history_fraction']=$model['history_fraction'];
-        $company_model['clinch']=$model['clinch'];
-        $company_model['price']=$model['price'];
-        
+        $company_model['total_fraction']=$base_fraction*1000;
+        if(!empty($model->company_id)){
+            $company_model['total_fraction']=$base_fraction*1000+$company_model['history_fraction'];
+        }
+        $company_model['base_fraction']=$base_fraction*1000;
+        $company_model['ext_fraction']=$ext_fraction*1000;
+        $company_model['banck_card']=$model['banck_card'];
         $company_model['manage_time']=$model['manage_time'];
         $company_model['alipay']=$model['alipay'];
         $company_model['business_code']=$model['business_code'];
         $company_model['number'] = $model['number'];
+
         if(empty($model['number'])){
             $company_model['number']=YxCompany::getCmpNumber($model->district);
         }
@@ -237,9 +269,10 @@ class YxCompanyVerifyController extends Controller
             $model->company_id=$company_id;
             $user->company_id=$company_id;
             if($model->save()&&$user->save()){
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['yx-company/view', 'id' => $model->company_id]);
             }
         }
+        return print_r($company_model->getErrors());
     }
     /**
      * Finds the YxCompanyVerify model based on its primary key value.

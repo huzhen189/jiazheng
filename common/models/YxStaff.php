@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use common\models\YxOrder;
 use common\models\Region;
 use common\models\YxCompany;
 use common\models\YxStaffServer;
@@ -95,10 +96,10 @@ class YxStaff extends \yii\db\ActiveRecord
     {
         return [
             [['staff_name', 'staff_sex', 'staff_age', 'staff_idcard', 'staff_state', 'staff_img', 'staff_idcard_front', 'staff_idcard_back','staff_address', 'staff_health_img','staff_number','staff_province', 'staff_city', 'staff_district'], 'required'],
-            [['company_id', 'staff_sex', 'staff_found', 'staff_main_server_id','staff_fraction', 'staff_base_fraction', 'staff_history_fraction', 'staff_clinch', 'staff_price', 'staff_manage_time', 'staff_educate', 'staff_login_time','staff_province', 'staff_city', 'staff_district'], 'integer'],
+            [['company_id', 'staff_sex', 'staff_found', 'staff_main_server_id','staff_fraction', 'staff_base_fraction', 'staff_history_fraction', 'staff_clinch', 'staff_price', 'staff_manage_time', 'staff_educate', 'staff_login_time','staff_province', 'staff_city', 'staff_district','ext_fraction','ext_history_fraction'], 'integer'],
             [['staff_name'], 'string', 'max' => 50],
-            [['staff_idcard'], 'string', 'max' => 18],
-            [['staff_intro', 'staff_memo','staff_query'], 'string', 'max' => 1000],
+            [['staff_idcard'], 'string','min'=>18,'max' => 18],
+            [['staff_intro','staff_train','staff_memo','staff_query'], 'string', 'max' => 1000],
             [['staff_state'], 'string', 'max' => 1],
             [['staff_login_ip'], 'string', 'max' => 45],
             [['staff_skill', 'staff_crime_record', 'staff_sin_record'], 'string', 'max' => 255],
@@ -174,6 +175,7 @@ class YxStaff extends \yii\db\ActiveRecord
            'staff_crime_record' => '犯罪记录',
            'staff_sin_record' => '不良习惯',
            'staff_health_img' =>'健康证',
+           'staff_train'=>'培训说明',
             'staff_province' => '省',
            'staff_city' => '市',
            'staff_district' => '区',
@@ -275,11 +277,6 @@ class YxStaff extends \yii\db\ActiveRecord
         return array(0=>'一年以下',1=>'一年以上',3=>'三年以上',5=>'五年以上');
     }
 
-    public static function getClinch($staff_id)
-    {
-        #根据公司ID，交易成功取订单条数；
-        return '总交易成功量';
-    }
     public static function getCmpServerName($models)
     {
         $types = self::getCmpServer();
@@ -356,21 +353,72 @@ class YxStaff extends \yii\db\ActiveRecord
 
 
 
-    public static function getPreClinch($staff_id)
+/**
+ * [getClinch 取订单完成量]
+ * @Author   Yoon
+ * @DateTime 2018-04-09T15:52:23+0800
+ * @param    [type]                   $id [description]
+ * @return   [type]                       [description]
+ */
+    public static function getClinch($id)
     {
-        #根据公司ID，交易成功，时间取订单条数；
-        return '上月交易成功量';
+        $clinch_count=YxOrder::find()->where(['yx_staff_id'=>$id,'order_state'=>'2'])->count();
+        if(empty($clinch_count)) $clinch_count=0;
+        $model=self::findOne($id);
+        $model->staff_clinch=$clinch_count;
+        $model->save();
+        return $clinch_count;
     }
-    public static function getPrice($staff_id)
+/**
+ * [getPrice 取订单完成总金额]
+ * @Author   Yoon
+ * @DateTime 2018-04-09T15:53:22+0800
+ * @param    [type]                   $id [description]
+ * @return   [type]                       [description]
+ */
+    public static function getPrice($id)
     {
-        #根据公司ID取订单，交易成功取订单金额，求和；
-        return '总交易成功金额';
+        $price_count=YxOrder::find()->where(['yx_staff_id'=>$id,'order_state'=>'2'])->sum('order_money');
+        if(empty($price_count)) $price_count=0;
+        $model=self::findOne($id);
+        $model->staff_price=$price_count;
+        $model->save();
+        return $price_count;
     }
-    public static function getPrePrice($staff_id)
+/**
+ * [getPreClinch 取上月订单完成量]
+ * @Author   Yoon
+ * @DateTime 2018-04-09T15:52:23+0800
+ * @param    [type]                   $id [description]
+ * @return   [type]                       [description]
+ */
+    public static function getPreClinch($id)
     {
-        #根据公司ID取订单，时间段，交易成功取订单金额，求和；
-        return '上月交易成功金额';
+        $date=date('Y-m');
+        $pre_month=strtotime($date);
+        $now_month=strtotime("$date +1 month");
+        $clinch_count=YxOrder::find()->where(['yx_staff_id'=>$id,'order_state'=>'2']) ->andFilterWhere(['between', 'time_end', $pre_month,$now_month])->count();
+        if(empty($clinch_count)) $clinch_count=0;
+        return $clinch_count;
     }
+/**
+ * [getPrePrice 取上月完成总金额]
+ * @Author   Yoon
+ * @DateTime 2018-04-09T15:53:22+0800
+ * @param    [type]                   $id [description]
+ * @return   [type]                       [description]
+ */
+    public static function getPrePrice($id)
+    {
+        $date=date('Y-m');
+        $pre_month=strtotime($date);
+        $now_month=strtotime("$date +1 month");
+        $price_count=YxOrder::find()->where(['yx_staff_id'=>$id,'order_state'=>'2']) ->andFilterWhere(['between', 'time_end', $pre_month,$now_month])->sum('order_money');
+        if(empty($price_count)) $price_count=0;
+        return $price_count;
+    }
+
+
     // 得到服务人员名字(oyzx)
     public static function getStaffName($staff_id) {
       $staff = YxStaff::find()->where(['staff_id'=>$staff_id])->one();

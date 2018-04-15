@@ -1,45 +1,193 @@
 <?php
 
+use common\models\YxCompany;
+use common\models\YxOrder;
+use common\models\YxServer;
+use common\models\YxStaff;
+use common\models\YxUser;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
 /* @var $this yii\web\View */
 /* @var $model common\models\YxOrder */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Yx Orders'), 'url' => ['index']];
+$queryParams = Yii::$app->request->queryParams;
+$index_url = 'index';
+$update_url='update';
+$delete_url='delete';
+$uri='';
+if (isset($queryParams['company_id'])) {
+    $uri ='?company_id=' . $queryParams['company_id'];
+}
+if (isset($queryParams['user_id'])) {
+    $uri ='?user_id=' . $queryParams['user_id'];
+}
+if (isset($queryParams['staff_id'])) {
+    $uri ='?staff_id=' . $queryParams['staff_id'];
+}
+$index_url=$index_url.$uri;
+$update_url=$update_url.$uri.'&id='.$model->id;
+$delete_url=$delete_url.$uri.'&id='.$model->id;
+
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '订单列表'), 'url' => [$index_url]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="yx-order-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?=Html::encode($this->title);?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?=Html::a(Yii::t('app', '删除'), [$delete_url], [
+    'class' => 'btn btn-danger',
+    'data' => [
+        'confirm' => Yii::t('app', '您确定删除此项吗?'),
+        'method' => 'post',
+    ],
+]);?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'order_name',
-            'address',
-            'phone',
-            'order_money',
-            'order_state',
-            'order_memo',
-            'usera_id',
-            'usera_name',
-            'created_at',
-            'updated_at',
+    <?=DetailView::widget([
+    'model' => $model,
+    'attributes' => [
+        // 'id',
+        'order_no',
+        'order_name',
+        // 'yx_user_id',
+        [
+            'label' => '公司编号',
+            'attribute' => 'cmp_number',
+            'value' => function ($model) {
+                return (YxCompany::findOne($model->yx_company_id))['number'];
+            },
         ],
-    ]) ?>
+        [
+            'label' => '公司名称',
+            'attribute' => 'cmp_number',
+            'value' => function ($model) {
+                return (YxCompany::findOne($model->yx_company_id))['name'];
+            },
+        ],
+        [
+            'label' => '员工编号',
+            'attribute' => 'staff_number',
+            'value' => function ($model) {
+                return (YxStaff::findOne($model->yx_staff_id))['staff_number'];
+            },
+        ],
+        [
+            'label' => '员工名称',
+            'attribute' => 'staff_name',
+            'value' => function ($model) {
+                return (YxStaff::findOne($model->yx_staff_id))['staff_name'];
+            },
+        ],
 
+        [
+            'label' => '用户账号',
+            'attribute' => 'user_phone',
+            'value' => function ($model) {
+                return (YxUser::findOne($model->yx_user_id))['phone'];
+            },
+        ],
+        [
+            'label' => '用户昵称',
+            'attribute' => 'user_nickanme',
+            'value' => function ($model) {
+                return (YxUser::findOne($model->yx_user_id))['nickname'];
+            },
+        ],
+        [
+            'label' => '服务名',
+            'attribute' => 'order_server',
+            'value' => function ($model) {
+                return (YxServer::findOne($model->order_server))['server_name'];
+            },
+        ],
+        'user_name',
+        'address',
+        'phone',
+        [
+            'attribute' => 'order_money',
+            'value' => function ($model) {
+                $order_money = ($model->order_money) / 100;
+                return $order_money;
+            },
+        ],
+        [
+            'attribute' => 'order_state',
+            'value' => function ($model) {
+                return YxOrder::getName($model->order_state, 'getOrderState');
+            },
+        ],
+        [
+            'attribute' => 'order_type',
+            'value' => function ($model) {
+                return YxOrder::getName($model->order_type, 'getOrderType');
+            },
+        ],
+        'order_memo',
+
+        [
+            'attribute' => 'created_at',
+            'value' => function ($model) {
+                return date('Y-m-d H:i', $model->created_at);
+            },
+        ],
+        [
+            'attribute' => 'updated_at',
+            'value' => function ($model) {
+                return date('Y-m-d H:i', $model->updated_at);
+            },
+        ],
+        // 'is_delete',
+        [
+            'attribute' => 'time_start',
+
+            'value' => function ($model) {
+                return date('Y-m-d H:i', $model->time_start);
+            },
+        ],
+        [
+            'attribute' => 'time_start',
+            'value' => function ($model) {
+                return date('Y-m-d H:i', $model->time_start);
+            },
+        ],
+    ],
+]);?>
+    <p>
+        <?php
+
+$order_state = $model->order_state;
+if ($order_state == 2) {
+    echo Html::a(Yii::t('app', '确认接单'), ['acceptorder', 'id' => $model->id], [
+        'class' => 'btn btn-success',
+        'data' => [
+            'confirm' => Yii::t('app', '您确定是否要接单?'),
+            'method' => 'post',
+        ],
+    ]);
+
+    echo Html::a(Yii::t('app', '拒绝接单'), ['notacceptorder', 'id' => $model->id], [
+        'class' => 'btn btn-danger',
+        'data' => [
+            'confirm' => Yii::t('app', '您确定是否要拒绝此单?'),
+            'method' => 'post',
+        ],
+    ]);
+}
+if ($order_state == 3 || $order_state == 4) {
+
+    echo Html::a(Yii::t('app', '强制退款'), ['notoverorder', 'id' => $model->id], [
+        'class' => 'btn btn-danger',
+        'data' => [
+            'confirm' => Yii::t('app', '您确定要强制退款?'),
+            'method' => 'post',
+        ],
+    ]);
+}
+
+?>
+
+    </p>
 </div>

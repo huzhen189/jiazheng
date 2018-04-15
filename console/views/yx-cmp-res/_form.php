@@ -18,8 +18,9 @@ use zh\qiniu\QiniuFileInput;
         'uploadUrl' => 'https://upload-z2.qiniup.com/', //文件上传地址 不同地区的空间上传地址不一样 参见官方文档
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
-            'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'max' =>1,//最多允许上传图片个数  默认为3
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+	    'size'=>30720000,
         ],
     ]) ?>
 

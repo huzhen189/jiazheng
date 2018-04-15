@@ -239,9 +239,152 @@ class YxServer extends \yii\db\ActiveRecord
         return $arr_Parent;
     }
 
+
+
+/*
+getServerByCompany 以及 getServerByStaff 返回
+Array (
+    [staff_id] => 38
+    [server_id] => 31
+    [server_least] => 0
+    [server_price] => 1000
+    [server_parent_id] => 66
+    [server_type] => 2
+    [server_name] => 深度保洁
+    [server_parent] => 66
+    [server_state] => 1
+    [server_memo] =>
+    [server_sort] =>
+    [server_unit] => 平方米
+    [server_pic] =>
+    [server_mans] => 1
+    [server_class] =>
+)
+没有为空
+*/
+    public static function getServerByCompany($yx_company_id,$server_id){
+      $query = (new \yii\db\Query())
+      ->select('*')
+      ->from('yx_server')
+      ->leftJoin('yx_cmp_server','yx_cmp_server.server_id =yx_server.server_id')
+      ->where(["yx_cmp_server.company_id"=>$yx_company_id,"yx_cmp_server.server_id"=>$server_id]);
+      $yx_cmp_server = $query->one();
+      return $yx_cmp_server;
+    }
+
+    public static function getServerByStaff($yx_staff_id,$server_id){
+      $query = (new \yii\db\Query())
+      ->select('*')
+      ->from('yx_server')
+      ->leftJoin('yx_staff_server','yx_staff_server.server_id =yx_server.server_id')
+      ->where(["yx_staff_server.staff_id"=>$yx_staff_id,"yx_staff_server.server_id"=>$server_id]);
+      $yx_staff_server = $query->one();
+      return $yx_staff_server;
+    }
+
+
     // 得到服务对应的名字（oyzx）
     public static function getServerName($server_id) {
       $YxServer = YxServer::find()->where(['server_id' => $server_id])->one();
       return $YxServer['server_name'];
+    }
+
+    // 得到服务人员二级服务下的附加服务价格（oyzx）
+    public static function getServerThird($staffId,$serverId) {
+      $YxStaffServer = YxStaffServer::find()->where(['staff_id' => $staffId,'server_id' => $serverId,'server_type' => 2])->one();
+      return $YxStaffServer['server_price'];
+    }
+    // 得到商家二级服务下的附加服务价格（oyzx）
+    public static function getServerThirdCompany($companyId,$serverId) {
+      $YxCmpServer = YxCmpServer::find()->where(['company_id' => $companyId,'server_id' => $serverId,'server_type' => 2])->one();
+      return $YxCmpServer['server_price'];
+    }
+
+
+    // 得到二级服务（oyzx）
+    public static function getServerSecond($server_parent) {
+      $YxServerAll = YxServer::find()->where(['server_parent' => $server_parent,'server_type' => 2])->all();
+      return $YxServerAll;
+    }
+
+    // 得到服务单位（oyzx）
+    public static function getServerUnit($server_id) {
+      $YxServerUnit = YxServer::find()->where(['server_id' => $server_id])->one();
+      return $YxServerUnit['server_unit'];
+    }
+
+    // 搜索得到所有商家（oyzx）
+    public static function getStores($companyName) {
+      $YxCompany = YxCompany::find()->select(['*'])
+                ->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
+                  ->where(['yx_company.status'=>2])->andWhere(['like', 'name', $companyName])->orderby('total_fraction desc')->all();
+      $YxCompanyId = '/store/index?company_all=';
+      foreach ($YxCompany as $key => $value) {
+        if($key == 0) {
+          $YxCompanyId = $YxCompanyId.$value['id'];
+        }else {
+          $YxCompanyId = $YxCompanyId.','.$value['id'];
+        }
+      }
+      return $YxCompanyId;
+    }
+
+    // 得到公司所有的服务类型（oyzx）
+    public static function getCompanyServerAll($companyId) {
+      $YxCompany = YxCompany::find()->where(['id' => $companyId])->one();
+      $ServerAll = YxServer::find()->where(['server_type' => 2])->all();
+      // print_r($YxCompany['query']);
+      $ServerIdName = [];
+      foreach ($ServerAll as $key => $value) {
+        if (stristr($YxCompany['query'],$value['server_name'])!==false) {
+          $ServerIdName[$value['server_id']] = $value['server_name'];
+        }
+      }
+      return $ServerIdName;
+    }
+    // 得到附加服务(oyzx)
+    public static function getReserve($serverId) {
+      if($serverId == 82 || $serverId == 83 || $serverId == 72 || $serverId == 32 ) {
+        return 1;
+      }
+      return 0;
+    }
+    // 使用二级服务找到一级服务(oyzx)
+    public static function getOneServerId($serverId) {
+      $YxServer = YxServer::find()->where(['server_id' => $serverId,'server_type' => 2])->one();
+      return $YxServer['server_parent'];
+    }
+    // 搜索服务时使用，通过关键词搜索服务的链接(oyzx)
+    public static function getUrl($searchContent) {
+      $YxServer = YxServer::find()->where(['server_type' => 1])->andWhere(['like','server_name',$searchContent])->one();
+      $YxServerTwo = YxServer::find()->where(['server_type' => 2])->andWhere(['like','server_name',$searchContent])->one();
+      if($YxServer) {
+        // 一级服务
+        switch ($YxServer['server_id']) {
+          case 65:
+            $url = '/basic-clean/index?server_parent=65&sort=fraction';
+            return $url;
+          case 66:
+            $url = '/special-clean/index?server_parent=66&sort=fraction';
+            return $url;
+          default:
+            $url = '/other-services/index?server_parent='.$YxServer['server_id'].'&sort=fraction';
+            return $url;
+        }
+      }else if($YxServerTwo) {
+        // 二级服务
+        switch (YxServer::getOneServerId($YxServerTwo['server_id'])) {
+          case 65:
+            $url = '/basic-clean/index?server_parent=65&server_id='.$YxServerTwo['server_id'].'&sort=fraction';
+            return $url;
+          case 66:
+            $url = '/special-clean/index?server_parent=66&server_id='.$YxServerTwo['server_id'].'&sort=fraction';
+            return $url;
+          default:
+            $url = '/other-services/index?server_parent='.YxServer::getOneServerId($YxServerTwo['server_id']).'&server_id='.$YxServerTwo['server_id'].'&sort=fraction';
+            return $url;
+        }
+      }
+      return;
     }
 }

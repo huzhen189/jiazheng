@@ -35,20 +35,14 @@ class YxStaffController extends CheckController
      * Lists all YxStaff models.
      * @return mixed
      */
-    public function actionIndex($company_id)
+    public function actionIndex()
     {
         $searchModel = new YxStaffSearch();
 
         #在查询参数中添加公司ID
         $queryParams = Yii::$app->request->queryParams;
-        if (!empty($company_id)) {
-            if (!isset($queryParams['YxStaffSearch'])) {
-                $queryParams['YxStaffSearch'] = ['company_id' => $company_id];
-            } else {
-                $queryParams['YxStaffSearch'] = array_merge($queryParams['YxStaffSearch'], ['company_id' => $company_id]);
-            }
-        } else {
-            $queryParams['YxStaffSearch'] = ['company_id' => -1];
+        if (isset($queryParams['company_id'])) {
+            $queryParams['YxStaffSearch']['company_id']=$queryParams['company_id'];
         }
 
         $dataProvider = $searchModel->search($queryParams);
@@ -58,7 +52,6 @@ class YxStaffController extends CheckController
             'dataProvider' => $dataProvider,
         ]);
     }
-
     /**
      * Displays a single YxStaff model.
      * @param integer $id
@@ -136,7 +129,12 @@ class YxStaffController extends CheckController
                         $new_model2->save();
                     }
                 }
-                return $this->redirect(['view', 'id' => $model->staff_id]);
+                $queryParams = Yii::$app->request->queryParams;
+                $url='view?id='.$model->staff_id;
+                if (isset($queryParams['company_id'])) {
+                    $url=$url.'&company_id='.$queryParams['company_id'];
+                }
+                return $this->redirect([$url]);
             }
         }
 
@@ -231,7 +229,12 @@ class YxStaffController extends CheckController
                         }
                     }
                 }
-                return $this->redirect(['view', 'id' => $model->staff_id]);
+                $queryParams = Yii::$app->request->queryParams;
+                $url='view?id='.$model->staff_id;
+                if (isset($queryParams['company_id'])) {
+                    $url=$url.'&company_id='.$queryParams['company_id'];
+                }
+                return $this->redirect([$url]);
             }
         }
 
@@ -252,9 +255,14 @@ class YxStaffController extends CheckController
     {
         $model=$this->findModel($id);
         $company_id=$model->company_id;
+        $queryParams = Yii::$app->request->queryParams;
+        $url='index';
+        if (isset($queryParams['company_id'])) {
+            $url='index?company_id='.$company_id;
+        }
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index','company_id'=>$company_id]);
+        return $this->redirect([$url]);
     }
 
     /**
@@ -280,5 +288,27 @@ class YxStaffController extends CheckController
             'model'=>\common\models\Region::className()
         ];
         return $actions;
+    }
+
+    /**
+     * [actionAdjustfraction 分数调整]
+     * @Author   Yoon
+     * @DateTime 2018-04-09T18:31:29+0800
+     * @param    [type]                   $id [description]
+     * @return   [type]                       [description]
+     */
+    public function actionAdjustfraction($id){
+        $params=Yii::$app->request->post();
+        $fraction=$params['ext_history_fraction'];
+        if(empty($fraction)){
+            $fraction=0;
+        }
+        $fraction=$fraction*1000;
+        $model=YxStaff::findOne($id);
+        $model->updateCounters(['staff_fraction'=>$fraction]);
+        $model->updateCounters(['staff_history_fraction'=>$fraction]);
+        $model->updateCounters(['ext_history_fraction'=>$fraction]);
+        return $this->redirect(['view','id'=>$id]);
+
     }
 }

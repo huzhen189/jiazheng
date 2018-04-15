@@ -73,6 +73,7 @@ class YxServerController extends CheckController
         #修改输入参数
         $InsertParams = Yii::$app->request->post();
         if ($InsertParams) {
+
             if ($InsertParams['YxServer']['server_type'] == 2) {
                 $InsertParams['YxServer']['server_parent'] = $InsertParams['YxServer']['one_server'];
             }
@@ -81,7 +82,7 @@ class YxServerController extends CheckController
             }
             unset($InsertParams['YxServer']['one_server']);
         }
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load($InsertParams)) {
             $model->server_pic = $model->server_pic[0];
             if ($model->save()) {
                 #修改三级服务
@@ -90,7 +91,7 @@ class YxServerController extends CheckController
                     if ($isset_model) {
                         foreach ($isset_model as $key => $value) {
                             $staff_server_model = new YxStaffServer();
-                            $staff_server_model->staff_id = $isset_model->staff_id;
+                            $staff_server_model->staff_id = $isset_model[$key]['staff_id'];
                             $staff_server_model->server_id = $model->server_id;
                             $staff_server_model->server_name = $model->server_name;
                             $staff_server_model->server_parent_id = $model->server_parent;

@@ -72,7 +72,6 @@ class YxStaffServerController extends Controller
                 $queryParams['YxStaffServerSearch']['staff_id'] =$staff_id;
                 $queryParams['YxStaffServerSearch']['server_type'] = '1,2';
                 $queryParams['YxStaffServerSearch']['server_parent_id'] = $server_id;
-                $queryParams['YxStaffServerSearch'] = array_merge($queryParams['YxStaffServerSearch'], ['staff_id' => $staff_id]);
             }
         } else {
             $queryParams['YxStaffServerSearch'] = ['staff_id' => -1];
@@ -117,16 +116,19 @@ class YxStaffServerController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->staff_id=$staff_id;
             $model->server_price=$model->server_price * 100;
+            $server_model=YxServer::find()->where(['server_id'=>$model->server_id])->one();
+            $model->server_name=$server_model->server_name;
             if ($model->save()) {
-                $append_server_model=YxServer::find()->where(['server_parent'=>$model->server_id])->all();
-                foreach ($append_server_model as $key => $value) {
-                    $new_model = new YxStaffServer();
-                    $new_model->staff_id=$staff_id;
-                    $new_model->server_id=$append_server_model[$key]->server_id;
-                    $new_model->server_parent_id=$append_server_model[$key]->server_parent;
-                    $new_model->server_type=1;
-                    $new_model->save();
-                }
+                // $append_server_model=YxServer::find()->where(['server_parent'=>$model->server_id])->all();
+                // foreach ($append_server_model as $key => $value) {
+                //     $new_model = new YxStaffServer();
+                //     $new_model->staff_id=$staff_id;
+                //     $new_model->server_id=$append_server_model[$key]->server_id;
+                //     $new_model->server_parent_id=$append_server_model[$key]->server_parent;
+                //     $new_model->server_name=$append_server_model[$key]->server_name;
+                //     $new_model->server_type=1;
+                //     $new_model->save();
+                // }
                 return $this->redirect(['view', 'staff_id' => $model->staff_id, 'server_id' => $model->server_id]);
             }
 
@@ -144,6 +146,7 @@ class YxStaffServerController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->staff_id=$staff_id;
             $model->server_price=$model->server_price * 100;
+            $model->server_type=2;
             if ($model->save()) {
                 return $this->redirect(['view', 'staff_id' => $model->staff_id, 'server_id' => $model->server_id]);
             }
@@ -167,6 +170,8 @@ class YxStaffServerController extends Controller
     {
         $model = $this->findModel($staff_id, $server_id);
         $model->server_price = $model->server_price / 100;
+        $server_model=YxServer::find()->where(['server_id'=>$model->server_id])->one();
+        $model->server_name=$server_model->server_name;
         if ($model->load(Yii::$app->request->post())) {
             $model->server_price = $model->server_price * 100;
             $model->staff_id = $staff_id;
@@ -184,11 +189,13 @@ class YxStaffServerController extends Controller
     {
         $model = $this->findModel($staff_id, $server_id);
         $model->server_price = $model->server_price / 100;
+        $server_type=$model->server_type;
         if ($model->load(Yii::$app->request->post())) {
             $model->server_price = $model->server_price * 100;
             $model->staff_id = $staff_id;
+            $model->server_type=$server_type;
             if ($model->save()) {
-                return $this->redirect(['appendview', 'staff_id' => $model->staff_id, 'server_id' => $model->server_id]);
+                return $this->redirect(['view', 'staff_id' => $model->staff_id, 'server_id' => $model->server_id]);
             }
 
         }

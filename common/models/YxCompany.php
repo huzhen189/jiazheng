@@ -88,17 +88,18 @@ class YxCompany extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'address', 'telephone', 'charge_phone', 'charge_man', 'wechat', 'business_licences', 'image'], 'required'],
-            [['total_fraction', 'province', 'city', 'district', 'created_at', 'updated_at', 'status', 'models', 'base_fraction', 'history_fraction', 'clinch', 'price', 'banck_card'], 'integer'],
-            [['longitude', 'latitude', 'operating_radius', 'alipay'], 'number'],
+            [['name', 'address', 'telephone', 'charge_phone', 'charge_man', 'wechat', 'image'], 'required'],
+            [['total_fraction', 'province', 'city', 'district', 'created_at', 'updated_at', 'status', 'models', 'base_fraction', 'history_fraction', 'clinch', 'price', 'banck_card','ext_fraction','ext_history_fraction'], 'integer'],
+            [['longitude', 'latitude', 'operating_radius'], 'number'],
             [['name', 'telephone', 'wechat', 'number'], 'string', 'max' => 20],
             [['address', 'query'], 'string', 'max' => 200],
-            [['charge_phone'], 'string', 'max' => 30],
+            [['charge_phone', 'alipay'], 'string', 'max' => 30],
             [['charge_man'], 'string', 'max' => 10],
             [['all_server_id', 'main_server_id', 'alipay', 'business_code'], 'string', 'max' => 255],
             [['name'], 'unique'],
             [['all_server_id'], 'validateSASID'],
             [['main_server_id'], 'validateSMSID'],
+            [['business_licences'],'safe']
         ];
     }
     /**
@@ -194,6 +195,8 @@ class YxCompany extends \yii\db\ActiveRecord
             'banck_card' => '银行卡号',
             'alipay' => '支付宝账号',
             'business_code' => '营业执照编码',
+            'ext_fraction'=>'审核额外加分',
+            'ext_history_fraction'=>'额外运营分数'
         ];
     }
 
@@ -267,18 +270,72 @@ class YxCompany extends \yii\db\ActiveRecord
         }
         return $serverName;
     }
-
+/**
+ * [getPreClinch 取订单完成量]
+ * @Author   Yoon
+ * @DateTime 2018-04-09T15:52:23+0800
+ * @param    [type]                   $id [description]
+ * @return   [type]                       [description]
+ */
+    public static function getClinch($id)
+    {
+        $clinch_count=YxOrder::find()->where(['yx_company_id'=>$id,'order_state'=>'2'])->count();
+        if(empty($clinch_count)) $clinch_count=0;
+        $model=self::findOne($id);
+        $model->clinch=$clinch_count;
+        $model->save();
+        return $clinch_count;
+    }
+/**
+ * [getPrePrice 取订单完成总金额]
+ * @Author   Yoon
+ * @DateTime 2018-04-09T15:53:22+0800
+ * @param    [type]                   $id [description]
+ * @return   [type]                       [description]
+ */
+    public static function getPrice($id)
+    {
+        $price_count=YxOrder::find()->where(['yx_company_id'=>$id,'order_state'=>'2'])->sum('order_money');
+        if(empty($price_count)) $price_count=0;
+        $model=self::findOne($id);
+        $model->price=$price_count;
+        $model->save();
+        return $price_count;
+    }
+/**
+ * [getPreClinch 取上月订单完成量]
+ * @Author   Yoon
+ * @DateTime 2018-04-09T15:52:23+0800
+ * @param    [type]                   $id [description]
+ * @return   [type]                       [description]
+ */
     public static function getPreClinch($id)
     {
-        #根据公司ID，交易成功，时间取订单条数；
-        return '上月交易成功量';
+        $date=date('Y-m');
+        $pre_month=strtotime($date);
+        $now_month=strtotime("$date +1 month");
+        $clinch_count=YxOrder::find()->where(['yx_company_id'=>$id,'order_state'=>'2']) ->andFilterWhere(['between', 'time_end', $pre_month,$now_month])->count();
+        if(empty($clinch_count)) $clinch_count=0;
+        return $clinch_count;
     }
+/**
+ * [getPrePrice 取上月完成总金额]
+ * @Author   Yoon
+ * @DateTime 2018-04-09T15:53:22+0800
+ * @param    [type]                   $id [description]
+ * @return   [type]                       [description]
+ */
     public static function getPrePrice($id)
     {
-        #根据公司ID取订单，时间段，交易成功取订单金额，求和；
-        return '上月交易成功金额';
+        $date=date('Y-m');
+        $pre_month=strtotime($date);
+        $now_month=strtotime("$date +1 month");
+        $price_count=YxOrder::find()->where(['yx_company_id'=>$id,'order_state'=>'2']) ->andFilterWhere(['between', 'time_end', $pre_month,$now_month])->sum('order_money');
+        if(empty($price_count)) $price_count=0;
+        return $price_count;
     }
 
+    
     public static function getOneName($id = 0)
     {
         $result = static::findOne($id);
@@ -319,5 +376,12 @@ class YxCompany extends \yii\db\ActiveRecord
         }
         $number=preg_replace('# #','',$number);
         return $number;
+    }
+
+
+    // 根据商家id得到商家名（oyzx)
+    public static function getCompanyName($companyId) {
+      $YxCompany = YxCompany::find()->where(['id' => $companyId])->one();
+      return $YxCompany['name'];
     }
 }

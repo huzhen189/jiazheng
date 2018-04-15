@@ -12,7 +12,15 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'redactor' => [
+        'class' => 'yii\redactor\RedactorModule', 
+        'uploadDir' => 'upload/img', 
+        // 'uploadUrl' => 'http://www.jiazheng.com/upload/img', 
+         'uploadUrl' => 'http://backend.yuanxiangwu.com/upload/img', 
+        'imageAllowExtensions'=>['jpg','png','gif'] 
+        ]
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',

@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use common\models\YxRulesSearch;
+use common\models\YxRules;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\YxRulesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -27,7 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
             // 'rules_id',
             'rules_title',
-            'rules_content:ntext',
+        [
+            'attribute' => 'rules_type',
+            'filter'=>YxRules::getRulesTypeMap(),
+            'value' => function ($model) {
+                return YxRules::getName($model->rules_type,'getRulesTypeMap');
+            },
+        ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

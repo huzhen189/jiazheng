@@ -91,7 +91,6 @@
 
 .p_one_window {
     overflow: hidden;
-    position: fixed;
     min-height: 52px;
     width: 100%;
     right: 0;
@@ -222,4 +221,12 @@ body.p_one_open .p_one_mask {
 .p_one_ads.p_one_default {
     bottom: 0px;
     right: 0px
+}
+.p_one_window .p_one_button_alipay{
+  background-color: #169BDD;
+  color: #FFFFFF;
+}
+.p_one_window .p_one_button_wx{
+  background-color: #27983D;
+  color: #FFFFFF;
 }

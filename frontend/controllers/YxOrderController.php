@@ -3,8 +3,15 @@
 namespace frontend\controllers;
 
 use Yii;
-use common\models\YxOrder;
 use frontend\models\YxOrderSearch;
+use common\models\YxOrder;
+use common\models\YxOrderServer;
+use common\models\YxUserAddress;
+use common\models\YxStaff;
+use common\models\YxStaffServer;
+use common\models\YxCmpServer;
+use common\models\YxCompany;
+use common\models\YxServer;
 use common\tools\CheckController;
 use common\tools\Helper;
 use yii\web\NotFoundHttpException;
@@ -66,15 +73,212 @@ class YxOrderController extends CheckController
      */
     public function actionCreate()
     {
-        $model = new YxOrder();
+        $this->enableCsrfValidation = false;
+        $reJson = [ 'msg' => "下单失败", 'code' => -1, 'order_id' => 0];
+        $timeDatas = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+        $transaction = Yii::$app->db->beginTransaction();
+        Yii::$app->response->format = 'json';
+        if(Yii::$app->request->isAjax) {
+            $params = Yii::$app->request->post();
+            if(!isset($params['start_time']) || $params['start_time'] < ( time() - 86400)){
+                $reJson["msg"] = "上门服务时间不正确";
+                return $reJson;
+            }
+            if(!isset($params['yx_company_id']) || $params['yx_company_id'] <= 0){
+                $reJson["msg"] = "缺少商家信息";
+                return $reJson;
+            }
+            if(!isset($params['order_server']) || $params['order_server'] <= 0){
+                $reJson["msg"] = "未选择服务";
+                return $reJson;
+            }
+            if(!isset($params['amount']) || round($params['amount']) < 1){
+                $reJson["msg"] = "未选择服务数量";
+                return $reJson;
+            }
+            if(!isset($params['order_type']) || $params['order_type'] < 1){
+                $reJson["msg"] = "订单类型有误";
+                return $reJson;
+            }
+            if(!isset($params['extra_server']) || !is_array($params['extra_server'])){
+                $extra_server = [];
+            }else {
+                $extra_server = $params['extra_server'];
+            }
+            $start_time = $params['start_time'];
+            $yx_company_id = $params['yx_company_id'];
+            $yx_staff_id = $params['yx_staff_id'];
+            $order_server = $params['order_server'];
+            $amount = round($params['amount']);
+            $order_type = $params['order_type'];
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $all_money = 0;
+            $yxCompany = YxCompany::findOne(['id'=>$yx_company_id]);
+            if(!$yxCompany){
+                $reJson["msg"] = "商家信息有误";
+                return $reJson;
+            }
+            $model = new YxOrder();
+            $model->order_name = "原象屋-".$yxCompany['name'];
+            $model->yx_company_id = $yx_company_id;
+            $model->created_at = time();
+            $model->updated_at = time();
+            $model->time_start = $start_time;
+            $model->order_state = 1;
+            $model->yx_user_id = Yii::$app->user->id;
+            $model->is_delete = 0;
+            $model->order_type = $order_type;
+            $addressData = YxUserAddress::findOne(['yx_user_id'=>Yii::$app->user->id,'is_main'=>1]);
+            if(!$addressData){
+                $reJson["msg"] = "请选择默认收货地址";
+                return $reJson;
+            }
+            $model->address = $addressData['address'];
+            $model->phone = $addressData['phone'];
+            $model->user_name = $addressData['consignee'];
+            $mian_server = null;
+            $extra_server_info = [];  //附加服务的详情
+            $extra_server_models = []; //生成订单详情的model
+
+            if($order_type == 2){  //服务者下单
+                $mian_server = YxServer::getServerByStaff($yx_staff_id,$order_server);
+                foreach ($extra_server as $serverItem) {  //遍历前端提交的数据，获取附加服务的详情
+                    $serverData = YxServer::getServerByStaff($yx_staff_id,$serverItem["id"]);
+                    if(!$serverData){
+                        $reJson["msg"] = "服务信息有误";
+                        return $reJson;
+                    }
+                    $serverData['server_amount'] = $serverItem["amount"];
+                    array_push($extra_server_info,$serverData);
+                }
+            }else {  //商家下单
+                $mian_server = YxServer::getServerByCompany($yx_company_id,$order_server);
+                foreach ($extra_server as $serverItem) {  //遍历前端提交的数据，获取附加服务的详情
+                    $serverData = YxServer::getServerByCompany($yx_company_id,$serverItem["id"]);
+                    if(!$serverData){
+                        $reJson["msg"] = "服务信息有误";
+                        return $reJson;
+                    }
+                    $serverData['server_amount'] = $serverItem["amount"];
+                    array_push($extra_server_info,$serverData);
+                }
+            }
+            foreach ($extra_server_info as $serverItem) {
+                $extra_server_model = new YxOrderServer();
+                $extra_server_model->server_name = $serverItem["server_name"];
+                $extra_server_model->server_price = $serverItem["server_price"];
+                $extra_server_model->server_unit = $serverItem["server_unit"];
+                $extra_server_model->server_amount = $serverItem["server_amount"];
+                $extra_server_model->is_main = 0;
+                $all_money += $serverItem["server_price"] * $serverItem["server_amount"];
+                array_push($extra_server_models,$extra_server_model);
+            }
+            if(!$mian_server){
+                $reJson["msg"] = "服务信息有误";
+                return $reJson;
+            }
+
+
+            $main_server_model = new YxOrderServer();
+            $main_server_model->server_name = $mian_server["server_name"];
+            $main_server_model->server_price = $mian_server["server_price"];
+            $main_server_model->server_unit = $mian_server["server_unit"];
+            $main_server_model->server_amount = $amount;
+            $main_server_model->is_main = 1;
+            array_push($extra_server_models,$main_server_model);
+            $all_money += $mian_server["server_price"] * $amount;
+
+            if($mian_server["server_unit"] == "小时"){
+                $model->time_end = $model->time_start + ($amount+1)*3600;
+            }else {
+                $model->time_end = $model->time_start + 3 * 3600;
+            }
+
+            if($order_type == 2){  //服务者下单
+                $model->order_no = YxOrder::generateOrderNumber($mian_server["server_id"],$order_type,$yx_staff_id);
+            }else {  //商家下单
+                $model->order_no = YxOrder::generateOrderNumber($mian_server["server_id"],$order_type,$yx_company_id);
+            }
+
+            switch ($order_type) {
+              case 1:    //商家下单
+                $model->order_money = $all_money;
+                # code...
+                break;
+              case 2:    //服务者下单
+                $model->yx_staff_id = $yx_staff_id;
+                $model->order_money = $all_money;
+                $yxStaff = YxCompany::findOne(['id'=>$yx_staff_id]);
+                if(!$yxCompany){
+                    $reJson["msg"] = "服务者信息有误";
+                    return $reJson;
+                }
+                $staffHasOrder = YxOrder::returnStaffOrderCountByTime($yx_staff_id,$model->time_start,$model->time_end);
+                if($staffHasOrder > 0){
+                    $reJson["msg"] = "服务人员该时间段繁忙，请重新选择下单时间";
+                    return $reJson;
+                }
+                break;
+              case 3:    //商家预约
+                $model->order_money = 30000;
+                break;
+            }
+            $allSaveOk = true;
+            $errorMsg = "";
+            if($model->save()){
+                foreach ($extra_server_models as $serverModelItem) {
+                    $serverModelItem->yx_order_id = $model->id;
+                    if($serverModelItem->save()){
+                    }else {
+                        $allSaveOk = false;
+                        foreach ($serverModelItem->errors as $errorItem) {
+                          if(is_array($errorItem)){
+                              foreach ($errorItem as $errorStr) {
+                                  $errorMsg = $errorMsg.$errorStr.",  ";
+                              }
+                          }else {
+                              $errorMsg = $errorMsg.$errorItem.",  ";
+                          }
+                        }
+                        $transaction->rollback();
+                    }
+                }
+            }else {
+                $allSaveOk = false;
+                foreach ($model->errors as $errorItem) {
+                  if(is_array($errorItem)){
+                      foreach ($errorItem as $errorStr) {
+                          $errorMsg = $errorMsg.$errorStr.",  ";
+                      }
+                  }else {
+                      $errorMsg = $errorMsg.$errorItem.",  ";
+                  }
+                }
+                $transaction->rollback();
+            }
+
+            if(!$allSaveOk){
+                $reJson["msg"] = $errorMsg;
+                return $reJson;
+            }else {
+                $reJson["code"] = 0;
+                $reJson["order_id"] = $model->id;
+                $reJson["msg"] = '下单成功';
+                $transaction->commit();
+            }
+
+
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        return $reJson;
+        // $model = new YxOrder();
+        //
+        // if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        //     return $this->redirect(['view', 'id' => $model->id]);
+        // }
+        //
+        // return $this->render('create', [
+        //     'model' => $model,
+        // ]);
     }
 
     /**
@@ -84,17 +288,24 @@ class YxOrderController extends CheckController
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate_memo()
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+      $code = -1;
+      Yii::$app->response->format = 'json';
+      if(Yii::$app->request->isAjax) {
+          $params = Yii::$app->request->post();
+          if(!isset($params['order_id']) || !isset($params['order_memo']) || $params['order_id'] < 1){
+              return [  'code' => $code];
+          }
+          $model = $this->findModel($params['order_id']);
+          if($model){
+            $model->order_memo = $params['order_memo'];
+            if ($model->save()) {
+                $code = 0;
+            }
+          }
+      }
+        return [  'code' => $code];
     }
 
     /**
@@ -115,9 +326,15 @@ class YxOrderController extends CheckController
     {
         $isWechat = Helper::isWechatBrowser();
         $order = $this->findModel($id);
+        $yxStaffServer = YxStaffServer::findOne(['staff_id'=>$order->yx_staff_id]);
+        $yxStaff = YxStaff::findOne(['staff_id'=>$order->yx_staff_id]);
+        $yxCompany = YxCompany::findOne(['id'=>$order->yx_staff_id]);
         return $this->render('payment', [
             'model' => $order,
             'isWechat' => $isWechat,
+            'yxStaffServer' => $yxStaffServer,
+            'yxStaff' => $yxStaff,
+            'yxCompany' => $yxCompany,
         ]);
     }
     public function actionPaysuccess($id)
@@ -158,7 +375,7 @@ class YxOrderController extends CheckController
         }
         try {
           $ch = \Pingpp\Charge::create(array(
-            'order_no'  => '20180328'.$id,
+            'order_no'  => $order->order_no,
             'amount'    => $order->order_money,//订单总金额, 人民币单位：分（如订单总金额为 1 元，此处请填 100）
             'app'       => array('id' => Yii::$app->params['ping++']['PAPP_ID']),
             'channel'   => $channel,
@@ -238,4 +455,5 @@ class YxOrderController extends CheckController
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
 }

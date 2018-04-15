@@ -8,11 +8,12 @@ use common\models\YxStaffResSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\tools\CheckController;
 
 /**
  * YxStaffResController implements the CRUD actions for YxStaffRes model.
  */
-class YxStaffResController extends Controller
+class YxStaffResController extends CheckController
 {
     /**
      * {@inheritdoc}

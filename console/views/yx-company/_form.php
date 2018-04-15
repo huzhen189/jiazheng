@@ -136,7 +136,8 @@ $this->registerCss('
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>30720000,
         ],
     ]) ?>
 
@@ -164,7 +165,8 @@ $this->registerCss('
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>30720000,
         ],
     ]) ?>
 

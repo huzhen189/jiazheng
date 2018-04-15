@@ -24,11 +24,20 @@ class CmpLoginForm extends Model
     {
         return [
             // username and password are both required
-            [['username', 'password'], 'required'],
+            ['username','required','message'=>'账号不能为空'],
+            ['password','required','message'=>'密码不能为空'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'username'=>'账号',
+            'password'=>'密码',
         ];
     }
 

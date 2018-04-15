@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
+use common\models\YxRules;
 /* @var $this yii\web\View */
 /* @var $model common\models\YxRules */
 
@@ -30,7 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'rules_id',
             'rules_title',
-            'rules_content:ntext',
+            'rules_content:raw',
+        [
+            'attribute' => 'rules_type',
+            'value' => function ($model) {
+                return YxRules::getName($model->rules_type,'getRulesTypeMap');
+            },
+        ],
         ],
     ]) ?>
 

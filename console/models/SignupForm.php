@@ -26,16 +26,23 @@ class SignupForm extends Model
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'string', 'max' => 255],
+            [['email'], 'required','message'=>'手机号不能为空'],
+            [['email'],'number','message' => '请输入正确手机号'],
+            [['email'],'match','pattern'=>'/^[0-9]{11}$/','message' => '请输入正确手机号'],
             ['email', 'unique', 'targetClass' => '\common\models\YxCmpUser', 'message' => 'This email address has already been taken.'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
         ];
     }
-
+    public function attributeLabels()
+    {
+        return [
+            'username'=>'账号',
+            'email'=>'手机号',
+            'password'=>'密码',
+        ];
+    }
     /**
      * Signs user up.
      *

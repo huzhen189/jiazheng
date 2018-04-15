@@ -18,8 +18,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?=Html::encode($this->title);?></h1>
 
     <p>
-        <?=Html::a(Yii::t('app', '修改'), ['update', 'id' => $model->staff_id], ['class' => 'btn btn-primary']);?>
         <?php 
+           $verify_model=YxStaff::find()->where(['staff_id'=>$model->staff_id])->one();
+           if($verify_model['staff_state']!=0){
+            echo Html::a(Yii::t('app', '修改'), ['update', 'id' => $model->staff_id], ['class' => 'btn btn-primary']);
+           }
             $ycv_model=YxStaffVerify::find()->where(['staff_id'=>$model->staff_id,'staff_verify_state'=>1])->one();
             if($ycv_model){
                 echo '审核中';
@@ -162,6 +165,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'staff_skill',
         'staff_crime_record',
         'staff_sin_record',
+        'staff_train',
         [
             'attribute' => 'staff_health_img',
             'format' => ['image', ['width' => '200', 'height' => '200']],

@@ -12,8 +12,10 @@ use yii;
 class CartController extends Controller {
 
 	public function actionIndex() {
-		$this->getView()->title = "购物车"; 
+		$user = Yii::$app->user;
+		$this->getView()->title = "购物车";
 		$this->layout = "layout2";
+		// print_r($user);
 		return $this->render("index");
 	}
 }

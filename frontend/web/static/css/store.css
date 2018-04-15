@@ -132,20 +132,26 @@
 .content .staff .staff-one .img img {
 	width: 200px;
 	height: 110px;
+	border: 0;
 }
 .content .staff .staff-one h3 {
 	margin: 8px;
+	overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.content .staff .staff-one p {
+	margin: 0;
+	overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .content .staff .staff-one .staff-info {
-	height: 83px;
-	padding: 8px 8px 0 8px;
+	height: 27px;
 	background-color: #ff5a00;
 }
-.content .staff .staff-one .staff-info div,.content .staff .staff-one .staff-info a {
+.content .staff .staff-one .staff-info a {
 	color: #fff;
-}
-.content .staff .staff-one .staff-info .see-details {
-	margin-top: 5px;
 }
 .content .staff .staff-one .staff-info .staff-servers {
 	overflow: hidden;
@@ -158,7 +164,7 @@
 	border: 1px solid rgb(255, 90, 0);
 }
 .content .staff .staff-one .staff-info {
-	padding-top: 5px;
+  padding-top: 9px;
 	visibility: hidden;
 	background-color: rgb(255, 55, 0);
 	color: #ffffff;
@@ -170,4 +176,37 @@
 .page {
 	float: right;
 	margin-right: 20px;
+}
+
+
+/* 商家详情 */
+.company-info {
+	width: 96%;
+	padding: 0 2%;
+}
+.company-info .company-image-text {
+	display: flex;
+}
+.company-info .company-image-text .img {
+	width: 30%;
+}
+.company-info .company-image-text .company-detail {
+	width: 70%;
+}
+.company-info .company-image-text .company-detail p {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.company-info .company-image-text .company-detail .company-detail-text {
+	display: flex;
+}
+.company-info .company-image-text .company-detail .company-detail-text .first-child {
+	width: 40%;
+}
+.company-info .company-image-text .company-detail .company-detail-text .second-child {
+	width: 60%;
 }

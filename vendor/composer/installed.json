@@ -1681,6 +1681,56 @@
         ]
     },
     {
+        "name": "pingplusplus/pingpp-php",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/PingPlusPlus/pingpp-php.git",
+            "reference": "9dca48ad98e7807ba0bbc12af8c355b6b081c00e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/PingPlusPlus/pingpp-php/9dca48ad98e7807ba0bbc12af8c355b6b081c00e.zip",
+            "reference": "9dca48ad98e7807ba0bbc12af8c355b6b081c00e",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "ext-json": "*",
+            "ext-mbstring": "*",
+            "php": ">=5.6.0"
+        },
+        "time": "2018-01-22T03:01:15+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": []
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "Pingpp\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Pingplusplus and contributors",
+                "homepage": "https://github.com/PingPlusPlus/pingpp-php/contributors"
+            }
+        ],
+        "description": "Pingplusplus PHP Library",
+        "homepage": "https://pingxx.com/",
+        "keywords": [
+            "api",
+            "mobile payment processing",
+            "pingpp"
+        ]
+    },
+    {
         "name": "psr/http-message",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -2949,6 +2999,52 @@
             "assert",
             "check",
             "validate"
+        ]
+    },
+    {
+        "name": "yiidoc/yii2-redactor",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/yiidoc/yii2-redactor.git",
+            "reference": "9848704a8bef370a0f09f3be0dd7a052d5ad3d32"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/yiidoc/yii2-redactor/9848704a8bef370a0f09f3be0dd7a052d5ad3d32.zip",
+            "reference": "9848704a8bef370a0f09f3be0dd7a052d5ad3d32",
+            "shasum": ""
+        },
+        "require": {
+            "yiisoft/yii2": "*"
+        },
+        "time": "2016-01-07T06:45:09+00:00",
+        "type": "yii2-extension",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "yii\\redactor\\": "/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Nghia Nguyen",
+                "email": "zinzinday@gmail.com"
+            }
+        ],
+        "description": "Extension redactor for Yii2 Framework.",
+        "keywords": [
+            "Redactor",
+            "extension",
+            "html editor",
+            "imperavi",
+            "wysiwyg",
+            "yii2"
         ]
     },
     {

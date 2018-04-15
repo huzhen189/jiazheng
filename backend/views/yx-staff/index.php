@@ -19,10 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php
 
 $queryParams = Yii::$app->request->queryParams;
-$company_id = $queryParams['company_id'];
+if(isset($queryParams['company_id'])){
+    Html::a(Yii::t('app', '添加员工'), ['create?company_id=' . $queryParams['company_id']], ['class' => 'btn btn-success']);
+}
 ?>
 
-        <?=Html::a(Yii::t('app', '添加员工'), ['create?company_id=' . $company_id], ['class' => 'btn btn-success']);?>
     </p>
 
     <?=GridView::widget([
@@ -34,6 +35,7 @@ $company_id = $queryParams['company_id'];
         // 'staff_id',
         // 'company_id',
         'staff_name',
+        'staff_number',
         [
             'attribute' => 'staff_sex',
             'filter' => YxStaff::getCmpSex(),
@@ -69,7 +71,7 @@ $company_id = $queryParams['company_id'];
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => '操作',
-            'template' => '{view} {update} {delete} {server-list} {res-list}',
+            'template' => '{view} {update} {delete} {server-list} {res-list} {comment-list} {order-list}',
             'buttons' => [
                 'server-list' => function ($url, $model) {
                     $url = "/yx-staff-server/index?staff_id=" . $model->staff_id;
@@ -78,6 +80,51 @@ $company_id = $queryParams['company_id'];
                 'res-list'=> function ($url, $model) {
                     $url = "/yx-staff-res/index?staff_id=" . $model->staff_id;
                     return Html::a('<span class="glyphicon glyphicon-th-large"></span>', $url, ['title' => '员工成果列表', 'target' => '_blank']);
+                },
+                'comment-list'=> function ($url, $model) {
+                    $url = "/yx-comment/index?staff_id=" . $model->staff_id;
+                    return Html::a('<span class="glyphicon glyphicon-star"></span>', $url, ['title' => '评论列表', 'target' => '_blank']);
+                },
+                'order-list' => function ($url, $model) {
+                    $url = "/yx-order/index?staff_id=" . $model->staff_id;
+                    return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, ['title' => '订单列表', 'target' => '_blank']);
+                },
+                'view' => function ($url, $model, $yx_user_id) {
+
+                    $queryParams = Yii::$app->request->queryParams;
+                    $uri='';
+                    if (isset($queryParams['company_id'])) {
+                        $uri = '&company_id=' . $queryParams['company_id'];
+                    }
+                    $url = "/yx-staff/view?id=" . $model->staff_id . $uri ;
+                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => '查看']);
+                },
+                'update' => function ($url, $model, $yx_user_id) {
+
+                    $queryParams = Yii::$app->request->queryParams;
+                    $uri='';
+                    if (isset($queryParams['company_id'])) {
+                        $uri = '&company_id=' . $queryParams['company_id'];
+                    }
+                    $url = "/yx-staff/update?id=" . $model->staff_id . $uri ;
+                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => '修改']);
+                },
+                'delete' => function ($url, $model, $yx_user_id) {
+
+                    $queryParams = Yii::$app->request->queryParams;
+                    $uri='';
+                    if (isset($queryParams['company_id'])) {
+                        $uri = '&company_id=' . $queryParams['company_id'];
+                    }
+                    $url = "/yx-staff/delete?id=" . $model->staff_id . $uri ;
+                    $options=[
+                        'title' => Yii::t('yii', 'Delete'),
+                        'aria-label' => Yii::t('yii', 'Delete'),
+                        'data-confirm' => Yii::t('yii', '您确定要删除此项吗?'),
+                        'data-method' => 'post',
+                        'data-pjax' => '0',
+                    ];
+                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
                 },
             ],
         ],

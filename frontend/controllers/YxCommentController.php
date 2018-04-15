@@ -124,4 +124,11 @@ class YxCommentController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    // 根据订单插入值
+    public function actionComment() {
+      $request = Yii::$app->request;
+  		$id = $request->get('order_id');
+      return $this->render('comment');
+    }
 }

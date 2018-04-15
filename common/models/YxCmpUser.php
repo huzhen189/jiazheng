@@ -56,6 +56,15 @@ class YxCmpUser extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'username'=>'账号',
+            'email'=>'手机号',
+            'password'=>'密码',
+            'password_see'=>'密码',
+        ];
+    }
     /**
      * @inheritdoc
      */

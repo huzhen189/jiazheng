@@ -79,6 +79,59 @@ h1,h2,h3,h4,h5,h6,p {
     color: rgb(255, 90, 0);
 }
 
+/* 商家基本详情（价格，分数、服务类型等 */
+.basic-detail .store-basic .store-info .basic .basic-detail-text {
+	width: 800px;
+	height: 100px;
+	padding-left: 10px;
+	padding-right: 10px;
+	font-size: 18px;
+	background-color: #f5f5f5;
+	display: flex;
+	align-items: center;
+}
+.basic-detail .store-basic .store-info .basic .basic-detail-text .first-child {
+	width: 300px;
+}
+.basic-detail .store-basic .store-info .basic .basic-detail-text .first-child p {
+	color: rgb(255, 90, 0);
+}
+.basic-detail .store-basic .store-info .basic .basic-detail-text .second-child {
+	width: 500px;
+}
+
+/* 附加服务选项 */
+.long-hourly .choose-server {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.long-hourly .choose-server .one-server {
+	width: 33%;
+}
+
+/* 服务时间的选择 */
+.date-hour .date-all .date-hour {
+
+}
+.date-hour .hour-all {
+	width: 50%;
+	margin: 0;
+	padding: 0;
+}
+.date-hour .hour-all .hour-one {
+	margin: 5px 0;
+	padding: 0;
+}
+/* 可以选择时间的样式 */
+.date-hour .hour-all .hour-one .allow {
+
+}
+/* 已选择时间的样式 */
+.date-hour .date-hour .btn-danger {
+	background-color: rgb(255, 90, 0);
+	border-color: rgb(255, 90, 0);
+}
 
 /* 商家详情 */
 .basic-detail .store-basic {

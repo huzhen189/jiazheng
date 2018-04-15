@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\YxCmpRes;
 use common\models\YxCmpResSearch;
+use common\tools\CheckController;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * YxCmpResController implements the CRUD actions for YxCmpRes model.
  */
-class YxCmpResController extends Controller
+class YxCmpResController extends CheckController
 {
     /**
      * {@inheritdoc}
@@ -100,8 +101,12 @@ class YxCmpResController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->cmp_res_id]);
+        if ($model->load(Yii::$app->request->post()) ) {
+            $model->cmp_res_img=$model->cmp_res_img[0];
+            if($model->save()){
+               return $this->redirect(['view', 'id' => $model->cmp_res_id]); 
+            }
+            
         }
 
         return $this->render('update', [

@@ -10,6 +10,14 @@ $this->registerCssFile("/css/order/index.css");
 $this->title = Yii::t('app', 'Yx Orders');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+  .grid-view .filters{
+    display: none;
+  }
+</style>
+<br></br>
+<?php //YxOrder::testSql(38,31); ?>
+
 <div class="yx-order-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -18,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'showHeader' =>false,
+        'showHeader' => false,
         'columns' => [
             'id',
             'order_name',
@@ -33,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'order_memo',
             'yx_user_id',
-            'usera_name',
+            'user_name',
             'created_at',
             'updated_at',
 
@@ -60,4 +68,50 @@ $this->params['breadcrumbs'][] = $this->title;
             'lastPageLabel'=>'Last',
         ],
     ]); ?>
+
+    <button class="btn" id="test_btn">测试订单生成</button>
 </div>
+
+
+<script>
+  window.onload = function(){
+     $("#test_btn").click(function(){
+         var order_server = 97;
+         var yx_company_id = 32;
+         var yx_staff_id = 0;
+         var start_time = 1523782800;
+         var amount = 1;
+         var order_type = 1;
+         var extra_server = [
+           {
+             'id':20,
+             'amount':1
+           }
+         ];
+
+         $.ajax({
+             type  : "POST",
+             url   : "/yx-order/create",
+             dataType:"json",
+             data:{
+                 "order_server":order_server,
+                 "yx_company_id":yx_company_id,
+                 "yx_staff_id":yx_staff_id,
+                 "start_time":start_time,
+                 "amount":amount,
+                 "extra_server":extra_server,
+                 "order_type":order_type,
+             },
+             success:function(json) {
+               console.log(json);
+               if(json.code == -1){
+                 alert(json.msg);
+               }else {
+               }
+             }
+         });
+     })
+
+  }
+
+</script>

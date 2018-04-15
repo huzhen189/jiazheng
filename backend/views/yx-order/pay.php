@@ -24,18 +24,18 @@ $this->title = "支付中...";
       if(typeof pingpp != 'undefined'){
         pingpp.createPayment(ch, function(result, err){
            // 可按需使用 alert 方法弹出 log
-            alert(result);
-            alert(err.msg);
-            alert(err.extra);
+            console.log(result);
+            console.log(err.msg);
+            console.log(err.extra);
             if (result == "success") {
                 // 只有微信公众号 (wx_pub)、QQ 公众号 (qpay_pub)支付成功的结果会在这里返回，其他的支付结果都会跳转到 extra 中对应的 URL
-                window.location.href = "<?php echo Url::to('/yx-order/paysuccess?id='.$model->id)?>";
+                window.location.href = "<?php echo Url::to('/yx-order/paysuccess>id='.$model->id)?>";
             } else if (result == "fail") {
                 // Ping++ 对象不正确或者微信公众号 / QQ公众号支付失败时会在此处返回
-                //window.location.href = "<?php echo Url::to('/yx-order/paysuccess?id='.$model->id)?>";
+                window.location.href = "<?php echo Url::to('/yx-order/paysuccess>id='.$model->id)?>";
             } else if (result == "cancel") {
                 // 微信公众号支付取消支付
-                //window.location.href = "<?php echo Url::to('/yx-order/paysuccess?id='.$model->id)?>";
+                window.location.href = "<?php echo Url::to('/yx-order/paysuccess>id='.$model->id)?>";
             }
         });
       }else {

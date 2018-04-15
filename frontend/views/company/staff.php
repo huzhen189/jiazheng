@@ -2,6 +2,7 @@
 	use yii\helpers\Html;
 	use yii\widgets\LinkPager;
 	use common\models\YxStaff;
+	use common\models\YxStaffServer;
 	$sortText = '排序';
 ?>
 
@@ -16,13 +17,13 @@
 			<p><b>简介：</b>本公司是一个拥有上千优秀的服务人员，一直本着服务的态度而立足于行业中。</p>
 		</div>
 		<div>
-			<h4><b>相似商家：</b></h4>
+			<h4><b>原象推荐：</b></h4>
 			<?php foreach ($recommendArr as $value): ?>
 				<div class="other-store">
-					<img src="/static/img/staff/staff1.jpg" />
+					<img src="<?= $value['staff_img']?>" alg="yuanxiang"/>
 					<div class="other-store-info">
-						<h5><a href="/company/staff?company=<?= $value['id'] ?>" title="<?= $value['name'] ?>"><?= $value['name'] ?></a></h5>
-						<p title="<?= $value['introduction'] ?>"><?= $value['introduction'] ?></p>
+							<h5><a href="/staff/index?staff_id=<?= $value['staff_id'] ?>"><?= $value['staff_name']?></a></h5>
+							<p title="<?= $value['staff_intro']?>"><?= $value['staff_intro']?></p>
 					</div>
 				</div>
 			<?php endforeach; ?>
@@ -35,13 +36,6 @@
 				<div class="condition-inner">
 					<div class="condition-left">
 						<ul>
-							<li class="<?php if($sort == 'default'){
-								echo "active";
-							}?>">
-								<a href="?server_id=<?= $serverId?>&company_id=<?= $companyId?>&sort=default">默认<?php if($sort == 'default'){
-										echo $sortText;
-									}?></a>
-							</li>
 							<li class="<?php if($sort == 'fraction'){
 								echo "active";
 								}?>">
@@ -62,7 +56,7 @@
 						<ul>
 							<li>
 								<?php
-										echo '<a href="/company/index?server_id='.$serverId.'company_id='.$companyId.'&sort=default" class="header-title">商家详情</a>';
+										echo '<a href="/company/index?server_id='.$serverId.'&company_id='.$companyId.'&sort=fraction" class="header-title">商家详情</a>';
 								?>
 							</li>
 							<li class="active">
@@ -78,27 +72,16 @@
 			</div>
 			<div class="select-server">
 				<div class="selector-child">
-					服务类型：<input list="companys" style="width:100px;" placeholder="服务类型"/>
-					<datalist id="companys">
-						<option value="基础保洁">
-						<option value="长期/周期保洁">
-						<option value="深度保洁">
-						<option value="厨房保养">
-						<option value="卫生间保养">
-						<option value="擦玻璃">
-						<option value="油烟机清洗">
-						<option value="灶台清洗">
-						<option value="电烤箱清洗">
-						<option value="微波炉清洗">
-						<option value="消毒柜清洗">
-						<option value="洗衣机清洗">
-						<option value="空调清洗">
-						<option value="饮水机清洗">
-						<option value="热水器清洗">
-						<option value="月嫂">
-						<option value="育儿嫂">
-						<option value="擦玻璃">
-					</datalist>
+					服务类型：
+					<select class="server-type" style="width:100px;height:25px;">
+						<?php foreach ($CompanyServerAll as $key => $value) {
+							if ($serverId == $key) {
+								echo '<option value="'.$key.'" title="'.$value.'" selected>'.$value.'</option>';
+							}else {
+								echo '<option value="'.$key.'" title="'.$value.'">'.$value.'</option>';
+							}
+						}?>
+					</select>
 				</div>
 			</div>
 		</div>
@@ -112,14 +95,12 @@
 						<div class="img">
 							<img class="img-thumbnail" src="<?= $model->staff_img ?>" >
 						</div>
-						<h3><?= $model->staff_name ?></h3>
+						<h3 title="<?= $model->staff_name ?>"><?= $model->staff_name ?></h3>
+						<p title="价格: <?= YxStaffServer::getStaffPrice($model->staff_id,$serverId) ?>">价格: <?= YxStaffServer::getStaffPrice($model->staff_id,$serverId) ?>元</p>
+						<p title="分数: <?= $model->staff_fraction ?>">分数: <?= $model->staff_fraction ?></p>
+						<p title="主营业务: <?= YxStaff::getServerName($model->staff_id) ?>" class="staff-servers">主营业务: <?= YxStaff::getServerName($model->staff_id) ?></p>
 						<div class="staff-info">
-							<div>价格: <?= $model->staff_fraction ?>元</div>
-							<div>分数: <?= $model->staff_fraction ?></div>
-							<div class="staff-servers">主营业务: <?= YxStaff::getServerName($model->staff_id) ?></div>
-							<div class="see-details">
-								<a href="/staff/index?staff_id=<?= $model->staff_id ?>" target="_blank">查看详情</a>
-							</div>
+							<a href="/staff/index?staff_id=<?= $model->staff_id ?>" target="_blank">查看详情</a>
 						</div>
 					</div>
 				</div>
@@ -140,7 +121,13 @@
 
 
 <script type="text/javascript">
+	var companyId = <?=$companyId?>;
 	window.onload = function() {
+		$(".server-type").change(function() {
+			// 根据选择服务显示服务人员
+			window.location.href = "/company/staff?server_id="+$(".server-type").val()+"&company_id="+companyId+"&sort=fraction";
+		});
+		// 鼠标移动到用户变色
 		$(".staff-one").mouseenter(function(){
 			$(this).addClass("active");
 			$(this).find(".staff-info").addClass("block");

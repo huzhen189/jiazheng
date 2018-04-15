@@ -23,6 +23,7 @@ class YxUserAddress extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+
     public static function tableName()
     {
         return 'yx_user_address';

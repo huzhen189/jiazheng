@@ -213,4 +213,28 @@ class YxCompanyController extends CheckController
         ];
         return $actions;
     }
+
+    /**
+     * [actionAdjustfraction 分数调整]
+     * @Author   Yoon
+     * @DateTime 2018-04-09T18:31:29+0800
+     * @param    [type]                   $id [description]
+     * @return   [type]                       [description]
+     */
+    public function actionAdjustfraction($id){
+        $params=Yii::$app->request->post();
+        $fraction=$params['ext_history_fraction'];
+        if(empty($fraction)){
+            $fraction=0;
+        }
+        $fraction=$fraction*1000;
+        $model=YxCompany::findOne($id);
+        $model->updateCounters(['total_fraction'=>$fraction]);
+        $model->updateCounters(['history_fraction'=>$fraction]);
+        $model->updateCounters(['ext_history_fraction'=>$fraction]);
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+
+    }
 }

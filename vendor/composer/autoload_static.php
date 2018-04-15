@@ -24,6 +24,7 @@ class ComposerStaticInit68ac20a40d7a62a34acdc3a257baa85c
         array (
             'yii\\swiftmailer\\' => 16,
             'yii\\redis\\' => 10,
+            'yii\\redactor\\' => 13,
             'yii\\gii\\' => 8,
             'yii\\faker\\' => 10,
             'yii\\debug\\' => 10,
@@ -58,6 +59,7 @@ class ComposerStaticInit68ac20a40d7a62a34acdc3a257baa85c
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
+            'Pingpp\\' => 7,
         ),
         'G' => 
         array (
@@ -97,6 +99,10 @@ class ComposerStaticInit68ac20a40d7a62a34acdc3a257baa85c
         'yii\\redis\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-redis/src',
+        ),
+        'yii\\redactor\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiidoc/yii2-redactor',
         ),
         'yii\\gii\\' => 
         array (
@@ -175,6 +181,10 @@ class ComposerStaticInit68ac20a40d7a62a34acdc3a257baa85c
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Pingpp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pingplusplus/pingpp-php/lib',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (

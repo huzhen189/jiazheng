@@ -7,15 +7,16 @@ use common\models\YxStaffImg;
 use common\models\YxStaffImgSearch;
 use common\models\YxStaffVerify;
 use common\models\YxStaffVerifySearch;
+use common\models\YxCompany;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-
+use common\tools\CheckController;
 /**
  * YxStaffVerifyController implements the CRUD actions for YxStaffVerify model.
  */
-class YxStaffVerifyController extends Controller
+class YxStaffVerifyController extends CheckController
 {
     /**
      * @inheritdoc
@@ -58,11 +59,20 @@ class YxStaffVerifyController extends Controller
     {
         $searchModel = new YxStaffImgSearch();
         $model = $this->findModel($id);
-        $model2= YxStaffImg::find()->where(['verify_state'=>1,'staff_verify_id'=>$id])->all();
+        $model2 = YxStaffImg::find()->where(['verify_state' => 1, 'staff_verify_id' => $id])->all();
         #资格证书查询参数
         $queryParams = Yii::$app->request->queryParams;
         $queryParams['YxStaffImgSearch'] = ['staff_verify_id' => $id];
         $dataProvider = $searchModel->search($queryParams);
+
+        $staff_model = '';
+        $ext_fraction = 0;
+        if (isset($model->staff_id)) {
+            $staff_model = YxCompany::findOne($model->staff_id);
+            if ($staff_model) {
+                $ext_fraction = $staff_model->ext_fraction / 1000;
+            }
+        }
 
         if (Yii::$app->request->post()) {
 
@@ -74,7 +84,7 @@ class YxStaffVerifyController extends Controller
 
             $model->save();
             foreach ($model2 as $key => $value) {
-                $model2[$key]['verify_state']=2;
+                $model2[$key]['verify_state'] = 2;
                 $model2[$key]->save();
             }
         }
@@ -83,6 +93,7 @@ class YxStaffVerifyController extends Controller
             'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'ext_fraction' => $ext_fraction,
 
         ]);
     }
@@ -130,7 +141,7 @@ class YxStaffVerifyController extends Controller
         } else {
             $type1_model2 = new YxStaffImg();
         }
-        $model->staff_age = date('Y-m-d',$model->staff_age);
+        $model->staff_age = date('Y-m-d', $model->staff_age);
         #员工的修改
         if ($model->load(Yii::$app->request->post())) {
             $model->staff_age = strtotime($model->staff_age);
@@ -225,9 +236,14 @@ class YxStaffVerifyController extends Controller
     {
         $model = $this->findModel($id);
         $model->staff_verify_state = 3;
+        $params = Yii::$app->request->post();
+        $ext_fraction = $params['ext_fraction'];
+        $base_fraction = 70;
+        $ext_fraction = $params['ext_fraction'];
+        if (empty($ext_fraction)) {
+            $ext_fraction = 0;
+        }
         $staff_model = [];
-
-        $model2 = YxStaffImg::find()->all();
 
         if (!empty($model->staff_id)) {
             $staff_model = YxStaff::find()->where(['staff_id' => $model->staff_id])->one();
@@ -235,13 +251,39 @@ class YxStaffVerifyController extends Controller
             $staff_model = new YxStaff();
 
         }
-
+        if (!empty($model['staff_img'])) {
+            $base_fraction += 0.5;
+        }
+        if (!empty($model['staff_name']) && !empty($model['staff_idcard_front']) && !empty($model['staff_idcard']) && !empty($model['staff_idcard_back'])) {
+            $base_fraction += 1;
+        }
+        if ($model['staff_manage_time'] == 1) {
+            $base_fraction += 1;
+        }
+        if ($model['staff_manage_time'] >= 2) {
+            $base_fraction += 2;
+        }
+        if (!empty($model['staff_health_img'])) {
+            $base_fraction += 1.5;
+        }
+        if (!empty($model['staff_train']) && trim($model['staff_train']) != '无') {
+            $base_fraction += 1;
+        }
+        if (!empty($model['staff_crime_record']) && trim($model['staff_crime_record']) != '无') {
+            $base_fraction -= 30;
+        }
+        if (!empty($model['staff_sin_record']) && trim($model['staff_sin_record']) != '无') {
+            $base_fraction -= 10;
+        }
+        if (!empty($params['ext_fraction'])) {
+            $base_fraction += $ext_fraction;
+        }
         $staff_model['staff_name'] = $model['staff_name'];
         $staff_model['company_id'] = $model['company_id'];
-        // $staff_model['province']=$model['province'];
-        // $staff_model['city']=$model['city'];
-        // $staff_model['district']=$model['district'];
-        // $staff_model['address']=$model['address'];
+        $staff_model['staff_province'] = $model['staff_province'];
+        $staff_model['staff_city'] = $model['staff_city'];
+        $staff_model['staff_district'] = $model['staff_district'];
+        $staff_model['staff_address'] = $model['staff_address'];
         $staff_model['staff_sex'] = $model['staff_sex'];
         $staff_model['staff_age'] = $model['staff_age'];
         $staff_model['staff_img'] = $model['staff_img'];
@@ -257,11 +299,13 @@ class YxStaffVerifyController extends Controller
         $staff_model['staff_all_server_id'] = $model['staff_all_server_id'];
         $staff_model['staff_query'] = $model['staff_query'];
 
-        $staff_model['staff_fraction'] = $model['staff_fraction'];
-        $staff_model['staff_base_fraction'] = $model['staff_base_fraction'];
-        $staff_model['staff_history_fraction'] = $model['staff_history_fraction'];
-        $staff_model['staff_clinch'] = $model['staff_clinch'];
-        $staff_model['staff_price'] = $model['staff_price'];
+        $staff_model['staff_fraction'] = $base_fraction * 1000;
+        if (!empty($model->staff_id)) {
+            $staff_model['staff_fraction'] = $base_fraction * 1000 + $staff_model['staff_history_fraction'];
+        }
+        $staff_model['staff_base_fraction'] = $base_fraction * 1000;
+        $staff_model['ext_fraction'] = $ext_fraction;
+
         $staff_model['staff_manage_time'] = $model['staff_manage_time'];
         $staff_model['staff_idcard_front'] = $model['staff_idcard_front'];
         $staff_model['staff_idcard_back'] = $model['staff_idcard_back'];
@@ -271,32 +315,40 @@ class YxStaffVerifyController extends Controller
         $staff_model['staff_crime_record'] = $model['staff_crime_record'];
         $staff_model['staff_sin_record'] = $model['staff_sin_record'];
         $staff_model['staff_health_img'] = $model['staff_health_img'];
+        $staff_model['staff_train'] = $model['staff_train'];
         $staff_model['staff_number'] = $model['staff_number'];
-        if(empty($model['staff_number'])){
+
+        if (empty($model['staff_number'])) {
             $staff_model['staff_number'] = YxStaff::getStaffNumber($model->staff_district);
         }
-        
 
         if ($staff_model->save()) {
             $staff_id = $staff_model->attributes['staff_id'];
             $model->staff_id = $staff_id;
             if ($model->save()) {
-                if($model2){
+                $model2 = YxStaffImg::find()->where(['and', 'staff_id' => $staff_id, ['or', 'staff_verify_id' => $id]])->all();
+                if ($model2) {
                     foreach ($model2 as $key => $value) {
-                        if($model2[$key]['staff_verify_id']==$id){
-                            $model2[$key]['verify_state']=3;
-                            $model2[$key]['staff_id']=$staff_id;
-                            $model2[$key]->save(); 
-                        }else{
-                            $model2[$key]['verify_state']=2;
-                            $model2[$key]['staff_id']=$staff_id;
-                            $model2[$key]->save(); 
+                        if ($model2[$key]['staff_verify_id'] == $id) {
+                            $model2[$key]['verify_state'] = 3;
+                            $model2[$key]['staff_id'] = $staff_id;
+                            $model2[$key]->save();
+                        } else {
+                            $model2[$key]['verify_state'] = 2;
+                            $model2[$key]['staff_id'] = $staff_id;
+                            $model2[$key]->save();
                         }
 
-                    }   
+                    }
+                    $count_model2 = YxStaffImg::find()->where(['staff_id' => $staff_id, 'verify_state' => 3])->count();
+                    if ($count_model2 > 0) {
+                        $staff_model->updateCounters(['staff_fraction' => 1000]);
+                        $staff_model->updateCounters(['staff_base_fraction' => 1000]);
+                        $staff_model->updateCounters(['ext_fraction' => 1000]);
+                    }
                 }
 
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['yx-staff/view', 'id' => $model->staff_id]);
             }
         }
     }
@@ -319,10 +371,10 @@ class YxStaffVerifyController extends Controller
 
     public function actions()
     {
-        $actions=parent::actions();
-        $actions['get-region']=[
-            'class'=>\chenkby\region\RegionAction::className(),
-            'model'=>\common\models\Region::className()
+        $actions = parent::actions();
+        $actions['get-region'] = [
+            'class' => \chenkby\region\RegionAction::className(),
+            'model' => \common\models\Region::className(),
         ];
         return $actions;
     }

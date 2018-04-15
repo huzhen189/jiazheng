@@ -15,13 +15,13 @@ $this->params['breadcrumbs'][] = $this->title;
   display: none;
 }
 </style>
+<?php  $GLOBALS['order_id'] = $order_id ?>
 <div class="yx-user-address-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('新建收货地址', ['create'], ['class' => 'btn','style' => 'color:#40bbff;border-color:#40bbff']) ?>
+        <?= Html::a('新建收货地址', ['create?order_id='.$order_id], ['class' => 'btn','style' => 'color:#40bbff;border-color:#40bbff']) ?>
     </p>
 
     <?= GridView::widget([
@@ -67,8 +67,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons'=>[
                     'setmain' => function ($url, $model, $key){
                         return $model->is_main == 2 ? Html::a('<span style="font-weight: bold;">设为默认地址</span>',
-                            ['setmain?id='.$key],
-                            ['title' => '下架商品', 'data' => ['method' => 'post'], 'class'=> 'shelf']) : '';
+                            ['setmain?id='.$key.'&order_id='.$GLOBALS['order_id']],
+                            ['title' => '设为默认地址', 'data' => ['method' => 'post'], 'class'=> 'shelf']) : '';
                     }
                 ]
             ],
@@ -76,5 +76,4 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 </div>
 <script>
-
 </script>

@@ -19,7 +19,12 @@ class SpecialCleanController extends Controller {
 	public function actionIndex() {
 		$this->layout = "layout2";
 		$request = Yii::$app->request;
+		$server_parent = $request->get('server_parent');
+		$YxServerAll = YxServer::getServerSecond($server_parent);
 		$serverId = $request->get('server_id');
+		if (!$serverId) {
+			$serverId = $YxServerAll[0]['server_id'];
+		}
 		$serverName = YxServer::getServerName($serverId);
 		$this->getView()->title = $serverName;
 		$sort = $request->get('sort');
@@ -28,8 +33,8 @@ class SpecialCleanController extends Controller {
 		}else if($sort === 'price') {
 			$YxCompany = YxCompany::find()->where(['like','query',''.$serverName])->orderBy('total_fraction');
 		}else {
-			$sort = 'default';
-			$YxCompany = YxCompany::find()->where(['like','query',''.$serverName]);
+			$sort = 'fraction';
+			$YxCompany = YxCompany::find()->where(['like','query',''.$serverName])->orderBy('total_fraction desc');
 		}
 		$pages = new Pagination([
 			'totalCount' => $YxCompany->count(),
@@ -43,7 +48,9 @@ class SpecialCleanController extends Controller {
 		    'models' => $models,
 		    'pages' => $pages,
 		    'sort' => $sort,
-		    'serverId' => $serverId
+				'serverId' => $serverId,
+				'serverParent' => $server_parent,
+				'YxServerAll' => $YxServerAll
 		]);
 	}
 	// 预约

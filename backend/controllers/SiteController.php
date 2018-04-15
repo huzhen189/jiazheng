@@ -66,8 +66,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        //return $this->redirect(['/yx-company/index']);
-        return $this->render('index');
+        return $this->redirect(['/yx-company/index']);
+        // return $this->render('index');
     }
 
     /**
@@ -78,12 +78,12 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect(['/yx-company/index']);
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect(['/yx-company/index']);
         } else {
             $model->password = '';
 

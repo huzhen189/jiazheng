@@ -73,8 +73,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => '{view} {delete} {order-list} {address-list}',
             'buttons' => [
                 'order-list' => function ($url, $model) {
-                    $url = "/yx-order/index?yx_user_id=" . $model->id;
-                    return Html::a('<span class="glyphicon glyphicon-tag"></span>', $url, ['title' => '订单列表', 'target' => '_blank']);
+                    $url = "/yx-order/index?user_id=" . $model->id;
+                    return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, ['title' => '订单列表', 'target' => '_blank']);
                 },
                 'address-list' => function ($url, $model) {
                     $url = "/yx-user-address/index?yx_user_id=" . $model->id;

@@ -51,11 +51,33 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+            ['username', 'trim'],
+            ['username', 'required'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'string', 'min' => 2, 'max' => 255],
+
+            ['email', 'email'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+
+            ['password_see', 'required'],
+            ['password_see', 'string', 'min' => 6],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
-
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'username' => '账号',
+            'email' => '邮箱',
+            'password_see'=>'密码',
+            'created_at'=>'创建时间',
+            'updated_at'=>'更新时间',
+        ];
+    }
     /**
      * @inheritdoc
      */
@@ -185,5 +207,16 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+
+    public function updateUser(){
+        if (!$this->validate()) {
+            return null;
+        }
+        $this->setPassword($this->password_see);
+        $this->generateAuthKey();
+
+        return $this->save() ? $this : null;
     }
 }

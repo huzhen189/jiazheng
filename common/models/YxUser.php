@@ -246,4 +246,11 @@ class YxUser extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    // 得到用户的名字
+    public static function getUserName($user_id) {
+      $userName = YxUser::find()->where(['id' => $user_id])->one();
+      // print_r($userName);
+      return $userName['username'];
+    }
 }

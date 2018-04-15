@@ -26,7 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             // 'id',
+            'number',
             'name',
+
            //         'image',
            // 'total_fraction',
             [
@@ -88,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作', 
-                'template' => '{view} {update} {delete} {waiter-list} {res-list} {server-list}',
+                'template' => '{view} {update} {delete} {waiter-list} {res-list} {server-list} {comment-list} {order-list}',
                 'buttons'=>[
                     'waiter-list'=>function($url,$model){
                         $url="/yx-staff/index?company_id=".$model->id;
@@ -101,6 +103,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'server-list'=> function ($url, $model) {
                         $url = "/yx-cmp-server/index?company_id=" . $model->id;
                         return Html::a('<span class="glyphicon glyphicon-list"></span>', $url, ['title' => '服务列表', 'target' => '_blank']);
+                    },
+                    'comment-list'=> function ($url, $model) {
+                        $url = "/yx-comment/index?company_id=" . $model->id;
+                        return Html::a('<span class="glyphicon glyphicon-star"></span>', $url, ['title' => '评论列表', 'target' => '_blank']);
+                    },
+                    'order-list'=> function ($url, $model) {
+                        $url = "/yx-order/index?company_id=" . $model->id;
+                        return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, ['title' => '订单列表', 'target' => '_blank']);
                     },
                 ]
             ],

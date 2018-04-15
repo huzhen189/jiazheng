@@ -8,11 +8,12 @@ use common\models\YxUserAddressSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\tools\CheckController;
 
 /**
  * YxUserAddressController implements the CRUD actions for YxUserAddress model.
  */
-class YxUserAddressController extends Controller
+class YxUserAddressController extends CheckController
 {
     /**
      * {@inheritdoc}

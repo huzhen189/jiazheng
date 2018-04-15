@@ -1,16 +1,35 @@
 <?php
 
+use common\models\Region;
 use common\models\YxCompany;
 use common\models\YxStaff;
-use common\models\Region;
+use yii\bootstrap\Modal;
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model common\models\YxStaff */
 
 $this->title = $model->staff_name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '员工列表'), 'url' => ['index?company_id=' . $model->company_id]];
+
+$queryParams = Yii::$app->request->queryParams;
+$index_url = 'index';
+$update_url = 'update';
+$delete_url = 'delete';
+$uri = '?id=' . $model->staff_id;
+
+if (isset($queryParams['company_id'])) {
+    $uri = '?company_id=' . $queryParams['company_id'];
+    $index_url = $index_url . $uri . '&id=' . $model->staff_id;
+    $delete_url = $delete_url . $uri . '&id=' . $model->staff_id;
+    $update_url = $update_url . $uri . '&id=' . $model->staff_id;
+} else {
+    $index_url = $index_url . $uri;
+    $update_url = $update_url . $uri;
+    $delete_url = $delete_url . $uri;
+}
+
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '员工列表'), 'url' => [$index_url]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="yx-staff-view">
@@ -18,8 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?=Html::encode($this->title);?></h1>
 
     <p>
-        <?=Html::a(Yii::t('app', '修改'), ['update', 'id' => $model->staff_id], ['class' => 'btn btn-primary']);?>
-        <?=Html::a(Yii::t('app', '删除'), ['delete', 'id' => $model->staff_id], [
+        <?=Html::a(Yii::t('app', '修改'), [$update_url], ['class' => 'btn btn-primary']);?>
+        <?=Html::a(Yii::t('app', '删除'), [$delete_url], [
     'class' => 'btn btn-danger',
     'data' => [
         'confirm' => Yii::t('app', '您确定要删除此项吗?'),
@@ -103,7 +122,8 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'attribute' => 'pre_price',
             'value' => function ($model) {
-                return YxStaff::getPrePrice($model->staff_id);
+                $pre_price = YxStaff::getPrePrice($model->staff_id);
+                return $pre_price / 100;
             },
         ],
         [
@@ -127,12 +147,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 return $staff_history_fraction;
             },
         ],
-        'staff_clinch',
+
+        [
+            'attribute' => 'staff_clinch',
+            'value' => function ($model) {
+                return YxStaff::getClinch($model->staff_id);
+            },
+        ],
         [
             'attribute' => 'staff_price',
             'value' => function ($model) {
-                $staff_price = $model->staff_price / 100;
-                return $staff_price;
+                $pre_price = YxStaff::getPrice($model->staff_id);
+                return $pre_price / 100;
             },
         ],
         [
@@ -184,6 +210,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'staff_skill',
         'staff_crime_record',
         'staff_sin_record',
+        'staff_train',
         [
             'attribute' => 'staff_health_img',
             'format' => ['image', ['width' => '200', 'height' => '200']],
@@ -197,12 +224,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?=GridView::widget([
     'dataProvider' => $dataProvider,
-    'showOnEmpty'=>true,
+    'showOnEmpty' => true,
     'layout' => "{items}",
     'columns' => [
         [
-            'label'=>'相关证书',
-            'attribute'=>'image',
+            'label' => '相关证书',
+            'attribute' => 'image',
             'format' => ['image', ['width' => '200', 'height' => '200']],
             'value' => function ($model) {
                 return $model->image;
@@ -213,3 +240,28 @@ $this->params['breadcrumbs'][] = $this->title;
 ]);?>
 
 </div>
+    <p>
+        <?=Html::a('调整运营分', '#', [
+    'id' => 'deny',
+    'data-toggle' => 'modal',
+    'data-target' => '#deny-modal',
+    'class' => 'btn btn-danger',
+]);?>
+    </p>
+</div>
+<?php
+
+Modal::begin([
+    'id' => 'deny-modal',
+    'header' => '<h4 class="modal-title">调整运营分</h4>',
+]);
+$verify = Yii::$app->request->csrfToken;
+$id = $model->staff_id;
+$js = <<<JS
+    var data='<form class="form-horizontal myform" action="/yx-staff/adjustfraction?id={$id}" method="post" enctype="multipart/form-data"><input name="_csrf-backend" type="hidden" id="_csrf-backend" value="{$verify}"><div class="form-group"><div class="col-sm-12"><input class="form-control" name="ext_history_fraction" type="number" step="0.001" value="0"></input></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-12"><button type="submit" class="btn btn-warning">提交</button></div></div></form>'
+    $('.modal-body').html(data);
+JS;
+$this->registerJs($js);
+Modal::end();
+
+?>

@@ -93,9 +93,9 @@ class YxCompanySearch extends YxCompany
             ->andFilterWhere(['like', 'alipay', $this->alipay])
             ->andFilterWhere(['like', 'business_code', $this->business_code]);
 
-        $query->join('INNER JOIN','region rA','yx_company.province=rA.id');
-        $query->join('INNER JOIN','region rB','yx_company.city=rB.id');
-        $query->join('INNER JOIN','region rC','yx_company.district=rC.id');
+        $query->join('LEFT JOIN','region rA','yx_company.province=rA.id');
+        $query->join('LEFT JOIN','region rB','yx_company.city=rB.id');
+        $query->join('LEFT JOIN','region rC','yx_company.district=rC.id');
 
         $query->andFilterWhere(['like', 'rA.name', $this->provinceName])
             ->andFilterWhere(['like', 'rB.name', $this->cityName])

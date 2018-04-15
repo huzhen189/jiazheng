@@ -11,15 +11,17 @@ $this->title = '订单支付';
 </div>
 <script>
 //在成功页调用
+  window.onload = function(){
+    console.log(typeof pingpp_ui);
+    pingpp_ui.success(function(res){
+        if(!res.status){
+            alert(res.msg);
+        }
+    },function(){
+      window.location.href = "/yx-order/index";
+    });
+  }
 
-  console.log(typeof pingpp_ui);
-  pingpp_ui.success(function(res){
-      if(!res.status){
-          alert(res.msg);
-      }
-  },function(){
-    console.log("hello")
-  });
 
 
 

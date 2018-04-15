@@ -5,6 +5,8 @@ namespace frontend\controllers;
 use Yii;
 use common\models\YxUserAddress;
 use common\models\YxUserAddressSearch;
+use common\models\YxOrder;
+use common\models\Region;
 use common\tools\CheckController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,10 +39,15 @@ class YxUserAddressController extends CheckController
     {
         $searchModel = new YxUserAddressSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $params = Yii::$app->request->queryParams;
+        $order_id = 0;
+        if(isset($params['order_id'])){
+          $order_id = $params['order_id'];
+        }
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'order_id' => $order_id,
         ]);
     }
 
@@ -62,7 +69,7 @@ class YxUserAddressController extends CheckController
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($order_id)
     {
 
         $model = new YxUserAddress();
@@ -70,8 +77,9 @@ class YxUserAddressController extends CheckController
         if ($model->load(Yii::$app->request->post())){
             $this->setMainBefore(Yii::$app->user->id);
             $model->yx_user_id = Yii::$app->user->id;
+            $model->is_main = 1;
             if($model->save()) {
-                return $this->redirect(['index', 'yx_user_id' => $model->yx_user_id]);
+                return $this->redirect(['index?yx_user_id='.$model->yx_user_id.'&order_id='.$order_id]);
             }
         }
         return $this->render('create', [
@@ -100,12 +108,25 @@ class YxUserAddressController extends CheckController
             'model' => $model,
         ]);
     }
-    public function actionSetmain($id)
+    public function actionSetmain($id,$order_id)
     {
         $model = $this->findModel($id);
-        if($model->save()) {
-            return $this->redirect(['index', 'yx_user_id' => $model->yx_user_id]);
+        $this->setMainBefore(Yii::$app->user->id);
+        $model->is_main = 1;
+        if($order_id && $order_id > 0){
+            $yxOrder = YxOrder::findOne(['id'=>$order_id]);
+            $yxOrder->address = Region::getOneName($model->province).Region::getOneName($model->city).Region::getOneName($model->district).'  '.$model->address;
+            $yxOrder->phone = $model->phone;
+            $yxOrder->user_name = $model->consignee;
+            if($model->save() && $yxOrder->save()) {
+                return $this->redirect(['/yx-order/payment', 'id' => $order_id]);
+            }
+        }else {
+            if($model->save()) {
+                return $this->redirect(['index', 'yx_user_id' => $model->yx_user_id]);
+            }
         }
+
         return $this->render('update', [
             'model' => $model,
         ]);

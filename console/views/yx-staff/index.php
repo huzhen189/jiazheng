@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="yx-staff-index">
 
     <h1><?=Html::encode($this->title);?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ;?>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
 
@@ -37,7 +37,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 return YxStaff::getCmpSexName($model->staff_sex);
             },
         ],
-        'staff_age',
+        [
+            'attribute' => 'staff_age',
+            'value' => function ($model) {
+                return date('Y-m-d', $model->staff_age);
+            },
+        ],
         //'staff_img',
         'staff_idcard',
         //'staff_intro',
@@ -62,15 +67,23 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => '操作',
-            'template' => '{view} {update} {server-list} {res-list}',
+            'template' => '{view} {server-list} {res-list} {order-list} {comment-list}',
             'buttons' => [
                 'server-list' => function ($url, $model) {
                     $url = "/yx-staff-server/index?staff_id=" . $model->staff_id;
                     return Html::a('<span class="glyphicon glyphicon-list"></span>', $url, ['title' => '已选服务列表', 'target' => '_blank']);
                 },
-                'res-list'=> function ($url, $model) {
+                'res-list' => function ($url, $model) {
                     $url = "/yx-staff-res/index?staff_id=" . $model->staff_id;
                     return Html::a('<span class="glyphicon glyphicon-th-large"></span>', $url, ['title' => '员工成果列表', 'target' => '_blank']);
+                },
+                'comment-list' => function ($url, $model) {
+                    $url = "/yx-comment/index?staff_id=" . $model->staff_id;
+                    return Html::a('<span class="glyphicon glyphicon-star"></span>', $url, ['title' => '评论列表', 'target' => '_blank']);
+                },
+                'order-list' => function ($url, $model) {
+                    $url = "/yx-order/index?staff_id=" . $model->staff_id;
+                    return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, ['title' => '订单列表', 'target' => '_blank']);
                 },
             ],
         ],

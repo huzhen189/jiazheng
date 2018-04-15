@@ -8,21 +8,20 @@
 .staff-detail .detail-cart .img img {
 	width: 300px;
 	height: 300px;
-	border: 1px solid #e9e9e9;
 }
 .staff-detail .detail-cart .detail {
 	width: 100%;
 	padding: 0 30px;
 }
 
-/* 服务选项 */
+/* 附加服务选项 */
 .staff-detail .detail-cart .detail .choose-server {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 }
 .staff-detail .detail-cart .detail .choose-server .one-server {
-	width: 25%;
+	width: 33%;
 }
 
 .staff-detail .detail-cart h3,.staff-detail .detail-cart h4,.staff-detail .detail-cart h5 {
@@ -61,6 +60,29 @@
 	padding: 0;
 }
 
+/* 服务时间的选择 */
+.staff-detail .detail-cart .detail .date-hour {
+
+}
+.staff-detail .detail-cart .detail .hour-all {
+	width: 50%;
+	margin: 0;
+	padding: 0;
+}
+.staff-detail .detail-cart .detail .hour-all .hour-one {
+	margin: 5px 0;
+	padding: 0;
+}
+/* 可以选择时间的样式 */
+.staff-detail .detail-cart .detail .hour-all .hour-one .allow {
+
+}
+/* 已选择时间的样式 */
+.staff-detail .detail-cart .detail .date-hour .btn-danger {
+	background-color: rgb(255, 90, 0);
+	border-color: rgb(255, 90, 0);
+}
+
 /* 商家详情 */
 .detail-info {
 	display: flex;
@@ -79,6 +101,22 @@
 .staff-info .other-staff img {
 	width: 120px;
 	height: 100px;
+}
+.staff-info .other-staff .other-staff-info {
+	width: 110px;
+	padding: 5px;
+}
+.staff-info .other-staff .other-staff-info h5 {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.staff-info .other-staff .other-staff-info p {
+	height: 50px;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	overflow: hidden;
 }
 
 .detail-info .staff-comment {

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\YxNotice;
 use common\models\YxNoticeSearch;
+use common\tools\CheckController;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * YxNoticeController implements the CRUD actions for YxNotice model.
  */
-class YxNoticeController extends Controller
+class YxNoticeController extends CheckController
 {
     /**
      * @inheritdoc

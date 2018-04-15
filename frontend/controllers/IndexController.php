@@ -9,6 +9,7 @@ use common\models\YxRecomLeft;
 use common\models\YxRecomRight;
 use common\models\YxCompany;
 use common\models\YxStaff;
+use common\models\YxServer;
 use Yii;
 
 /**
@@ -16,6 +17,9 @@ use Yii;
  */
 
 class IndexController extends Controller {
+	public function init(){
+		 $this->enableCsrfValidation = false;
+	}
 
 	public function actionIndex() {
 		$this->getView()->title = "首页";
@@ -34,5 +38,21 @@ class IndexController extends Controller {
             'YxCompany' => $YxCompany,
             'YxStaff' => $YxStaff
         ]);
+	}
+
+	// 搜索
+	public function actionSearch() {
+		$request = Yii::$app->request;
+		$choosed = $request->post('choosed');
+		$searchContent = $request->post('searchContent');
+		if($choosed == 1) {
+			if($searchContent) {
+				return YxServer::getUrl($searchContent);
+			}
+		  return 0;
+		}elseif ($choosed == 2) {
+			$YxCompany = YxServer::getStores($searchContent);
+			return $YxCompany;
+		}
 	}
 }

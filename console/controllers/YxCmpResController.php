@@ -104,8 +104,12 @@ class YxCmpResController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->cmp_res_id]);
+        if ($model->load(Yii::$app->request->post()) ) {
+            $model->cmp_res_img=$model->cmp_res_img[0];
+            if($model->save()){
+               return $this->redirect(['view', 'id' => $model->cmp_res_id]); 
+            }
+            
         }
 
         return $this->render('update', [

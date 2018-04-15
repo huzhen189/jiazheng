@@ -83,8 +83,8 @@ class YxCompanyVerify extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'address', 'telephone', 'charge_phone', 'charge_man', 'wechat', 'business_licences', 'image','business_code'], 'required'],
-            [['company_id', 'province', 'city', 'district', 'created_at', 'updated_at', 'status', 'models', 'verify_sate', 'id', 'cmp_user_id', 'total_fraction', 'base_fraction', 'history_fraction', 'clinch', 'price', 'manage_time', 'banck_card'], 'integer'],
+            [['name', 'address', 'telephone', 'charge_phone', 'charge_man', 'wechat', 'image'], 'required'],
+            [['company_id', 'province', 'city', 'district', 'created_at', 'updated_at', 'status', 'models', 'verify_sate', 'id', 'cmp_user_id', 'total_fraction', 'base_fraction', 'history_fraction', 'clinch', 'price', 'manage_time', 'banck_card','ext_fraction'], 'integer'],
             [['longitude', 'latitude', 'operating_radius'], 'number'],
             [['introduction', 'verify_memo', 'query'], 'string'],
             [['name', 'telephone', 'wechat', 'number'], 'string', 'max' => 20],
@@ -95,6 +95,7 @@ class YxCompanyVerify extends \yii\db\ActiveRecord
             [['main_server_id', 'all_server_id', 'alipay', 'business_code'], 'string', 'max' => 255],
             [['all_server_id'], 'validateSASID'],
             [['main_server_id'], 'validateSMSID'],
+            [['business_licences'],'safe']
         ];
     }
     /**

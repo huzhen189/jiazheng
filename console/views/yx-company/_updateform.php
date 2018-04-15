@@ -117,7 +117,7 @@ $this->registerJs(
 
     <?= $form->field($model, 'address')->textInput(['maxlength' => true,'readonly'=>true]) ?>
 
-    <?= $form->field($model, 'telephone')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'telephone')->textInput(['maxlength' => true,'readonly'=>true]) ?>
 
     <?= $form->field($model, 'charge_phone')->textInput(['maxlength' => true]) ?>
 
@@ -141,12 +141,13 @@ $this->registerJs(
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>102400,
         ],
     ]) ?>
 
     <?php $models = YxCompany::getCmpModels(); ?>
-    <?= $form->field($model, 'models')->dropDownList($models) ?>
+    <?= $form->field($model, 'models')->dropDownList($models,['disabled'=>'disabled']) ?>
 
     <?php 
         $server_id = YxCompany::getCmpServer();
@@ -170,20 +171,21 @@ $this->registerJs(
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>102400,
         ],
     ]) ?>
 
 
 
    <?php $manage_time = YxStaff::getStaffTime(); ?>
-   <?= $form->field($model, 'manage_time')->dropDownList($manage_time) ;?>
+   <?= $form->field($model, 'manage_time')->dropDownList($manage_time,['disabled'=>'disabled']) ;?>
 
-   <?= $form->field($model, 'banck_card')->textInput(['maxlength' => true]) ?>
+   <?= $form->field($model, 'banck_card')->textInput(['maxlength' => true,'readonly'=>true]) ?>
 
-   <?= $form->field($model, 'alipay')->textInput(['maxlength' => true]) ?>
+   <?= $form->field($model, 'alipay')->textInput(['maxlength' => true,'readonly'=>true]) ?>
 
-   <?= $form->field($model, 'business_code')->textInput(['maxlength' => true]) ?>
+   <?= $form->field($model, 'business_code')->textInput(['maxlength' => true,'readonly'=>true]) ?>
 <!--    <?= $form->field($model, 'query')->textarea(['rows' => 6]) ?> -->
     <div class="form-group">
         <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
@@ -197,3 +199,7 @@ $this->registerJs(
       }
     </script>
 </div>
+<script >
+    $(".zh-cover").hide();
+    $(".file-btn").hide();
+</script>

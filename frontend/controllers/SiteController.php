@@ -85,8 +85,12 @@ class SiteController extends Controller
     		$YxRecomLeft = YxRecomLeft::find()->limit(4)->all();
     		$YxActivity = YxActivity::find()->one();
     		$YxRecomRight = YxRecomRight::find()->one();
-    		$YxCompany = YxCompany::find()->where(['status'=>2])->orderby('total_fraction desc')->limit(4)->all();
-    		$YxStaff = YxStaff::find()->where(['staff_state'=>1])->orderby('staff_fraction desc')->limit(8)->all();
+        $YxCompany = YxCompany::find()->select(['*'])
+  								->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
+  									->where(['yx_company.status'=>2])->orderby('total_fraction desc')->limit(4)->all();
+        $YxStaff = YxStaff::find()->select(['*'])
+  								->innerjoin('yx_staff_server', 'yx_staff_server.staff_id=yx_staff.staff_id')
+  									->where(['yx_staff.staff_state'=>1])->limit(8)->all();
     		return $this->render("/index/index", [
                 'YxBanner' => $YxBanner,
                 'YxRecomLeft' => $YxRecomLeft,

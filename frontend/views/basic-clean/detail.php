@@ -1,7 +1,10 @@
 <?php
 	use yii\helpers\Html;
 	use yii\bootstrap\Tabs;
-
+	use common\models\YxServer;
+	use common\models\YxCmpServer;
+	use common\models\YxStaffServer;
+	use common\models\YxStaff;
 ?>
 <?= Html::cssFile('/static/css/detail.css') ?>
 
@@ -39,29 +42,57 @@
 				<div>
 					<p>ID：<?= $YxCompany->number;?></p>
 				</div>
-				<div style="width: 600px;height: 100px;background-color: #f5f5f5;display: flex;align-items: center;padding-left: 10px;padding-right: 10px;font-size: 18px;">
-					<div style="width: 30%;">
+				<div class="basic-detail-text">
+					<div class="first-child">
 						<div class="price">
-							<p style="color: rgb(255, 90, 0);">保洁价：35元/小时</p>
+							<p>价格：<?= number_format(YxCmpServer::getCompanyPrice($companyId,$serverId)/100,2);?>元/<?=YxStaffServer::getServerUnit($serverId)?></p>
 						</div>
 						<div class="fraction">
-							<p style="color: rgb(255, 90, 0);">分数：<?= number_format($YxCompany->total_fraction/1000,1);?>分</p>
+							<p>分数：<?= number_format($YxCompany->total_fraction,2);?>分</p>
+						</div>
+						<div class="server">
+							<p id="server-id" date-id="<?=$serverId?>">服务：<?=$ServerName?></p>
 						</div>
 					</div>
-					<div style="width: 70%;">
-						<div class="address">
-							<p>地址：<?= $YxCompany->address;?></p>
+					<div class="second-child">
+						<div class="business">
+							<p title="主营业务：<?= $YxCompany->query;?>">主营业务：<?= $YxCompany->query;?></p>
 						</div>
 
-						<div class="business">
-							<p>主营业务：<?= $YxCompany->query;?></p>
+						<div class="address">
+							<p title="地址：<?= $YxCompany->address;?>">地址：<?= $YxCompany->address;?></p>
 						</div>
+
 					</div>
 				</div>
 
+				<!-- 附加服务内容 -->
+				<?php echo $serverAdd;?>
+				<!-- 时间表 -->
+				<div style="margin: 5px;">
+					<div class="date-hour">
+						<div class="date-all">
+							<i>上门时间：</i>
+							<select id="order_day" style="height:25px;margin-right:10px;">
+								<?php
+									for ($i=0; $i < 7; $i++) {
+										echo '<option value="'.strtotime(date('Y-m-d',strtotime("+$i day"))).'">'.date('Y-m-d',strtotime("+$i day")).' '.YxStaff::getChineseWeek(date("w",strtotime("+$i day"))).'</option>';
+									}
+								?>
+							</select>
+							<button class="btn btn-defaul">可选</button>
+							<button class="btn btn-danger">已选</button>
+						</div>
+						<div class="hour-all row" id="time_unit_list">
+						</div>
+					</div>
+				</div>
+				<!-- 下单、预约 -->
 				<div class="store-order">
-					<button class="btn btn-warning"><a href="http://www.yuanxiangwu.com/order/index" style="color: #fff;">立即下单</a></button>
-					<button id="reserve" class="btn btn-danger">预约服务</button>
+					<button id="order_button" class="btn btn-danger" style="padding: 10px 40px;" onclick="makeOrderBefor()">立即下单</button>
+					<?php if (YxServer::getReserve($serverId)==1) {
+						echo '<button id="reserve" class="btn btn-warning" style="padding: 10px 40px;">预约</button>';
+					}?>
 				</div>
 			</div>
 		</div>
@@ -94,60 +125,7 @@
 				  'items' => [
 				      	[
 				           	'label' => '基本信息',
-				          	'content' => '<div class="tabs">
-									<table class="table table-bordered">
-										<tbody>
-											<tr>
-												<td>商家名</td>
-												<td>'.$YxCompany->name.'</td>
-											</tr>
-											<tr>
-												<td>ID</td>
-												<td>'.$YxCompany->number.'</td>
-											</tr>
-											<tr>
-												<td>地址</td>
-												<td>'.$YxCompany->address.'</td>
-											</tr>
-											<tr>
-												<td>业务范围</td>
-												<td>'.$YxCompany->query.'</td>
-											</tr>
-											<tr>
-												<td>营业地域范围</td>
-												<td>'.$YxCompany->name.'</td>
-											</tr>
-											<tr>
-												<td>营业时长</td>
-												<td>'.$YxCompany->name.'年</td>
-											</tr>
-											<tr>
-												<td>规模</td>
-												<td>'.$YxCompany->name.'名服务者</td>
-											</tr>
-											<tr>
-												<td>服务总量</td>
-												<td>'.$YxCompany->name.'次</td>
-											</tr>
-											<tr>
-												<td>服务总金额</td>
-												<td>'.$YxCompany->name.'元</td>
-											</tr>
-											<tr>
-												<td>入驻平台时间</td>
-												<td>'.$YxCompany->created_at.'</td>
-											</tr>
-											<tr>
-												<td>联系商家</td>
-												<td>'.$YxCompany->telephone.'</td>
-											</tr>
-											<tr>
-												<td>商家宣言</td>
-												<td>'.$YxCompany->introduction.'</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>',
+										'content' => $this->render('detail/basic',['YxCompany'=>$YxCompany]),
 				          	'active' => true
 				      	],
 				      	[
@@ -155,16 +133,13 @@
 				          	'content' => '<div class="tabs">
 				         				<img src="/static/img/achievement/achieve1.jpg" width="870px" />
 				         				<img src="/static/img/achievement/achieve2.jpg" width="870px" />
-				         			</div>',
-				          	// 'headerOptions' => [...],
-				          	// 'options' => ['id' => 'myveryownID'],
+				         			</div>'
 				      	],
 				      	[
 				          	'label' => '评论',
 				          	'content' => '<div class="tabs">
 				          				第三个tab页
-				          			</div>',
-				          	// 'url' => 'http://www.example.com',
+				          			</div>'
 				      	],
 				  	],
 				]);
@@ -175,20 +150,129 @@
 </div>
 
 <script type="text/javascript">
-	// $(document).ready(function() {
-	// 	$("#reserve").click(function() {
-	// 		var formData = new FormData();
-	// 		formData.append("username", "Groucho");
-	// 		formData.append("accountnum", 123456);
-	// 		var xml = new XMLHttpRequest();
-	// 		xml.onreadystatechange=function(){
-	// 			if (xml.readyState==4 && xml.status==200){
-	// 		    	console.log(xml.responseText);
-	// 		    }
-	// 		}
-	// 		xml.open("GET","http://localhost/advanced/frontend/web/index.php?r=basic/index-reserve",true);
-	// 		xml.setRequestHeader("Content-type","application/x-www-form-urlencoded;charset=UTF-8");
-	// 		xml.send();
-	// 	})
-	// })
+	var yx_company_id = <?= $companyId;?>;
+	var order_server = <?= $serverId;?>;
+	function makeOrderBefor(){
+		var order_day = Number($("#order_day").val());
+		var time_unit = [];
+		if(isNaN(order_server) || order_server <=0){
+			alert("请选择服务~");
+			return;
+		}
+		if(isNaN(order_day) || order_day <=0){
+			alert("请选择服务日期~");
+			return;
+		}
+		if(!checkTimeSuccessive()){
+			return;
+		}
+		var time_unit_arr = $("#time_unit_list .selected");
+		for (var i = 0; i < time_unit_arr.length; i++) {
+				time_unit.push(Number($(time_unit_arr[i]).attr("date-time")));
+		}
+		console.log(" 服务  order_server : "+order_server);
+		console.log(" 服务日期  order_day : "+order_day);
+		console.log(" 服务时长  time_unit : ");
+		console.log(time_unit);
+		$.ajax({
+				type  : "POST",
+				url   : "/yx-order/create",
+				dataType:"json",
+				data:{
+						"order_server":order_server,
+						"yx_company_id":yx_company_id,
+						"dayTime":order_day,
+						"time_unit":time_unit,
+				},
+				success:function(json) {
+					if(json.code == -1){
+						if(typeof json.msg == "string"){
+							alert(json.msg);
+						}else {
+							for (var i = 0; i < json.msg.length; i++) {
+								alert(json.msg[i]);
+							}
+						}
+					}else {
+							window.location.href = "/yx-order/payment?id=" + json.order_id;
+					}
+				}
+		});
+	}
+	function checkTimeSuccessive(){
+			var time_unit_arr = $("#time_unit_list .selected");
+			if(time_unit_arr.length < 1){
+				alert("请选择服务时长~");
+				return false;
+			}
+			for (var i = 0; i < time_unit_arr.length; i++) {
+				var new_time_unit = Number($(time_unit_arr[i]).attr("date-time"));
+				if(i > 0){
+					if(new_time_unit != last_time_unit + 1){
+						alert("请选择连续的服务时长");
+						return false;
+					}
+				}
+				last_time_unit = new_time_unit
+			}
+			return true;
+	}
+	window.onload = function() {
+
+		$("#reservation").click(function() {
+			alert("预约");
+		})
+
+		// 显示发送当天的时间戳，得到当天的各个小时的状态
+		function getHourAll(dayTime){
+			var listDom = $("#time_unit_list");
+			listDom.html("");
+			$.ajax({
+					type  : "POST",
+					url   : "/staff/get_staff_times",
+					dataType:"json",
+					data:{"dayTime":dayTime},
+					success:function(json) {
+							var time_datas = json.time_datas;
+							for(let i = 7,j = 0;i < 23;i++,j++) {
+								if(time_datas[i] == 0) {
+									listDom.append(
+													'<div class="hour-one col-md-3 col-lg-3">'+
+															'<button class="btn btn-danger disabled hour-one-button" date-time="'+i+'" disabled="disabled" onclick="changeTimeUnitBtn(this)">'+returnNum(i)+'点-'+returnNum(i+1)+'点</button>'+
+													'</div>'
+									)
+								}else {
+									listDom.append(
+													'<div class="hour-one col-md-3 col-lg-3">'+
+															'<button class="btn btn-default hour-one-button" date-time="'+i+'" data-choosed="0" onclick="changeTimeUnitBtn(this)">'+returnNum(i)+'点-'+returnNum(i+1)+'点</button>'+
+													'</div>'
+									)
+								}
+							}
+					}
+			});
+		}
+		getHourAll($("#order_day").val());
+		// 切换时间查看每天各个小时的状态
+		$("#order_day").change(function(){
+			var dayTime = $(this).val();
+			getHourAll(dayTime);
+		})
+
+	}
+	function changeTimeUnitBtn(btnDom){
+			console.log($(btnDom).attr('data-choosed'))
+			if ($(btnDom).attr('data-choosed') == "0"){
+					$(btnDom).attr('class', 'btn btn-danger selected hour-one-button');
+					$(btnDom).attr('data-choosed', '1');
+			}else {
+					$(btnDom).attr('class', 'btn btn-default hour-one-button');
+					$(btnDom).attr('data-choosed', '0');
+					$(btnDom).blur()
+			}
+	}
+	function returnNum(num){
+			if(num >= 10) return num;
+			return "0"+num;
+	}
 </script>

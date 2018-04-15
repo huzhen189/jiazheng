@@ -48,7 +48,7 @@ $menuItems = [
     // // ['label' => '员工审核', 'url' => ['/yx-staff-verify/index']],
     // ['label' => '服务分类', 'url' => ['/yx-server/index']],
     // ['label' => '七牛测试', 'url' => ['/test-h/index']],
-    // ['label' => '订单支付', 'url' => ['/yx-order/index']],
+
     // ['label' => '图片管理',
     //     'url' => ['/yx-order/index'],
     //     'items' => [
@@ -65,6 +65,8 @@ $menuItems = [
 $user_info=Yii::$app->user->identity;
 if(!empty($user_info['company_id'])){
     $menuItems[] = ['label' => '服务人员', 'url' => ['/yx-staff/index']];
+    $menuItems[] = ['label' => '成果展示', 'url' => ['/yx-cmp-res/index']];
+    $menuItems[] = ['label' => '订单管理', 'url' => ['/yx-order/index']];
 }
 if (Yii::$app->user->isGuest) {
     $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
@@ -73,7 +75,6 @@ if (Yii::$app->user->isGuest) {
     $menuItems[]=['label' => '家政公司', 'url' => ['/yx-company/view']];
     $menuItems[] = ['label' => '审核',
         'url' => ['/yx-company-verify/index'],
-
         'items' => [
             ['label' => '公司审核', 'url' => ['/yx-company-verify/index']],
             ['label' => '员工审核', 'url' => ['/yx-staff-verify/index']],

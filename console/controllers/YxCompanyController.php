@@ -231,6 +231,7 @@ class YxCompanyController extends CheckController
         $model2['manage_time']=$model['manage_time'];
         $model2['alipay']=$model['alipay'];
         $model2['business_code']=$model['business_code'];
+        $model2['ext_fraction']=$model['ext_fraction'];
 
         $user_info=Yii::$app->user->identity;
         $cmp_user_id=$user_info['id'];

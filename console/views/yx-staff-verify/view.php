@@ -122,6 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'staff_skill',
         'staff_crime_record',
         'staff_sin_record',
+        'staff_train',
         [
             'attribute' => 'staff_health_img',
             'format' => ['image', ['width' => '200', 'height' => '200']],

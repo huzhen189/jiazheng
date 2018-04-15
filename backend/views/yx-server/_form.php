@@ -36,8 +36,11 @@ use zh\qiniu\QiniuFileInput;
     <?= $form->field($model, 'server_state')->dropDownList($state_list) ?>
 
     <?= $form->field($model, 'server_memo')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'server_unit')->textInput(['maxlength' => true]) ?> 
+    <?= Html::label('是否为时间单位',['class' => 'label is_time']) ?>
+</br>
+    <?= Html::radio('is_time', true, ['label' => '是','value'=>1]); ?>
+    <?= Html::radio('is_time', false, ['label' => '否','value'=>0]); ?>
+    <?= $form->field($model, 'server_unit')->textInput(['maxlength' => true,'value'=>'小时','readonly'=>true]) ?> 
     
     <?= $form->field($model, 'server_class')->textInput(['maxlength' => true]) ?>
 
@@ -46,7 +49,8 @@ use zh\qiniu\QiniuFileInput;
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>10240000,
         ],
     ]) ?>
  
@@ -78,5 +82,13 @@ use zh\qiniu\QiniuFileInput;
                 $(".field-yxserver-server_parent").show();
             }
     }
+    $("input[name='is_time']").change(function() { 
+        if($(this).val()==1){
+            $("#yxserver-server_unit").attr('readonly',true)
+            $("#yxserver-server_unit").val('小时')
+        }else{
+            $("#yxserver-server_unit").attr('readonly',false)
+        }
+});
     window.onload=serverType();
 </script>

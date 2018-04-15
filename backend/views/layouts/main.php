@@ -40,6 +40,8 @@ $menuItems = [
 
     ['label' => '公司管理', 'url' => ['/yx-company/index']],
     ['label' => '用户管理', 'url' => ['/yx-user/index']],
+    
+    ['label' => '员工管理', 'url' => ['/yx-staff/index']],
     ['label' => '审核管理',
         'url' => ['/yx-company-verify/index'],
         'items' => [
@@ -48,7 +50,7 @@ $menuItems = [
         ],
     ],
     ['label' => '分类管理', 'url' => ['/yx-server/index']],
-    // ['label' => '七牛测试', 'url' => ['/test-h/index']],
+    
     ['label' => '订单管理', 'url' => ['/yx-order/index']],
     ['label' => '图片管理',
         'url' => ['/yx-banner/index'],
@@ -59,13 +61,17 @@ $menuItems = [
             ['label' => '活动图', 'url' => ['/yx-activity/index']],
         ],
     ],
-
-    ['label' => '公告管理', 'url' => ['/yx-notice/index']],
-    ['label' => '地区管理', 'url' => ['/region/index']],
-    ['label' => '规则管理', 'url' => ['/yx-rules/index']],
+    ['label' => '其他',
+        'url' => ['/yx-rules/index'],
+        'items' => [
+            ['label' => '公告管理', 'url' => ['/yx-notice/index']],
+            ['label' => '富文本管理', 'url' => ['/yx-rules/index']],
+            ['label' => '管理员管理', 'url' => ['/user/index']],
+            ['label' => '地区管理', 'url' => ['/region/index']],
+        ],
+    ],
 ];
 if (Yii::$app->user->isGuest) {
-    $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
     $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
 } else {
     $menuItems[] = '<li>'

@@ -76,14 +76,14 @@ class YxStaffVerify extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['company_id', 'staff_name', 'staff_sex', 'staff_age', 'staff_idcard', 'staff_img', 'staff_state', 'staff_idcard', 'staff_idcard_front', 'staff_idcard_back', 'staff_health_img','staff_address','staff_number','staff_province', 'staff_city', 'staff_district'], 'required'],
+            [['company_id', 'staff_name', 'staff_sex', 'staff_age', 'staff_idcard', 'staff_img', 'staff_state', 'staff_idcard', 'staff_idcard_front', 'staff_idcard_back', 'staff_health_img','staff_address','staff_province', 'staff_city', 'staff_district'], 'required'],
             [['id', 'staff_id', 'company_id', 'staff_sex', 'staff_found', 'staff_main_server_id', 'staff_verify_state','staff_fraction', 'staff_base_fraction', 'staff_history_fraction', 'staff_clinch', 'staff_price', 'staff_manage_time', 'staff_educate', 'staff_province', 'staff_city', 'staff_district'], 'integer'],
             [['staff_query', 'staff_verify_memo'], 'string'],
             [['staff_name'], 'string', 'max' => 50],
-            [['staff_idcard'], 'string', 'max' => 18],
+            [['staff_idcard'], 'string','min'=>18,'max' => 18],
             [['staff_intro', 'staff_memo'], 'string', 'max' => 1000],
             [['staff_state'], 'string', 'max' => 1],
-            [['staff_login_ip', 'staff_login_time'], 'string', 'max' => 45],
+            [['staff_login_ip','staff_train', 'staff_login_time'], 'string', 'max' => 45],
             [['id','staff_number'], 'unique'],
             [['staff_all_server_id'], 'validateSASID'],
             [['staff_skill', 'staff_crime_record', 'staff_sin_record'], 'string', 'max' => 255],
@@ -200,6 +200,7 @@ class YxStaffVerify extends \yii\db\ActiveRecord
            'staff_crime_record' => '犯罪记录', 
            'staff_sin_record' => '不良习惯', 
            'staff_health_img' => '健康证', 
+           'staff_train'=>'培训说明',
             'staff_province' => '省',
            'staff_city' => '市',
            'staff_district' => '区',

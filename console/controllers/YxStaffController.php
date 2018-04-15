@@ -146,6 +146,7 @@ class YxStaffController extends Controller
                 }
                 return $this->redirect(['index']);
             }
+            // return print_r($model->getErrors());
         }
 
         return $this->render('create', [

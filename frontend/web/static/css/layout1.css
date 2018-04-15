@@ -1,4 +1,4 @@
-/*
+﻿/*
     top_menu的css
 */
 .top_menu {
@@ -68,6 +68,7 @@
     font-size: 16px;
     font-family: sans-serif;
     color: #fff;
+    text-decoration: none;
 }
 
 .top_menu #nav .big_sub_menu {

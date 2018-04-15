@@ -12,6 +12,9 @@ use common\models\Region;
 
 $this->registerJs(
    '
+    $(".yc-selected-staff_province").attr("disabled",true)
+    $(".yc-selected-staff_city").attr("disabled",true)
+    $(".yc-selected-staff_district").attr("disabled",true)
     function onProvinceChange(value){
         $("#yxstaff-staff_address").val(value);
 
@@ -49,6 +52,7 @@ $this->registerJs(
         console.log("3"+district_);
         onDistrictChange(district_);
     })
+
     '
 );
 
@@ -72,20 +76,24 @@ $this->registerJs(
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>102400,
         ],
+
     ]) ?>
 
     <?= $form->field($model, 'staff_idcard')->textInput(['maxlength' => true,'readonly'=>true]) ?>
 
-    <?= $form->field($model, 'staff_intro')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'staff_intro')->textInput(['maxlength' => true,'readonly'=>true]) ?>
 
 <!--     <?= $form->field($model, 'staff_found')->textInput(['maxlength' => true]) ?> -->
 
-    <?php $staff_state = YxStaff::getCmpState(); ?>
+    <?php $staff_state = YxStaff::getCmpState(); 
+        unset($staff_state['0']);
+    ?>
     <?= $form->field($model, 'staff_state')->dropDownList($staff_state) ?>
 
-    <?= $form->field($model, 'staff_memo')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'staff_memo')->textInput(['maxlength' => true,'readonly'=>true]) ?>
 
 <!--     <?= $form->field($model, 'staff_login_ip')->textInput(['maxlength' => true]) ?> -->
 
@@ -106,14 +114,15 @@ $this->registerJs(
     <?= $form->field($model, 'staff_all_server_id')->checkboxList($server2_id);?>
 
     <?php $staff_manage_time = $model->getStaffTime(); ?>
-   <?= $form->field($model, 'staff_manage_time')->dropDownList($staff_manage_time) ;?>
+   <?= $form->field($model, 'staff_manage_time')->dropDownList($staff_manage_time,['disabled'=>'disabled']) ;?>
 
    <?= $form->field($model, 'staff_idcard_front')->widget(QiniuFileInput::className(),[
         'uploadUrl' => 'https://upload-z2.qiniup.com/', //文件上传地址 不同地区的空间上传地址不一样 参见官方文档
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>102400,
         ],
     ]) ?>
 
@@ -122,18 +131,19 @@ $this->registerJs(
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>102400,
         ],
     ]) ?>
 
     <?php $staff_educate = $model->getStaffEducate(); ?>
-   <?= $form->field($model, 'staff_educate')->dropDownList($staff_educate) ?>
+   <?= $form->field($model, 'staff_educate')->dropDownList($staff_educate,['disabled'=>'disabled']) ?>
 
-   <?= $form->field($model, 'staff_skill')->textInput(['maxlength' => true,'value'=>'无']) ?>
+   <?= $form->field($model, 'staff_skill')->textInput(['maxlength' => true,'value'=>'无','readonly'=>true]) ?>
 
-   <?= $form->field($model, 'staff_crime_record')->textInput(['maxlength' => true,'value'=>'无']) ?>
+   <?= $form->field($model, 'staff_crime_record')->textInput(['maxlength' => true,'value'=>'无','readonly'=>true]) ?>
 
-   <?= $form->field($model, 'staff_sin_record')->textInput(['maxlength' => true,'value'=>'无']) ?>
+   <?= $form->field($model, 'staff_sin_record')->textInput(['maxlength' => true,'value'=>'无','readonly'=>true]) ?>
 
     <?= $form->field($model, 'staff_province')->widget(\chenkby\region\Region::className(),[
         'model'=>$model,
@@ -141,29 +151,33 @@ $this->registerJs(
         'province'=>[
             'attribute'=>'staff_province',
             'items'=>Region::getRegion(),
-            'options'=>['class'=>'form-control form-control-inline yc-selected-staff_province','prompt'=>'选择省份']
+            'options'=>['class'=>'form-control form-control-inline yc-selected-staff_province','prompt'=>'选择省份'],
+            'disabled'=>'disabled'
         ],
         'city'=>[
             'attribute'=>'staff_city',
             'items'=>Region::getRegion($model['staff_province']),
-            'options'=>['class'=>'form-control form-control-inline yc-selected-staff_city','prompt'=>'选择城市']
+            'options'=>['class'=>'form-control form-control-inline yc-selected-staff_city','prompt'=>'选择城市'],
+            'disabled'=>'disabled'
         ],
         'district'=>[
             'attribute'=>'staff_district',
             'items'=>Region::getRegion($model['staff_city']),
-            'options'=>['class'=>'form-control form-control-inline yc-selected-staff_district','prompt'=>'选择县/区']
+            'options'=>['class'=>'form-control form-control-inline yc-selected-staff_district','prompt'=>'选择县/区'],
+            'disabled'=>'disabled'
         ]
     ]);
     ?>
 
-   <?= $form->field($model, 'staff_address')->textInput(['maxlength' => true]) ?>
+   <?= $form->field($model, 'staff_address')->textInput(['maxlength' => true,'readonly'=>true]) ?>
 
     <?= $form->field($model, 'staff_health_img')->widget(QiniuFileInput::className(),[
         'uploadUrl' => 'https://upload-z2.qiniup.com/', //文件上传地址 不同地区的空间上传地址不一样 参见官方文档
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>102400,
         ],
     ]) ?>
 
@@ -171,8 +185,9 @@ $this->registerJs(
         'uploadUrl' => 'https://upload-z2.qiniup.com/', //文件上传地址 不同地区的空间上传地址不一样 参见官方文档
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
-            'max' => 10,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'max' => 30,//最多允许上传图片个数  默认为3
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>102400,
         ],
     ]) ?>
     <div class="form-group">
@@ -182,3 +197,7 @@ $this->registerJs(
     <?php ActiveForm::end(); ?>
 
 </div>
+<script >
+    $(".zh-cover").hide();
+    $(".file-btn").hide();
+</script>

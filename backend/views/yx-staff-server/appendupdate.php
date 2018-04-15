@@ -16,7 +16,7 @@ $this->title = Yii::t('app', '{nameAttribute}', [
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '已选服务列表'), 'url' => ['index?staff_id='.$staff_id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '附加服务列表'), 'url' => ['append?staff_id='.$staff_id. '&server_id=' . $model->server_parent_id]];
-
+$this->params['breadcrumbs'][] = ['label' => $model->server->server_name, 'url' => ['appendview', 'staff_id' => $model->staff_id, 'server_id' => $model->server_id]];
 $this->params['breadcrumbs'][] = Yii::t('app', '修改');
 ?>
 <div class="yx-staff-server-appendupdate">

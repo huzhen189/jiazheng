@@ -10,52 +10,52 @@
 		<nav>
 			<ul>
 				<li>
-					<a href="/other-services/index?server_id=72&sort=default" target="_blank" title="保姆">保姆</a> / <a href="/basic-clean/index?server_id=74&sort=default" title="擦玻璃">擦玻璃</a>
+					<a href="/other-services/index?server_parent=71&server_id=72&sort=fraction" target="_blank" title="保姆">保姆</a> / <a href="/basic-clean/index?server_parent=65&server_id=74&sort=fraction" target="_blank" title="擦玻璃">擦玻璃</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=82&sort=default"  target="_blank" title="月嫂">月嫂</a> / <a href="/basic-clean/index?server_id=73&sort=default"  target="_blank" title="长期钟点工">长期钟点工</a>
+					<a href="/other-services/index?server_parent=69&server_id=82&sort=fraction"  target="_blank" title="月嫂">月嫂</a> / <a href="/basic-clean/index?server_parent=65&server_id=73&sort=fraction"  target="_blank" title="长期钟点工">长期钟点工</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=83&sort=default"  target="_blank" title="育儿嫂">育儿嫂</a> / <a href="/other-services/index?server_id=26&sort=default"  target="_blank" title="消毒柜清洗">消毒柜清洗</a>
+					<a href="/other-services/index?server_parent=70&server_id=83&sort=fraction"  target="_blank" title="育儿嫂">育儿嫂</a> / <a href="/other-services/index?server_parent=67&server_id=26&sort=fraction"  target="_blank" title="消毒柜清洗">消毒柜清洗</a>
 				</li>
 				<li>
-					<a href="/basic-clean/index?server_id=65&sort=default" target="_blank" title="日常保洁">日常保洁</a> / <a href="/special-clean/index?server_id=34&sort=default"  target="_blank" title="厨房保养">厨房保养</a>
+					<a href="/basic-clean/index?server_parent=65&server_id=20&sort=fraction" target="_blank" title="基础保洁">基础保洁</a> / <a href="/special-clean/index?server_parent=12&server_id=34&sort=fraction"  target="_blank" title="厨房保养">厨房保养</a>
 				</li>
 				<li>
-					<a href="/special-clean/index?server_id=78&sort=default"  target="_blank" title="深度保洁">深度保洁</a> / <a href="/special-clean/index?server_id=87&sort=default"  target="_blank" title="开荒保洁">开荒保洁</a>
+					<a href="/special-clean/index?server_parent=66&server_id=78&sort=fraction"  target="_blank" title="深度保洁">深度保洁</a> / <a href="/special-clean/index?server_parent=66&server_id=87&sort=fraction"  target="_blank" title="开荒保洁">开荒保洁</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=75&sort=default"  target="_blank" title="沙发保养">沙发保养</a> / <a href="/other-services/index?server_id=39&sort=default"  target="_blank" title="地板打蜡">地板打蜡</a>
+					<a href="/other-services/index?server_parent=68&server_id=75&sort=fraction"  target="_blank" title="沙发保养">沙发保养</a> / <a href="/other-services/index?server_parent=14&server_id=39&sort=fraction"  target="_blank" title="地板打蜡">地板打蜡</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=29&sort=default"  target="_blank" title="空调清洗">空调清洗</a> / <a href="/other-services/index?server_id=47&sort=default"  target="_blank" title="空调维修">空调维修</a>
+					<a href="/other-services/index?server_parent=67&server_id=29&sort=fraction"  target="_blank" title="空调清洗">空调清洗</a> / <a href="/other-services/index?server_parent=18&server_id=47&sort=fraction"  target="_blank" title="空调维修">空调维修</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=28&sort=default"  target="_blank" title="冰箱清洗">冰箱清洗</a> / <a href="/other-services/index?server_id=50&sort=default"  target="_blank" title="冰箱维修">冰箱维修</a>
+					<a href="/other-services/index?server_parent=67&server_id=28&sort=fraction"  target="_blank" title="冰箱清洗">冰箱清洗</a> / <a href="/other-services/index?server_parent=18&server_id=50&sort=fraction"  target="_blank" title="冰箱维修">冰箱维修</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=48&sort=default"  target="_blank" title="马桶维修">马桶维修</a> / <a href="/other-services/index?server_id=45&sort=default"  target="_blank" title="管道疏通">管道疏通</a>
+					<a href="/other-services/index?server_parent=18&server_id=48&sort=fraction"  target="_blank" title="马桶维修">马桶维修</a> / <a href="/other-services/index?server_parent=18&server_id=45&sort=fraction"  target="_blank" title="管道疏通">管道疏通</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=22&sort=default"  target="_blank" title="灶台清洗">灶台清洗</a> / <a href="/other-services/index?server_id=56&sort=default"  target="_blank" title="电路维修">电路维修</a>
+					<a href="/other-services/index?server_parent=67&server_id=22&sort=fraction"  target="_blank" title="灶台清洗">灶台清洗</a> / <a href="/other-services/index?server_parent=18&server_id=56&sort=fraction"  target="_blank" title="电路维修">电路维修</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=57&sort=default"  target="_blank" title="普通门开锁">普通门开锁</a> / <a href="/other-services/index?server_id=23&sort=default"  target="_blank" title="热水器清洗">热水器清洗</a>
+					<a href="/other-services/index?server_parent=19&server_id=57&sort=fraction"  target="_blank" title="普通门开锁">普通门开锁</a> / <a href="/other-services/index?server_parent=67&server_id=23&sort=fraction"  target="_blank" title="热水器清洗">热水器清洗</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=58&sort=default"  target="_blank" title="普通门换锁">普通门换锁</a> / <a href="/other-services/index?server_id=52&sort=default"  target="_blank" title="热水器维修">热水器维修</a>
+					<a href="/other-services/index?server_parent=19&server_id=58&sort=fraction"  target="_blank" title="普通门换锁">普通门换锁</a> / <a href="/other-services/index?server_parent=18&server_id=52&sort=fraction"  target="_blank" title="热水器维修">热水器维修</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=21&sort=default"  target="_blank" title="油烟机清洗">油烟机清洗</a> / <a href="/other-services/index?server_id=51&sort=default"  target="_blank" title="油烟机维修">油烟机维修</a>
+					<a href="/other-services/index?server_parent=67&server_id=21&sort=fraction"  target="_blank" title="油烟机清洗">油烟机清洗</a> / <a href="/other-services/index?server_parent=18&server_id=51&sort=fraction"  target="_blank" title="油烟机维修">油烟机维修</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=27&sort=default"  target="_blank" title="洗衣机清洗">洗衣机清洗</a> / <a href="/other-services/index?server_id=53&sort=default"  target="_blank" title="洗衣机维修">洗衣机维修</a>
+					<a href="/other-services/index?server_parent=67&server_id=27&sort=fraction"  target="_blank" title="洗衣机清洗">洗衣机清洗</a> / <a href="/other-services/index?server_parent=18&server_id=53&sort=fraction"  target="_blank" title="洗衣机维修">洗衣机维修</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=25&sort=default"  target="_blank" title="微波炉清洗">微波炉清洗</a> / <a href="/other-services/index?server_id=54&sort=default"  target="_blank" title="微波炉维修">微波炉维修</a>
+					<a href="/other-services/index?server_parent=67&server_id=25&sort=fraction"  target="_blank" title="微波炉清洗">微波炉清洗</a> / <a href="/other-services/index?server_parent=18&server_id=54&sort=fraction"  target="_blank" title="微波炉维修">微波炉维修</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_id=30&sort=default"  target="_blank" title="饮水机清洗">饮水机清洗</a> / <a href="/other-services/index?server_id=55&sort=default"  target="_blank" title="电视机维修">电视机维修</a>
+					<a href="/other-services/index?server_parent=67&server_id=30&sort=fraction"  target="_blank" title="饮水机清洗">饮水机清洗</a> / <a href="/other-services/index?server_parent=18&server_id=55&sort=fraction"  target="_blank" title="电视机维修">电视机维修</a>
 				</li>
 			</ul>
 		</nav>
@@ -174,52 +174,52 @@
 		<div class="server-icon">
 			<div class="server-one">
 				<img src="/static/img/icon/1.png">
-				<a href="/basic-clean/index?server_id=65&sort=default" target="_blank" title="日常保洁">日常保洁</a>
+				<a href="/basic-clean/index?server_parent=65&sort=fraction" target="_blank" title="日常保洁">日常保洁</a>
 			</div>
 			<div class="server-one">
 				<img src="/static/img/icon/2.png">
-				<a href="/other-services/index?server_id=69&sort=default" target="_blank" title="月嫂">月嫂</a>
+				<a href="/other-services/index?server_parent=69&sort=fraction" target="_blank" title="月嫂">月嫂</a>
 			</div>
 			<div class="server-one">
 				<img src="/static/img/icon/3.png">
-				<a href="/other-services/index?server_id=70&sort=default" target="_blank" title="育儿嫂">育儿嫂</a>
+				<a href="/other-services/index?server_parent=70&sort=fraction" target="_blank" title="育儿嫂">育儿嫂</a>
 			</div>
 			<div class="server-one">
 				<img src="/static/img/icon/4.png">
-				<a href="/basic-clean/index?server_id=36&sort=default" target="_blank" title="擦玻璃">擦玻璃</a>
+				<a href="/basic-clean/index?server_parent=12&server_id=36&sort=fraction" target="_blank" title="擦玻璃">擦玻璃</a>
 			</div>
 
 			<div class="server-one">
 				<img src="/static/img/icon/5.png">
-				<a href="/other-services/index?server_id=71&sort=default" target="_blank" title="保姆">保姆</a>
+				<a href="/other-services/index?server_parent=71&sort=fraction" target="_blank" title="保姆">保姆</a>
 			</div>
 			<div class="server-one">
 				<img src="/static/img/icon/6.png">
-				<a href="/other-services/index?server_id=45&sort=default" target="_blank" title="管道疏通">管道疏通</a>
+				<a href="/other-services/index?server_parent=18&server_id=45&sort=fraction" target="_blank" title="管道疏通">管道疏通</a>
 			</div>
 			<div class="server-one">
 				<img src="/static/img/icon/7.png">
-				<a href="/other-services/index?server_id=88&sort=default" target="_blank" title="家电维修">家电维修</a>
+				<a href="/other-services/index?server_parent=18&server_id=88&sort=fraction" target="_blank" title="家电维修">家电维修</a>
 			</div>
 			<div class="server-one">
 				<img src="/static/img/icon/8.png">
-				<a href="/special-clean/index?server_id=66&sort=default" target="_blank" title="专项保洁">专项保洁</a>
+				<a href="/special-clean/index?server_parent=66&sort=fraction" target="_blank" title="专项保洁">专项保洁</a>
 			</div>
 			<div class="server-one">
 				<img src="/static/img/icon/9.png">
-				<a href="/special-clean/index?server_id=89&sort=default" target="_blank" title="沙发护理">沙发护理</a>
+				<a href="/special-clean/index?server_parent=66&server_id=89&sort=fraction" target="_blank" title="沙发护理">沙发护理</a>
 			</div>
 			<div class="server-one">
 				<img src="/static/img/icon/10.png">
-				<a href="/other-services/index?server_id=58&sort=default" target="_blank" title="普通门换锁">普通门换锁</a>
+				<a href="/other-services/index?server_parent=19&server_id=58&sort=fraction" target="_blank" title="普通门换锁">普通门换锁</a>
 			</div>
 			<div class="server-one">
 				<img src="/static/img/icon/11.png">
-				<a href="/other-services/index?server_id=18&sort=default" target="_blank" title="维修">维修</a>
+				<a href="/other-services/index?server_parent=18&sort=fraction" target="_blank" title="维修">维修</a>
 			</div>
 			<div class="server-one">
 				<img src="/static/img/icon/12.png">
-				<a href="/other-services/index?server_id=39&sort=default" target="_blank" title="地板打蜡">地板打蜡</a>
+				<a href="/other-services/index?server_parent=14&server_id=39&sort=fraction" target="_blank" title="地板打蜡">地板打蜡</a>
 			</div>
 		</div>
 	</div>
@@ -247,7 +247,7 @@
 					</div>
 					<div class="detail">
 						<div class="pop-ups">
-							<a href="/staff/index?staff_id=<?= $item->staff_id?>">查看详情</a>
+							<a href="/staff/index?staff_id=<?= $item->staff_id?>" target="_blank">查看详情</a>
 						</div>
 					</div>
 				</div>
@@ -279,7 +279,7 @@
 					</div>
 					<div class="detail">
 						<div class="pop-ups">
-							<a href="/company/staff?company_id=<?= $item->id?>">查看详情</a>
+							<a href="/company/staff?company_id=<?= $item->id?>" target="_blank">查看详情</a>
 						</div>
 					</div>
 				</div>

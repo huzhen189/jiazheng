@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\YxActivity;
 use common\models\YxActivitySearch;
+use common\tools\CheckController;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * YxActivityController implements the CRUD actions for YxActivity model.
  */
-class YxActivityController extends Controller
+class YxActivityController extends CheckController
 {
     /**
      * @inheritdoc

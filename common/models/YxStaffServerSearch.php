@@ -76,7 +76,6 @@ class YxStaffServerSearch extends YxStaffServer
         
 
         $query->andFilterWhere(['like', 'S.server_name', $this->getAttribute('server.server_name')]);
-        $query->andFilterWhere(['like', 'yx_staff_server.server_name', $this->server_name]);
         $query->andFilterWhere(['like', 'S.server_unit', $this->getAttribute('server.server_unit')]);
         $query->andFilterWhere(['in', 'yx_staff_server.server_type', $this->server_type]);
         return $dataProvider;

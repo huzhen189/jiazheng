@@ -3,10 +3,10 @@
 	display: flex;
 	flex-direction: column;
 	border: 1px solid #e8e8e8;
+	font-size: 14px;
 }
 
 .order-detail .child {
-	display: flex;
 	padding: 20px 20px;
 	border-bottom: 1px solid #e8e8e8;
 }
@@ -14,7 +14,16 @@
 .order-detail .address {
 	align-items: center;
 }
-
+.order-detail .address p{
+	display: block;
+	width: 100%;
+}
+.order-detail .address a{
+	float: right;
+	margin-top: -60px;
+	margin-right: 40px;
+	font-size: 20px;
+}
 .order-detail .detail {
 	flex-direction: column;
 	justify-content: center;
@@ -33,3 +42,8 @@
 	margin-right: 10px;
 	justify-content: flex-end;
 }
+.order-detail #order_memo{
+	width: 100%;
+	height: 120px;
+}
+textarea{ resize:none;}

@@ -19,35 +19,46 @@ $this->params['breadcrumbs'][] = $this->title;
   //   header('Location:getcode?id='.$model->id);
   //   die;
   // }
-
+ $server_time_long = ($model->time_end - $model->time_start)/3600 + 1
 ?>
-
+<?= Html::cssFile('/static/css/order.css') ?>
 <script src="<?php echo Yii::$app->params['webuploader']['fileDomain']."pingpp-js/dist/pingpp_ui.js" ?>" ></script>
 <script src="<?php echo Yii::$app->params['webuploader']['fileDomain']."pingpp-js/dist/pingpp.js" ?>" ></script>
 <link rel="stylesheet" href="<?php echo '/css/pay.css' ?>">
 <div class="yx-order-view">
-      <?php echo (time()+3600); ?>
     <h3><?= '您的订单已于'.date('Y-m-d H:i', $model->created_at).'提交成功，请您在半小时内付款' ?></h3>
 
-    <p>订单信息</p>
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'order_name',
-            'address',
-            'phone',
-            [
-        			'label' => '订单金额',
-        			'value' => function ($model) {
-        				return sprintf("%.2f",($model->order_money/100)).'元';
-        			},
-        		],
-            //'order_money',
-            'order_memo',
-            'usera_name',
-        ],
-    ]) ?>
+    <div class="order-detail">
+    	<div class="address child">
+    		<p>服务地址：<span><?= $model->address ?></span></p>
+        <p>联系人：<span><?= $model->user_name ?></span></p>
+        <p>联系电话：<span><?= $model->phone ?></span></p>
+    		<a href="/yx-user-address/index?yx_user_id=<?= Yii::$app->user->id ?>&order_id=<?= $model->id ?>" style="margin-left: 20px;">修改地址</a>
+    	</div>
+    	<div class="detail child">
+    		<div>服务项目：<span><?= $yxStaffServer->server_name ?></div>
+        <div>服务公司：<span><?= $yxCompany->name ?></span></div>
+        <?php
+            if($model->yx_staff_id > 0){
+                echo "<div>服务人员：<span>".$yxStaff->staff_name."</span></div>";
+            }
+        ?>
+    		<div>上门时间：<span><?= date("Y-m-d H:i:s",$model->time_start+8*3600) ?></span></div>
+    		<div>服务时长：<span><?= $server_time_long ?> 小时</span></div>
+    		<div>服务明细：<span><?= $yxStaffServer->server_name ?>：<?= number_format($yxStaffServer->server_price/100,2) ?>元×<?= $server_time_long ?>小时=<?= number_format($yxStaffServer->server_price*$server_time_long/100,2) ?>元</span></div>
+    		<div>擦玻璃：<span>64</span>元</div>
+    	</div>
+    	<div class="instructions child">
+    		距服务开始超过4小时取消订单，不会扣除您的预付款。据服务开始超过2小时不足4小时取消订单，将扣除您预付款的20%。距服务开始不足2小时取消订单将扣除您预付款的50%。其余部分将原路返回到您的支付账户。
+    	</div>
+      <div class="child">
+    		<div class="money">合计：<span><?= number_format($yxStaffServer->server_price*$server_time_long/100,2) ?></span>元</div>
+    	</div>
+
+      <div class="money-memo child">
+      		<textarea id="order_memo"></textarea>
+    	</div>
+    </div>
 
     <p>
         <!-- <?= Html::a('<sapn>支付宝支付</sapn>', ['pay','id'=>$model->id,'channel'=>'alipay_pc_direct'], ['class' => 'btn btn-primary']) ?> -->
@@ -59,8 +70,15 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="p_one_html in">
             <div class="p_one_body">
                 <div id="p_one_channelList" class="p_one_channel">
-                    <div p_one_channel="alipay_pc_direct" class="p_one_btn"><div class="p_one_icon_alipay">支付宝</div></div>
-                    <?php if($isWechat) echo '<div p_one_channel="wx_pub" class="p_one_btn"><div class="p_one_icon_wechat">微信支付</div></div>';?>
+
+                    <?php
+                          if($isWechat){
+                              echo '<div p_one_channel="wx_pub" class="p_one_btn p_one_button_wx"><div class="p_one_icon_wechat">微信支付</div></div>';
+                          }else {
+                              echo '<div p_one_channel="alipay_pc_direct" class="p_one_btn p_one_button_alipay"><div class="p_one_icon_alipay">支付宝</div></div>';
+                          }
+
+                    ?>
 
                     <!-- <div p_one_channel="upacp_wap" class="p_one_btn"><div class="p_one_icon_unionpay">银联支付</div></div>
                     <div p_one_channel="yeepay_wap" class="p_one_btn"><div class="p_one_icon_yeepay">易宝支付</div></div>
@@ -69,17 +87,39 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
         </div>
-    </div></div>
+    </div>
+  </div>
 <script>
-  $(".p_one_btn").click(function(){
-    var chanelStr = $(this).attr("p_one_channel")
-    console.log(chanelStr)
-    switch (chanelStr) {
-      case "wx_pub":
-        window.location.href = "getcode?id=<?php echo $model->id?>&channel="+chanelStr;
-        break;
-      default:
-        window.location.href = "pay?id=<?php echo $model->id?>&channel="+chanelStr;
+    window.onload = function(){
+        $(".p_one_btn").click(function(){
+          var chanelStr = $(this).attr("p_one_channel")
+          console.log(chanelStr)
+          switch (chanelStr) {
+            case "wx_pub":
+              window.location.href = "getcode?id=<?php echo $model->id?>&channel="+chanelStr;
+              break;
+            default:
+              window.location.href = "pay?id=<?php echo $model->id?>&channel="+chanelStr;
+          }
+        })
+
+        $("#order_memo").change(function(){
+          var order_memo = $(this).val();
+          $.ajax({
+      				type  : "POST",
+      				url   : "/yx-order/update_memo",
+      				dataType:"json",
+      				data:{
+      						"order_id":<?=  $model->id?>,
+                  "order_memo":order_memo,
+      				},
+      				success:function(json) {
+      		         console.log(json)
+      				}
+      		});
+        })
+
+        $("#order_memo").val("<?= $model->order_memo?>")
     }
-  })
+
 </script>

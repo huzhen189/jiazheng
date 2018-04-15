@@ -9,11 +9,12 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use common\tools\CheckController;
 
 /**
  * YxStaffServerController implements the CRUD actions for YxStaffServer model.
  */
-class YxStaffServerController extends Controller
+class YxStaffServerController extends CheckController
 {
     /**
      * @inheritdoc
@@ -65,12 +66,12 @@ class YxStaffServerController extends Controller
         if (!empty($staff_id)) {
             if (!isset($queryParams['YxStaffServerSearch'])) {
                 $queryParams['YxStaffServerSearch'] = ['staff_id' => $staff_id];
-                $queryParams['YxStaffServerSearch']['server_type'] = '1,2';
+                $queryParams['YxStaffServerSearch']['server_type'] =1;
                 $queryParams['YxStaffServerSearch']['server_parent_id'] = $server_id;
 
             } else {
                 $queryParams['YxStaffServerSearch']['staff_id'] =$staff_id;
-                $queryParams['YxStaffServerSearch']['server_type'] = '1,2';
+                $queryParams['YxStaffServerSearch']['server_type'] =1;
                 $queryParams['YxStaffServerSearch']['server_parent_id'] = $server_id;
             }
         } else {
@@ -119,16 +120,16 @@ class YxStaffServerController extends Controller
             $server_model=YxServer::find()->where(['server_id'=>$model->server_id])->one();
             $model->server_name=$server_model->server_name;
             if ($model->save()) {
-                $append_server_model=YxServer::find()->where(['server_parent'=>$model->server_id])->all();
-                foreach ($append_server_model as $key => $value) {
-                    $new_model = new YxStaffServer();
-                    $new_model->staff_id=$staff_id;
-                    $new_model->server_id=$append_server_model[$key]->server_id;
-                    $new_model->server_parent_id=$append_server_model[$key]->server_parent;
-                    $new_model->server_name=$append_server_model[$key]->server_name;
-                    $new_model->server_type=1;
-                    $new_model->save();
-                }
+                // $append_server_model=YxServer::find()->where(['server_parent'=>$model->server_id])->all();
+                // foreach ($append_server_model as $key => $value) {
+                //     $new_model = new YxStaffServer();
+                //     $new_model->staff_id=$staff_id;
+                //     $new_model->server_id=$append_server_model[$key]->server_id;
+                //     $new_model->server_parent_id=$append_server_model[$key]->server_parent;
+                //     $new_model->server_name=$append_server_model[$key]->server_name;
+                //     $new_model->server_type=1;
+                //     $new_model->save();
+                // }
                 return $this->redirect(['view', 'staff_id' => $model->staff_id, 'server_id' => $model->server_id]);
             }
 
@@ -146,9 +147,9 @@ class YxStaffServerController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->staff_id=$staff_id;
             $model->server_price=$model->server_price * 100;
-            $model->server_type=2;
+            $model->server_type=1;
             if ($model->save()) {
-                return $this->redirect(['view', 'staff_id' => $model->staff_id, 'server_id' => $model->server_id]);
+                return $this->redirect(['appendview', 'staff_id' => $model->staff_id, 'server_id' => $model->server_id]);
             }
 
         }

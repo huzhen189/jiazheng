@@ -69,7 +69,8 @@ $this->registerJs(
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>10240000,
         ],
     ]) ?>
 
@@ -116,7 +117,8 @@ $this->registerJs(
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>30720000,
         ],
     ]) ?>
 
@@ -125,7 +127,8 @@ $this->registerJs(
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>30720000,
         ],
     ]) ?>
 
@@ -137,6 +140,8 @@ $this->registerJs(
    <?= $form->field($model, 'staff_crime_record')->textInput(['maxlength' => true,'value'=>'无']) ?>
 
    <?= $form->field($model, 'staff_sin_record')->textInput(['maxlength' => true,'value'=>'无']) ?>
+   
+    <?= $form->field($model, 'staff_train')->textInput(['maxlength' => true,'value'=>'无']) ?>
 
     <?= $form->field($model, 'staff_province')->widget(\chenkby\region\Region::className(),[
         'model'=>$model,
@@ -165,7 +170,8 @@ $this->registerJs(
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
             'max' => 1,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>30720000,
         ],
     ]) ?>
 
@@ -173,8 +179,9 @@ $this->registerJs(
         'uploadUrl' => 'https://upload-z2.qiniup.com/', //文件上传地址 不同地区的空间上传地址不一样 参见官方文档
         'qlConfig' => Yii::$app->params['qnConfig'],
         'clientOptions' => [
-            'max' => 10,//最多允许上传图片个数  默认为3
-            'accept' => 'image/jpeg,image/png'//上传允许类型
+            'max' => 30,//最多允许上传图片个数  默认为3
+            'accept' => 'image/jpeg,image/png',//上传允许类型
+            'size'=>30720000,
         ],
     ]) ?>
     <div class="form-group">

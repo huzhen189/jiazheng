@@ -8,11 +8,12 @@ use common\models\YxStaffImgSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\tools\CheckController;
 
 /**
  * YxStaffImgController implements the CRUD actions for YxStaffImg model.
  */
-class YxStaffImgController extends Controller
+class YxStaffImgController extends CheckController
 {
     /**
      * {@inheritdoc}

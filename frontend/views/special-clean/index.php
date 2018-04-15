@@ -19,24 +19,17 @@
 				<div class="condition-inner">
 					<div class="condition-left">
 						<ul>
-							<li class="<?php if($sort == 'default'){
-								echo "active";
-								}?>">
-								<a href="?server_id=<?= $serverId?>&sort=default">默认<?php if($sort == 'default'){
-										echo $sortText;
-									}?></a>
-							</li>
 							<li class="<?php if($sort == 'fraction'){
 								echo "active";
 								}?>">
-								<a href="?server_id=<?= $serverId?>&sort=fraction">分数<?php if($sort == 'fraction'){
+								<a href="?server_parent=<?= $serverParent?>&server_id=<?= $serverId?>&sort=fraction">分数<?php if($sort == 'fraction'){
 										echo $sortText;
 								}?></a>
 							</li>
 							<li class="<?php if($sort == 'price'){
 								echo "active";
 								}?>">
-								<a href="?server_id=<?= $serverId?>&sort=price">价格<?php if($sort == 'price'){
+								<a href="?server_parent=<?= $serverParent?>&server_id=<?= $serverId?>&sort=price">价格<?php if($sort == 'price'){
 										echo $sortText;
 								}?></a>
 							</li>
@@ -57,6 +50,31 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="address-server-all">
+				<div class="server-all">
+					<select class="select-service" style="height: 25px;" server_parent="<?= $serverParent;?>">
+						<?php foreach ($YxServerAll as $key => $value): ?>
+							<option value="<?= $value['server_id']?>" <?php if ($value['server_id']==$serverId) {
+								echo "selected";
+							}?>><?= $value['server_name']?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+				<div class="address">
+ 					<form action="/index" method="get">
+ 						服务地域:
+						<input type="text" list="area_list" />
+						<datalist id="area_list">
+							<option label="南山区" value="南山区" />
+							<option label="福田区" value="福田区" />
+							<option label="罗湖区" value="罗湖区" />
+						</datalist>
+						<button type="submit">提交</button>
+ 					</form>
+				</div>
+			</div>
+
 		</div>
 
 		<div class="stores">
@@ -75,8 +93,8 @@
 			                <p>最低价格：35元/小时</p>
 						</div>
 						<div class="store-result">
-							<img src="/static/img/achievement/achieve1.jpg">
-							<img src="/static/img/achievement/achieve1.jpg"">
+							<img src="/static/img/achievement/achieve1.jpg" />
+							<img src="/static/img/achievement/achieve1.jpg" />
 						</div>
 					</div>
 			<?php endforeach; ?>
@@ -98,5 +116,10 @@
 </div>
 
 <script type="text/javascript">
-	// var xml = Http
+	window.onload = function() {
+		$(".select-service").change(function(event) {
+			// 切换服务
+			window.location.href = "/basic-clean/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&sort=fraction";
+		});
+	}
 </script>

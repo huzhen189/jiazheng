@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\YxBanner;
 use common\models\YxBannerSearch;
+use common\tools\CheckController;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -12,7 +13,7 @@ use yii\web\NotFoundHttpException;
 /**
  * YxBannerController implements the CRUD actions for YxBanner model.
  */
-class YxBannerController extends Controller
+class YxBannerController extends CheckController
 {
     /**
      * @inheritdoc

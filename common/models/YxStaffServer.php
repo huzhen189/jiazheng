@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\YxServer;
 
 /**
  * This is the model class for table "yx_staff_server".
@@ -12,7 +13,7 @@ use Yii;
  * @property int $server_least 最低服务量
  * @property int $server_price 服务价格
 * @property int $server_parent_id 一级服务ID
-* 
+*
  * @property YxStaff $staff
  * @property YxServer $server
  */
@@ -116,8 +117,37 @@ class YxStaffServer extends \yii\db\ActiveRecord
 
     // 得到服务人员所有服务（oyzx）
     public static function getServerAll($staff_id) {
-      $YxStaffServer = YxStaffServer::find()->where(['staff_id' => $staff_id])->all();
+      $YxStaffServer = YxStaffServer::find()->where(['staff_id' => $staff_id,'server_type' => 0])->all();
       return $YxStaffServer;
     }
-
+    // 得到服务的服务单位（oyzx）
+    public static function getServerUnit($server_id) {
+      $YxServer = YxServer::find()->where(['server_id' => $server_id])->one();
+      return $YxServer['server_unit'];
+    }
+    // 得到服务人员对应的的服务价格（oyzx）
+    public static function getStaffPrice($staff_id,$server_id) {
+      $YxServer = YxStaffServer::find()->where(['staff_id' => $staff_id,'server_id' => $server_id])->one();
+      return $YxServer['server_price'];
+    }
+    // 得到服务人员的附加服务（oyzx）
+    public static function getAddServer($staffId,$serverId) {
+      $addContent = "";
+      $YxServer = YxStaffServer::find()->select(['*'])
+                ->innerjoin('yx_staff', 'yx_staff_server.staff_id=yx_staff.staff_id')
+                  ->where(['yx_staff.staff_state'=>1,'yx_staff_server.server_parent_id' => $serverId])
+                  ->andWhere(['<>','yx_staff_server.server_type',0])->all();
+      if($YxServer) {
+        $addContent = '<div class="long-hourly" style="margin: 5px;">
+                				<div>您可以勾选以下附加服务：</div><div class="choose-server">';
+        foreach ($YxServer as $key => $value) {
+          $YxStaffServer = YxServer::getServerThird($staffId,$value['server_id']);
+          $addContent = $addContent.'<div class="one-server"><input type="checkbox" name="server"> '
+          .YxServer::getServerName($value['server_id']).' <span class="addserver">'
+          .$YxStaffServer.'</span>元/小时 <span class="server_num"><input text="number" style="width:50px;/>小时</span></div>';
+        }
+        $addContent = $addContent.'</div></div>';
+      }
+      return $addContent;
+    }
 }

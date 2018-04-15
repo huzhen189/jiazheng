@@ -19,24 +19,17 @@
 				<div class="condition-inner">
 					<div class="condition-left">
 						<ul>
-							<li class="<?php if($sort == 'default'){
-								echo "active";
-								}?>">
-								<a href="?server_id=<?= $serverId?>&sort=default">默认<?php if($sort == 'default'){
-										echo $sortText;
-									}?></a>
-							</li>
 							<li class="<?php if($sort == 'fraction'){
 								echo "active";
 								}?>">
-								<a href="?server_id=<?= $serverId?>&sort=fraction">分数<?php if($sort == 'fraction'){
+								<a href="?server_parent=<?= $serverParent?>&server_id=<?= $serverId?>&sort=fraction">分数<?php if($sort == 'fraction'){
 										echo $sortText;
 								}?></a>
 							</li>
 							<li class="<?php if($sort == 'price'){
 								echo "active";
 								}?>">
-								<a href="?server_id=<?= $serverId?>&sort=price">价格<?php if($sort == 'price'){
+								<a href="?server_parent=<?= $serverParent?>&server_id=<?= $serverId?>&sort=price">价格<?php if($sort == 'price'){
 										echo $sortText;
 								}?></a>
 							</li>
@@ -49,7 +42,7 @@
 							</li>
 							<li>
 								<?php
-										echo '<a href="/basic-clean/staff?server_id='.$serverId.'&sort=default" class="header-title">服务者</a>';
+										echo '<a href="/basic-clean/staff?server_parent='.$serverParent.'&server_id='.$serverId.'&sort=fraction" class="header-title">服务者</a>';
 								?>
 							</li>
 							<li>
@@ -62,6 +55,31 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="address-server-all">
+				<div class="server-all">
+					<select class="select-service" style="height: 25px;" server_parent="<?= $serverParent;?>">
+						<?php foreach ($YxServerAll as $key => $value): ?>
+							<option value="<?= $value['server_id']?>" <?php if ($value['server_id']==$serverId) {
+								echo "selected";
+							}?>><?= $value['server_name']?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+				<div class="address">
+ 					<form action="/index" method="get">
+ 						服务地域:
+						<input type="text" list="area_list" />
+						<datalist id="area_list">
+							<option label="南山区" value="南山区" />
+							<option label="福田区" value="福田区" />
+							<option label="罗湖区" value="罗湖区" />
+						</datalist>
+						<button type="submit">提交</button>
+ 					</form>
+				</div>
+			</div>
+
 		</div>
 
 		<div class="stores">
@@ -72,15 +90,15 @@
 						</div>
 						<div class="store-detail">
 							<h4 title="<?= $model->name?>">
-								<?= Html::a(Yii::t('app', $model->name), ['/basic-clean/detail', 'company' => $model->id], []) ?>
+								<?= Html::a(Yii::t('app', $model->name), ['/basic-clean/detail', 'company_id' => $model->id,'server_id' => $serverId], []) ?>
 							</h4>
 			                <p title="<?= $model->address?>">地址：<?= $model->address?></p>
 							<p title="<?= $model->total_fraction?>">分数：<?= number_format($model->total_fraction/1000,1)?></p>
 			                <p title="<?= $model->main_server_id?>">业务：<?= $model->main_server_id?></p>
 						</div>
 						<div class="store-result">
-							<img src="/static/img/achievement/achieve1.jpg">
-							<img src="/static/img/achievement/achieve1.jpg"">
+							<img src="/static/img/achievement/achieve1.jpg" />
+							<img src="/static/img/achievement/achieve1.jpg" />
 						</div>
 					</div>
 			<?php endforeach; ?>
@@ -96,7 +114,14 @@
 		</div>
 	</div>
 
-	<div class="recommend">
-
-	</div>
+	<div class="recommend"></div>
 </div>
+
+<script type="text/javascript">
+	window.onload = function() {
+		$(".select-service").change(function(event) {
+			// 切换服务
+			window.location.href = "/basic-clean/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&sort=fraction";
+		});
+	}
+</script>
