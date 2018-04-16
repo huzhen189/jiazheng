@@ -28,13 +28,21 @@ class SpecialCleanController extends Controller {
 		$serverName = YxServer::getServerName($serverId);
 		$this->getView()->title = $serverName;
 		$sort = $request->get('sort');
+		// 获取地区
+		$user_info = Yii::$app->user->identity;
 		if($sort === 'fraction') {
-			$YxCompany = YxCompany::find()->where(['like','query',''.$serverName])->orderBy('total_fraction desc');
+			$YxCompany = YxCompany::find()->select(['*'])
+								->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
+									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city']])->orderBy('total_fraction desc');
 		}else if($sort === 'price') {
-			$YxCompany = YxCompany::find()->where(['like','query',''.$serverName])->orderBy('total_fraction');
+			$YxCompany = YxCompany::find()->select(['*'])
+								->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
+									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city']])->orderBy('yx_cmp_server.server_price desc');
 		}else {
 			$sort = 'fraction';
-			$YxCompany = YxCompany::find()->where(['like','query',''.$serverName])->orderBy('total_fraction desc');
+			$YxCompany = YxCompany::find()->select(['*'])
+								->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
+									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city']])->orderBy('total_fraction desc');
 		}
 		$pages = new Pagination([
 			'totalCount' => $YxCompany->count(),

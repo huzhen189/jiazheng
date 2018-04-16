@@ -109,6 +109,9 @@ h1,h2,h3,h4,h5,h6,p {
 .long-hourly .choose-server .one-server {
 	width: 33%;
 }
+.long-hourly .choose-server .one-server .addserver {
+	color: rgb(255, 90, 0);
+}
 
 /* 服务时间的选择 */
 .date-hour .date-all .date-hour {

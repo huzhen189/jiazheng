@@ -53,4 +53,7 @@ class YxOrderServer extends \yii\db\ActiveRecord
             'is_main' => '是否订单主服务',
         ];
     }
+    public function getyx_order() {
+        return $this->hasOne('common\models\YxOrder', ['id'=>'yx_order_id']);
+    }
 }

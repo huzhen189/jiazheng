@@ -1,6 +1,7 @@
 <?php
 use frontend\assets\AppAsset;
 use yii\helpers\Html;
+use common\models\Region;
 
 AppAsset::register($this);
 $user_info = Yii::$app->user->identity;
@@ -28,7 +29,7 @@ $user_info = Yii::$app->user->identity;
 								echo '<a href="/site/login" class="header-title" style="color:rgb(255,90,0)">请登录！</a>';
 								echo '<a href="/site/signup" class="header-title">免费注册</a>';
 						} else {
-              echo '<div class="header-city">'.$user_info['city'].'<a href="#">[切换]</a></div>';
+              echo '<div class="header-city">'.Region::getOneName($user_info['city']).'<a href="/yx-user/update_city?id='.Yii::$app->user->id.'">[切换]</a></div>';
               echo '<div class="header-login">'
                   . Html::beginForm(['/site/logout'], 'post',['class' => 'logout-form','style'=>'float:right'])
                   . Html::submitButton('[退出]',['class' => 'btn btn-link logout'])
@@ -41,7 +42,7 @@ $user_info = Yii::$app->user->identity;
 			<div class="top_nav_right">
         <div class="login-text t_r">
 					<span id="js_isNotLogin">
-						<a href="http://www.yuanxiangwu.com/" rel="nofollow" class="header-title">首页</a>
+						<a href="http://www.yuanxiangwu.com/" rel="nofollow" class="header-title">原象屋首页</a>
 					</span>
 				</div>
 				<div class="login-text t_r">

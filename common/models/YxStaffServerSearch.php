@@ -24,7 +24,7 @@ class YxStaffServerSearch extends YxStaffServer
 
         return [
             [['staff_id', 'server_id', 'server_least', 'server_price', 'server_parent_id'], 'integer'],
-            [['server.server_name','server.server_unit','server.server_state','server_type','server_name'],'safe']
+            [['server.server_name','server.server_unit','server.server_state','server_type'],'safe']
         ];
     }
 

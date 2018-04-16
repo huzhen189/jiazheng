@@ -91,16 +91,18 @@ class YxCmpServer extends \yii\db\ActiveRecord
       $addContent = "";
       $YxServer = YxCmpServer::find()->select(['*'])
                 ->innerjoin('yx_company', 'yx_cmp_server.company_id=yx_company.id')
-                  ->where(['yx_company.status'=>2,'yx_cmp_server.server_parent_id' => $serverId])
+                  ->where(['yx_company.status'=>2])
+                  ->andWhere(['yx_company.id' => $companyId])
+                  ->andWhere(['yx_cmp_server.server_parent_id' => $serverId])
                   ->andWhere(['<>','yx_cmp_server.server_type',0])->all();
       if($YxServer) {
         $addContent = '<div class="long-hourly" style="margin: 5px;">
                 				<div>您可以勾选以下附加服务：</div><div class="choose-server row">';
         foreach ($YxServer as $key => $value) {
-          $YxStaffServer = YxServer::getServerThirdCompany($companyId,$value['server_id']);
+          $YxCmpServer = number_format(YxServer::getServerThirdCompany($companyId,$value['server_id'])/100,2);
           $addContent = $addContent.'<div class="one-server col-md-3 col-lg-3"><input type="checkbox" name="server"/> '
-            .YxServer::getServerName($value['server_id']). '<span  class="addserver">'
-            .$YxStaffServer.'</span>元/小时 <span class="server_num"> <input text="number" style="width:50px;"/>小时</span></div>';
+            .YxServer::getServerName($value['server_id']). '<span  class="addserver"> '
+            .$YxCmpServer.'</span>元/小时 <span class="server_num"> <input type="number" style="width:50px;" serverId="'.$value['server_id'].'" step="1" min="1" max="10" />小时</span></div>';
         }
         $addContent = $addContent.'</div></div>';
       }

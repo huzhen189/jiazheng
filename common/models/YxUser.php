@@ -57,9 +57,10 @@ class YxUser extends ActiveRecord implements IdentityInterface
         return [
             // [['username', 'password_hash', 'create_at', 'update_at', 'province', 'city', 'sex'], 'required'],
             // [['role', 'create_at', 'update_at', 'sex', 'age'], 'integer'],
-            // [['username', 'province', 'city'], 'string', 'max' => 50],
+            // [['username'], 'string', 'max' => 50],
             // [['auth_key'], 'string', 'max' => 32],
             // [['password_hash', 'password_reset_token', 'img', 'address'], 'string', 'max' => 255],
+            [['province', 'city'],'integer'],
             [['email'], 'string', 'max' => 45],
             [['phone', 'nickname'], 'string', 'max' => 20],
             // [['phone'], 'unique'],

@@ -35,7 +35,7 @@ class YxStaffServer extends \yii\db\ActiveRecord
         return [
             [['server_id'], 'required'],
             [['staff_id', 'server_id', 'server_least', 'server_parent_id','server_type'], 'integer'],
-            [['server_price','server_name'],'safe'],
+            [['server_price'],'safe'],
             [['staff_id', 'server_id'], 'unique', 'targetAttribute' => ['staff_id', 'server_id']],
             [['staff_id'], 'exist', 'skipOnError' => true, 'targetClass' => YxStaff::className(), 'targetAttribute' => ['staff_id' => 'staff_id']],
             [['server_id'], 'exist', 'skipOnError' => true, 'targetClass' => YxServer::className(), 'targetAttribute' => ['server_id' => 'server_id']],
@@ -54,7 +54,6 @@ class YxStaffServer extends \yii\db\ActiveRecord
             'server_price' => '单位服务价格',
             'server_parent_id' => '父级服务',
             'server_type'=>'服务类型',
-            'server_name'=>'服务名'
         ];
     }
 
@@ -135,7 +134,9 @@ class YxStaffServer extends \yii\db\ActiveRecord
       $addContent = "";
       $YxServer = YxStaffServer::find()->select(['*'])
                 ->innerjoin('yx_staff', 'yx_staff_server.staff_id=yx_staff.staff_id')
-                  ->where(['yx_staff.staff_state'=>1,'yx_staff_server.server_parent_id' => $serverId])
+                  ->where(['yx_staff.staff_state'=>1])
+                  ->andWhere(['yx_staff.staff_id' => $staffId])
+                  ->andWhere(['yx_staff_server.server_parent_id' => $serverId])
                   ->andWhere(['<>','yx_staff_server.server_type',0])->all();
       if($YxServer) {
         $addContent = '<div class="long-hourly" style="margin: 5px;">
@@ -144,7 +145,7 @@ class YxStaffServer extends \yii\db\ActiveRecord
           $YxStaffServer = YxServer::getServerThird($staffId,$value['server_id']);
           $addContent = $addContent.'<div class="one-server"><input type="checkbox" name="server"> '
           .YxServer::getServerName($value['server_id']).' <span class="addserver">'
-          .$YxStaffServer.'</span>元/小时 <span class="server_num"><input text="number" style="width:50px;/>小时</span></div>';
+          .$YxStaffServer.'</span>元/小时 <span class="server_num"><input type="number" style="width:50px;/>小时</span></div>';
         }
         $addContent = $addContent.'</div></div>';
       }

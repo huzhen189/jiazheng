@@ -5,6 +5,7 @@
 	use yii\bootstrap\dropDownList;
 	use yii\widgets\LinkPager;
 
+	use common\models\YxCmpServer;
 	$sortText = '排序';
 ?>
 
@@ -94,7 +95,7 @@
 							</h4>
 			                <p title="<?= $model->address?>">地址：<?= $model->address?></p>
 							<p title="<?= $model->total_fraction?>">分数：<?= number_format($model->total_fraction/1000,1)?></p>
-			                <p title="<?= $model->main_server_id?>">业务：<?= $model->main_server_id?></p>
+			                <p title="<?= YxCmpServer::getCompanyPrice($model->id,$serverId);?>">价格：<?= YxCmpServer::getCompanyPrice($model->id,$serverId);?></p>
 						</div>
 						<div class="store-result">
 							<img src="/static/img/achievement/achieve1.jpg" />

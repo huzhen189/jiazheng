@@ -51,6 +51,42 @@ class YxOrderController extends CheckController
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+
+        // $searchModel = new YxOrderSearch();
+        // $params = Yii::$app->request->queryParams;
+        // $order_state = 0;
+        // if(isset($params["order_state"])){
+        //   $order_state = (int)$params["order_state"];
+        // }
+        // $query = YxOrder::find();
+        // $yx_user_id = Yii::$app->user->id;
+        // $query->andFilterWhere([
+        //     'yx_user_id' => $yx_user_id,
+        //     'is_delete' => 0,
+        // ]);
+        // var_dump($order_state);
+        // switch ($order_state) {
+        //     case 1:
+        //         $query->andFilterWhere(['order_state' => 1]);
+        //         break;
+        //     case 2:
+        //         $query->andFilterWhere(['between', 'order_state',2,4]);
+        //         break;
+        //     case 3:
+        //         $query->andFilterWhere(['order_state' => 5]);
+        //         break;
+        //     case 4:
+        //         $query->andFilterWhere(['between', 'order_state',6,8]);
+        //         break;
+        //     default:
+        //         break;
+        // }
+        // $query->orderBy(['created_at'=>SORT_DESC]);
+        // $allOrder = $query->asarray()->all();
+        // return $this->render('index', [
+        //     'searchModel' => $searchModel,
+        //     'orderDatas' => $allOrder,
+        // ]);
     }
 
     /**
@@ -325,15 +361,18 @@ class YxOrderController extends CheckController
     public function actionPayment($id)
     {
         $isWechat = Helper::isWechatBrowser();
-        $order = $this->findModel($id);
-        $yxStaffServer = YxStaffServer::findOne(['staff_id'=>$order->yx_staff_id]);
-        $yxStaff = YxStaff::findOne(['staff_id'=>$order->yx_staff_id]);
-        $yxCompany = YxCompany::findOne(['id'=>$order->yx_staff_id]);
+        $order = YxOrder::find()->with('yx_order_server')->where(["id"=>$id])->one();
+        if($order->order_type ==2){
+            $yxStaffName = YxStaff::findOne(['staff_id'=>$order->yx_staff_id])["name"];
+        }else {
+            $yxStaffName = "商家指定";
+        }
+
+        $yxCompany = YxCompany::findOne(['id'=>$order->yx_company_id]);
         return $this->render('payment', [
             'model' => $order,
             'isWechat' => $isWechat,
-            'yxStaffServer' => $yxStaffServer,
-            'yxStaff' => $yxStaff,
+            'yxStaffName' => $yxStaffName,
             'yxCompany' => $yxCompany,
         ]);
     }

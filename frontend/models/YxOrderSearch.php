@@ -43,9 +43,13 @@ class YxOrderSearch extends YxOrder
         $query = YxOrder::find();
 
         // add conditions that should always apply here
-
+        //$query->select('*')->leftJoin('yx_order_server','yx_order.id = yx_order_server.yx_order_id');
+        $query->with('yx_order_server');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+             ]
         ]);
 
         $this->load($params);

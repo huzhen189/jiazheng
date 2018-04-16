@@ -18,8 +18,8 @@ class CityController extends Controller {
     // if ($provinceId) {
     //   $cityAll = Region::find()->where(['parent_id' => $provinceId,'level' => 1])->all();
     // }else {
-      $provinceId = $provinceAll[0]['id'];
-      $cityAll = Region::find()->where(['parent_id' => $provinceId,'level' => 1])->all();
+    $provinceId = $provinceAll[0]['id'];
+    $cityAll = Region::find()->where(['parent_id' => $provinceId,'level' => 1])->all();
     // }
     return $this->render('index', [
       'provinceAll' => $provinceAll,

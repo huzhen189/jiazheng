@@ -96,6 +96,11 @@ class YxOrder extends \yii\db\ActiveRecord
             'order_type'=>'下单类型'
         ];
     }
+
+    public function getyx_order_server() {
+        return $this->hasMany('common\models\YxOrderServer', ['yx_order_id'=>'id']);
+    }
+
     /**
      * [getName 匹配名字]
      * @Author   Yoon
@@ -249,6 +254,12 @@ class YxOrder extends \yii\db\ActiveRecord
             }
         }
         return $timeDatas;
+    }
+    public static function finishOrder($pingId,$order_no){
+        $orders = YxOrder::findOne(["order_no" => $order_no]);
+        $orders->order_state = 2;
+        $orders->ping_id = $pingId;
+        return $orders->save();
     }
     public static function returnStaffOrderCountByTime($yx_staff_id,$startTime,$endTime){
         //echo YxOrder::returnStaffOrderCountByTime(38,1523768400,1523779200);

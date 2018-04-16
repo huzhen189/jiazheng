@@ -91,7 +91,7 @@
 					<h3 title="<?= $model->staff_name?>"><?= $model->staff_name?></h3>
 					<p title="价格: <?=YxStaffServer::getStaffPrice($model->staff_name,$serverId)?>元">价格: <?=YxStaffServer::getStaffPrice($model->staff_name,$serverId)?>元</p>
 					<p title="分数：<?= number_format($model->staff_fraction/1000,1)?>">分数：<?= number_format($model->staff_fraction/1000,1)?></p>
-					<p title="主营服务：<?= $model->staff_query?>">主营服务：<?= $model->staff_query?></p>
+					<!-- <p title="主营服务：<?= $model->staff_query?>">主营服务：<?= $model->staff_query?></p> -->
 					<div class="staff-info">
 						<a href="/staff?staff_id=<?= $model->staff_id?>" target="_blank">查看详情</a>
 					</div>

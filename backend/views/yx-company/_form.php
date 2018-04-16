@@ -136,18 +136,18 @@ $this->registerCss('
     <?php $model->models = $model->getCmpModels(); ?>
     <?= $form->field($model, 'models')->dropDownList($model->models) ?>
 
-    <?php 
+    <?php
         $server_id = $model->getCmpServer();
         $model->main_server_id = explode(',', $model->main_server_id);
     ?>
     <?= $form->field($model, 'main_server_id')->checkboxList($server_id);?>
 
-    <?php 
+    <?php
         $server2_id = $model->getCmpServer();
         if(!empty($arr_main_server_id)){
             foreach ($arr_main_server_id as $key => $value) {
                 unset($server2_id[$key]);
-            }  
+            }
         }
         $model->all_server_id = explode(',', $model->all_server_id);
     ?>

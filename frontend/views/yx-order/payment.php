@@ -36,23 +36,46 @@ $this->params['breadcrumbs'][] = $this->title;
     		<a href="/yx-user-address/index?yx_user_id=<?= Yii::$app->user->id ?>&order_id=<?= $model->id ?>" style="margin-left: 20px;">修改地址</a>
     	</div>
     	<div class="detail child">
-    		<div>服务项目：<span><?= $yxStaffServer->server_name ?></div>
+
+        <div>订单编号：<span><?= $model->order_no ?></span></div>
         <div>服务公司：<span><?= $yxCompany->name ?></span></div>
         <?php
             if($model->yx_staff_id > 0){
-                echo "<div>服务人员：<span>".$yxStaff->staff_name."</span></div>";
+                echo "<div>服务人员：<span>".$yxStaffName."</span></div>";
             }
         ?>
     		<div>上门时间：<span><?= date("Y-m-d H:i:s",$model->time_start+8*3600) ?></span></div>
-    		<div>服务时长：<span><?= $server_time_long ?> 小时</span></div>
-    		<div>服务明细：<span><?= $yxStaffServer->server_name ?>：<?= number_format($yxStaffServer->server_price/100,2) ?>元×<?= $server_time_long ?>小时=<?= number_format($yxStaffServer->server_price*$server_time_long/100,2) ?>元</span></div>
-    		<div>擦玻璃：<span>64</span>元</div>
+    		<div>服务时长：<span><?= $server_time_long; ?> 小时</span></div>
+        <?php
+            foreach ($model->yx_order_server as $value) {
+               if($value->is_main == 1){
+                  echo '<div>服务项目：<span>'.$value->server_name.'</span></div>';
+                  echo '<div>服务明细：<span>'.$value->server_name.'：'.number_format($value->server_price/100,2).'元×'.$value->server_amount.' '.$value->server_unit.'='.number_format($value->server_price * $value->server_amount/100,2).'元</span></div>';
+               }
+            }
+        ?>
+        <p>附加服务:</p>
+        <?php
+            foreach ($model->yx_order_server as $value) {
+               if($value->is_main != 1){
+                  echo '<div>'.$value->server_name.': <span>'.number_format($value->server_price/100,2).'元×'.$value->server_amount.' '.$value->server_unit.'='.number_format($value->server_price * $value->server_amount/100,2).'</span>元</div>';
+               }
+            }
+        ?>
     	</div>
     	<div class="instructions child">
     		距服务开始超过4小时取消订单，不会扣除您的预付款。据服务开始超过2小时不足4小时取消订单，将扣除您预付款的20%。距服务开始不足2小时取消订单将扣除您预付款的50%。其余部分将原路返回到您的支付账户。
     	</div>
       <div class="child">
-    		<div class="money">合计：<span><?= number_format($yxStaffServer->server_price*$server_time_long/100,2) ?></span>元</div>
+    		<div class="money">合计：<span>
+          <?php
+              $all_money=0;
+              foreach ($model->yx_order_server as $value) {
+                $all_money += $value->server_price * $value->server_amount;
+              }
+              echo number_format($all_money/100,2);
+          ?>
+        </span>元</div>
     	</div>
 
       <div class="money-memo child">

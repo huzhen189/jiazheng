@@ -47,3 +47,210 @@
 	height: 120px;
 }
 textarea{ resize:none;}
+
+.yx-order-search{
+    height: 80px;
+    width: 100%;
+}
+.order-heard-table{
+    float: left;
+    margin-top: 20px;
+    height: 60px;
+    width: 100px;
+}
+.order-heard-table button{
+	text-align: center;
+  width: 72px;
+  padding: 0px;
+  line-height: 26px;
+	margin: 15px auto;
+}
+.yuanxiangwu-order{
+	width: 100%;
+	margin: auto;
+}
+.btn-linkchoosed{
+	background: rgb(255, 90, 0);
+  color: #ffffff;
+}
+.yuanxiangwu-order td{
+	display: block;
+	border: none;
+}
+.table-bordered{
+	border: none;
+}
+.table-bordered > tbody > tr > td{
+	border: none;
+	padding: 0px;
+}
+.table-bordered > tbody > tr{
+	border: 1px solid #daf3ff;
+	margin-bottom: 20px;
+	display: block;
+}
+
+.yuanxiangwu-order td:first-child
+{
+	background-color:#eaf8ff;
+}
+.yuanxiangwu-order .order-top-header{
+		height: 30px;
+		padding: 8px 12px;
+}
+.order-top-header div{
+		float: left;
+		line-height: 30px;
+}
+.order-top-header .created_at{
+	font-size: 14px;
+	font-weight: bold;
+	color: #000000;
+}
+.order-top-header .order_no{
+	font-size: 13px;
+	margin-left: 20px;
+}
+.order-top-header .order_name{
+	font-size: 13px;
+	margin-left: 80px;
+}
+.yuanxiangwu-order .order-top-body{
+		width: 100%;
+		height: 200px;
+		border-top: 1px solid #daf3ff;
+}
+.order-top-body .child{
+	float: left;
+	height: 200px;
+	border-right: 1px solid #e5e5e5;
+	box-sizing: border-box !important;
+}
+.order-top-body .mian_server_box{
+		width: 23%;
+}
+.order-top-body .extra_server_box{
+		width: 22%;
+}
+.order-top-body .order_money{
+		width: 12%;
+}
+.order-top-body .user_name{
+		width: 23%;
+}
+.order-top-body .order_state{
+		width: 8%;
+		text-align: center;
+}
+.order-top-body .order_action{
+		width: 139.359px;
+		text-align: center;
+		border: none;
+}
+.mian_server_box div{
+	display: block;
+	padding: 4px 12px;
+	height: 36px;
+}
+.mian_server_box .server_name{
+    margin-top: 28px;
+}
+.mian_server_box .server_price{
+		color: #E90;
+}
+.mian_server_box .server_amount{
+
+}
+.order-top-body .item_title{
+	text-align: center;
+	height: 26px;
+	line-height: 26px;
+	background: #e5e5e5;
+	padding: 0px;
+}
+.order-top-body .extra_server_box .extra_serve_item{
+	padding: 6px 8px;
+}
+.order-top-body .extra_server_box .extra_serve_item div{
+	float: left;
+}
+.extra_serve_item .server_name{
+    margin-left: 8px;
+		width: 118px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+}
+.extra_serve_item .server_price{
+		color: #E90;
+}
+.extra_serve_item .server_amount{
+	margin-left: 4px;
+}
+
+.order-top-body .order_money .price{
+	line-height: 174px;
+	text-align: center;
+	width: 100%;
+	color: #f40;
+	font-size: 14px;
+}
+.order-top-body .user_name {
+	width: 280px;
+}
+.user_name .name{
+	margin-top: 14px;
+}
+.user_name .name, .user_name .phone, .user_name .address, .start_time{
+	padding: 2px 8px;
+	height: 36px;
+}
+.user_name .address{
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
+.order-top-body .order_state .state{
+		line-height: 174px;
+}
+.order-top-body .btn{
+		font-size: 12px;
+		height: 30px;
+		line-height: 30px;
+		width: 80px;
+		text-align: center;
+		border-radius: 3px;
+		background: #40bbff;
+		color: #ffffff;
+		border: none;
+		padding: 0px;
+		display: block;
+		margin: 12px auto 0px;
+}
+.order-top-body .btn:hover{
+		background: #ffffff;
+		color: #40bbff;
+		border: 1px solid #40bbff;
+		box-sizing: border-box !important;
+}
+.order-top-body .btn-cancel{
+		background: #FF5A00;
+}
+.order-top-body .btn-cancel:hover{
+		color: #FF5A00;
+		border: 1px solid #FF5A00;
+}
+.order-top-body .btn-look{
+		background: #DAA520;
+}
+.order-top-body .btn-look:hover{
+		color: #DAA520;
+		border: 1px solid #DAA520;
+}
+.order-top-body .btn-comment{
+		background: #696969;
+}
+.order-top-body .btn-comment:hover{
+		color: #696969;
+		border: 1px solid #696969;
+}
