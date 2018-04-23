@@ -60,6 +60,7 @@
 
 			<div class="address-server-all">
 				<div class="server-all">
+					服务类型：
 					<select class="select-service" style="height: 25px;" server_parent="<?= $serverParent;?>">
 						<?php foreach ($YxServerAll as $key => $value): ?>
 							<option value="<?= $value['server_id']?>" <?php if ($value['server_id']==$serverId) {
@@ -69,16 +70,16 @@
 					</select>
 				</div>
 				<div class="address">
- 					<form action="/index" method="get">
- 						服务地域:
-						<input type="text" list="area_list" />
-						<datalist id="area_list">
-							<option label="南山区" value="南山区" />
-							<option label="福田区" value="福田区" />
-							<option label="罗湖区" value="罗湖区" />
-						</datalist>
-						<button type="submit">提交</button>
- 					</form>
+					服务地域:
+					<select id="area_list" style="height: 25px;margin: 0 10px;">
+						<?php foreach ($countyAll as $key => $value) {
+							if($county == $key) {
+								echo '<option value="'.$key.'"  selected/>'.$value.'</option>';
+								continue;
+							}
+							echo '<option value="'.$key.'"  />'.$value.'</option>';
+						}?>
+					</select>
 				</div>
 			</div>
 
@@ -92,11 +93,11 @@
 						</div>
 						<div class="store-detail">
 							<h4 title="<?= $model->name?>">
-								<?= Html::a(Yii::t('app', $model->name), ['/company/staff', 'server_id'=> $serverId, 'company_id' => $model->id,'sort' => 'fraction'], []) ?>
+								<?= Html::a(Yii::t('app', $model->name), ['/company/staff', 'company_id' => $model->id, 'server_id'=> $serverId,'sort' => 'fraction'], []) ?>
 							</h4>
 			                <p title="<?= $model->address?>">地址：<?= $model->address?></p>
 							<p title="<?= $model->total_fraction?>">分数：<?= round($model->total_fraction/1000,1)?></p>
-			                <p title="<?= YxCmpServer::getCompanyPrice($model->id,$serverId);?>">价格：<?= YxCmpServer::getCompanyPrice($model->id,$serverId);?></p>
+			                <p title="<?= number_format(YxCmpServer::getCompanyPrice($model->id,$serverId)/100,2);?>">价格：<?= number_format(YxCmpServer::getCompanyPrice($model->id,$serverId)/100,2);?></p>
 						</div>
 						<div class="store-result">
 							<img src="/static/img/achievement/achieve1.jpg" />
@@ -123,7 +124,11 @@
 window.onload = function() {
 	$(".select-service").change(function(event) {
 			// 切换服务
-			window.location.href = "/other-services/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&sort=fraction";
-		});
-	}
+			window.location.href = "/other-services/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&county="+$("#area_list option:selected").attr('value')+"&sort=fraction";
+	});
+	$("#area_list").change(function(event) {
+		// 切换地区
+		window.location.href = "/other-services/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&county="+$("#area_list option:selected").attr('value')+"&sort=fraction";
+	});
+}
 </script>

@@ -7,6 +7,7 @@ use yii\data\Pagination;
 use common\models\YxCompany;
 use common\models\YxStaff;
 use common\models\YxServer;
+use common\models\Region;
 use Yii;
 
 /**
@@ -30,19 +31,28 @@ class SpecialCleanController extends Controller {
 		$sort = $request->get('sort');
 		// 获取地区
 		$user_info = Yii::$app->user->identity;
+		// 获取地区下的所有县区
+		$countyAll = Region::getRegion($user_info['city']);
+		$county = $request->get('county');
+		if(!$county) {
+			foreach ($countyAll as $key => $value) {
+				$county = $key;
+				break;
+			}
+		}
 		if($sort === 'fraction') {
 			$YxCompany = YxCompany::find()->select(['*'])
 								->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
-									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city']])->orderBy('total_fraction desc');
+									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city'],'yx_company.district'=>$county])->orderBy('total_fraction desc');
 		}else if($sort === 'price') {
 			$YxCompany = YxCompany::find()->select(['*'])
 								->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
-									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city']])->orderBy('yx_cmp_server.server_price desc');
+									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city'],'yx_company.district'=>$county])->orderBy('yx_cmp_server.server_price desc');
 		}else {
 			$sort = 'fraction';
 			$YxCompany = YxCompany::find()->select(['*'])
 								->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
-									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city']])->orderBy('total_fraction desc');
+									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city'],'yx_company.district'=>$county])->orderBy('total_fraction desc');
 		}
 		$pages = new Pagination([
 			'totalCount' => $YxCompany->count(),
@@ -58,7 +68,9 @@ class SpecialCleanController extends Controller {
 		    'sort' => $sort,
 				'serverId' => $serverId,
 				'serverParent' => $server_parent,
-				'YxServerAll' => $YxServerAll
+				'YxServerAll' => $YxServerAll,
+				'countyAll' => $countyAll,
+				'county' => $county
 		]);
 	}
 	// 预约

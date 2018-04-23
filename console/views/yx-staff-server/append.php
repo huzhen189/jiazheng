@@ -37,7 +37,7 @@ $server_id = $queryParams['server_id'];
         // 'staff_id',
         [
             'label' => '服务名称',
-            'attribute' => 'server_name',
+            'attribute' => 'server.server_name',
         ],
         // 'server_id',
         [

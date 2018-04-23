@@ -63,7 +63,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 return YxUser::getName($model->sex,'getUserSex');
             },
         ],
-        //'age',
         'phone',
         'address',
 

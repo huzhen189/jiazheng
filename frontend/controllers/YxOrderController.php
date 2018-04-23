@@ -201,6 +201,7 @@ class YxOrderController extends CheckController
             }
             foreach ($extra_server_info as $serverItem) {
                 $extra_server_model = new YxOrderServer();
+                $extra_server_model->server_id = $serverItem["server_id"];
                 $extra_server_model->server_name = $serverItem["server_name"];
                 $extra_server_model->server_price = $serverItem["server_price"];
                 $extra_server_model->server_unit = $serverItem["server_unit"];
@@ -216,6 +217,7 @@ class YxOrderController extends CheckController
 
 
             $main_server_model = new YxOrderServer();
+            $main_server_model->server_id = $mian_server["server_id"];
             $main_server_model->server_name = $mian_server["server_name"];
             $main_server_model->server_price = $mian_server["server_price"];
             $main_server_model->server_unit = $mian_server["server_unit"];
@@ -357,7 +359,22 @@ class YxOrderController extends CheckController
 
         return $this->redirect(['index']);
     }
-
+    public function actionReturned($order_id)
+    {
+          $model = $this->findModel($order_id);
+          if($model){
+            if($model->order_state == 1){
+                $model->order_state = 5;
+                if ($model->save()) {
+                }
+            }elseif ($model->order_state == 2 || $model->order_state == 4 || $model->order_state == 8) {
+                $model->order_state = 3;
+                if ($model->save()) {
+                }
+            }
+          }
+        $this->redirect(['yx-order/index?yx_user_id='.Yii::$app->user->id]);
+      }
     public function actionPayment($id)
     {
         $isWechat = Helper::isWechatBrowser();

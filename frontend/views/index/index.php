@@ -16,7 +16,7 @@
 					<a href="/other-services/index?server_parent=69&server_id=82&sort=fraction"  target="_blank" title="月嫂">月嫂</a> / <a href="/basic-clean/index?server_parent=65&server_id=73&sort=fraction"  target="_blank" title="长期钟点工">长期钟点工</a>
 				</li>
 				<li>
-					<a href="/other-services/index?server_parent=70&server_id=83&sort=fraction"  target="_blank" title="育儿嫂">育儿嫂</a> / <a href="/other-services/index?server_parent=67&server_id=26&sort=fraction"  target="_blank" title="消毒柜清洗">消毒柜清洗</a>
+					<a href="/other-services/index?server_parent=70&server_id=83&sort=fraction"  target="_blank" title="育儿嫂">育儿嫂</a> / <a href="/other-services/index?server_parent=66&server_id=81&sort=fraction"  target="_blank" title="卫生间保养">卫生间保养</a>
 				</li>
 				<li>
 					<a href="/basic-clean/index?server_parent=65&server_id=20&sort=fraction" target="_blank" title="基础保洁">基础保洁</a> / <a href="/special-clean/index?server_parent=66&server_id=34&sort=fraction"  target="_blank" title="厨房保养">厨房保养</a>
@@ -90,22 +90,22 @@
 				<span>原象屋精选</span>
 			</div>
 			<div class="banner_img">
-				<a href="#"><img src="<?= $YxRecomLeft[0]->recom_left_pic; ?>"></a>
-				<a href="#"><img src="<?= $YxRecomLeft[1]->recom_left_pic; ?>"></a>
-				<a href="#"><img src="<?= $YxRecomLeft[2]->recom_left_pic; ?>"></a>
-				<a href="#"><img src="<?= $YxRecomLeft[3]->recom_left_pic; ?>"></a>
+				<a href="/other-services/index?server_parent=71&sort=fraction" target="_blank"><img src="<?= $YxRecomLeft[0]->recom_left_pic; ?>"></a>
+				<a href="/basic-clean/index?server_parent=65&sort=fraction" target="_blank"><img src="<?= $YxRecomLeft[1]->recom_left_pic; ?>"></a>
+				<a href="/other-services/index?server_parent=69&sort=fraction" target="_blank"><img src="<?= $YxRecomLeft[2]->recom_left_pic; ?>"></a>
+				<a href="/other-services/index?server_parent=70&sort=fraction" target="_blank"><img src="<?= $YxRecomLeft[3]->recom_left_pic; ?>"></a>
 			</div>
 		</div>
 	</div>
 	<div class="header_center2">
 		<div class="banner1">
-			<img src="<?= $YxActivity->activity_pic; ?>" />
+			<a href="/other-services/index?server_parent=71&sort=fraction" target="_blank"><img src="<?= $YxActivity->activity_pic; ?>" /></a>
 		</div>
 		<div class="banner_text">
 			<span>今日推荐</span>
 		</div>
 		<div class="banner2">
-			<img src="<?= $YxRecomRight->recom_right_pic; ?>" />
+			<a href="/other-services/index?server_parent=68&sort=fraction" target="_blank"><img src="<?= $YxRecomRight->recom_right_pic; ?>" /></a>
 		</div>
 	</div>
 	<div class="header_right">
@@ -118,7 +118,7 @@
 						    	<div class="buttons">
 					            <button class="btn btn-info" style="padding: 1.5px 30px;"><a href="/site/signup" class="header-title" style="color:#fff;font-size:14px;">注册</a></button>
 						    			<button class="btn btn-info" style="padding: 1.5px 22.5px;"><a href="/site/login" class="header-title" style="color:#fff;font-size:14px;">登录</a></button>
-						    			<button class="btn btn-warning" style="padding: 1.5px 22.5px;">入驻</button>
+						    			<button class="btn btn-warning" style="padding: 1.5px 22.5px;"><a href="http://manage.yuanxiangwu.com/site/signup" class="header-title" style="color:#fff;font-size:14px;">入驻</a></button>
 						    	</div>
 						    </div>';
 				}else {

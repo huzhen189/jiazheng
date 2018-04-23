@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
         		],
             //'order_money',
             'order_memo',
-            'usera_name',
+            'user_name',
         ],
     ]) ?>
 

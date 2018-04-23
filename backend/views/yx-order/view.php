@@ -7,6 +7,7 @@ use common\models\YxStaff;
 use common\models\YxUser;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use common\models\YxOrderServer;
 /* @var $this yii\web\View */
 /* @var $model common\models\YxOrder */
 
@@ -97,10 +98,30 @@ $this->params['breadcrumbs'][] = $this->title;
             },
         ],
         [
-            'label' => '服务名',
+            'label' => '主要服务',
             'attribute' => 'order_server',
             'value' => function ($model) {
-                return (YxServer::findOne($model->order_server))['server_name'];
+                $order_server_model=YxOrderServer::find()->where(['yx_order_id'=>$model->id,'is_main'=>1])->one();
+                return $order_server_model['server_name']."(".($order_server_model['server_price']/100)."元)";
+            },
+        ],
+        [
+            'label' => '附加服务',
+            'attribute' => 'add_order_server',
+            'value' => function ($model) {
+                $order_server_model=YxOrderServer::find()->where(['yx_order_id'=>$model->id,'is_main'=>0])->all();
+                $server_name='';
+                if($order_server_model){
+                    foreach ($order_server_model as $key => $value) {
+                        if($key==(count($order_server_model)-1)){
+                            $server_name=$server_name.$value['server_name']."(".($value['server_price']/100)."元)".",";
+                            continue;
+                        }
+                        $server_name=$server_name.$value['server_name'];
+                    }  
+                }
+                return $server_name;
+
             },
         ],
         'user_name',

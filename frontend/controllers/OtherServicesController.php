@@ -7,6 +7,7 @@ use yii\data\Pagination;
 use common\models\YxCompany;
 use common\models\YxStaff;
 use common\models\YxServer;
+use common\models\Region;
 use Yii;
 
 /**
@@ -22,28 +23,37 @@ class OtherServicesController extends Controller {
 		$server_parent = $request->get('server_parent');
 		$YxServerAll = YxServer::getServerSecond($server_parent);
 		$serverId = $request->get('server_id');
-		// print_r( $YxServerAll);
 		if (!$serverId) {
 			$serverId = $YxServerAll[0]['server_id'];
 		}
+
 		$serverName = YxServer::getServerName($serverId);
 		$this->getView()->title = $serverName;
 		$sort = $request->get('sort');
 		// 获取地区
 		$user_info = Yii::$app->user->identity;
+		// 获取地区下的所有县区
+		$countyAll = Region::getRegion($user_info['city']);
+		$county = $request->get('county');
+		if(!$county) {
+			foreach ($countyAll as $key => $value) {
+				$county = $key;
+				break;
+			}
+		}
 		if($sort === 'fraction') {
 			$YxCompany = YxCompany::find()->select(['*'])
 								->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
-									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city']])->orderBy('yx_company.total_fraction desc');
+									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city'],'yx_company.district'=>$county])->orderBy('yx_company.total_fraction desc');
 		}else if($sort === 'price') {
 			$YxCompany = YxCompany::find()->select(['*'])
 								->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
-									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city']])->orderBy('yx_cmp_server.server_price desc');
+									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city'],'yx_company.district'=>$county])->orderBy('yx_cmp_server.server_price desc');
 		}else {
 			$sort = 'fraction';
 			$YxCompany = YxCompany::find()->select(['*'])
 								->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
-									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city']])->orderBy('yx_company.total_fraction desc');
+									->where(['yx_company.status'=>2,'yx_cmp_server.server_id'=>$serverId,'yx_company.city'=>$user_info['city'],'yx_company.district'=>$county])->orderBy('yx_company.total_fraction desc');
 		}
 		$pages = new Pagination([
 			'totalCount' => $YxCompany->count(),
@@ -59,7 +69,9 @@ class OtherServicesController extends Controller {
 		    'sort' => $sort,
 				'serverId' => $serverId,
 				'serverParent' => $server_parent,
-				'YxServerAll' => $YxServerAll
+				'YxServerAll' => $YxServerAll,
+				'countyAll' => $countyAll,
+				'county' => $county
 		]);
 	}
 
@@ -78,19 +90,28 @@ class OtherServicesController extends Controller {
 		$sort = $request->get('sort');
 		// 获取地区
 		$user_info = Yii::$app->user->identity;
+		// 获取地区下的所有县区
+		$countyAll = Region::getRegion($user_info['city']);
+		$county = $request->get('county');
+		if(!$county) {
+			foreach ($countyAll as $key => $value) {
+				$county = $key;
+				break;
+			}
+		}
 		if($sort === 'fraction') {
 			$YxStaff = YxStaff::find()->select(['*'])
 								->innerjoin('yx_staff_server', 'yx_staff_server.staff_id=yx_staff.staff_id')
-									->where(['yx_staff.staff_state'=>1,'yx_staff_server.server_id'=>$serverId,'yx_staff.staff_city'=>$user_info['city']])->orderBy('yx_staff.staff_fraction desc');
+									->where(['yx_staff.staff_state'=>1,'yx_staff_server.server_id'=>$serverId,'yx_staff.staff_city'=>$user_info['city'],'yx_staff.staff_district'=>$county])->orderBy('yx_staff.staff_fraction desc');
 		}else if($sort === 'price') {
 			$YxStaff = YxStaff::find()->select(['*'])
 								->innerjoin('yx_staff_server', 'yx_staff_server.staff_id=yx_staff.staff_id')
-									->where(['yx_staff.staff_state'=>1,'yx_staff_server.server_id'=>$serverId,'yx_staff.staff_city'=>$user_info['city']])->orderBy('yx_staff_server.server_price desc');
+									->where(['yx_staff.staff_state'=>1,'yx_staff_server.server_id'=>$serverId,'yx_staff.staff_city'=>$user_info['city'],'yx_staff.staff_district'=>$county])->orderBy('yx_staff_server.server_price desc');
 		} else {
 			$sort = 'fraction';
 			$YxStaff = YxStaff::find()->select(['*'])
 								->innerjoin('yx_staff_server', 'yx_staff_server.staff_id=yx_staff.staff_id')
-									->where(['yx_staff.staff_state'=>1,'yx_staff_server.server_id'=>$serverId,'yx_staff.staff_city'=>$user_info['city']])->orderBy('yx_staff.staff_fraction desc');
+									->where(['yx_staff.staff_state'=>1,'yx_staff_server.server_id'=>$serverId,'yx_staff.staff_city'=>$user_info['city'],'yx_staff.staff_district'=>$county])->orderBy('yx_staff.staff_fraction desc');
 		}
 		$pages = new Pagination([
 			'totalCount' => $YxStaff->count(),
@@ -106,7 +127,9 @@ class OtherServicesController extends Controller {
 		    'sort' => $sort,
 				'serverId' => $serverId,
 				'serverParent' => $server_parent,
-				'YxServerAll' => $YxServerAll
+				'YxServerAll' => $YxServerAll,
+				'countyAll' => $countyAll,
+				'county' => $county
 			]);
 	}
 

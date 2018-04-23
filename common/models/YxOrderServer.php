@@ -32,7 +32,7 @@ class YxOrderServer extends \yii\db\ActiveRecord
     {
         return [
             [['yx_order_id'], 'required'],
-            [['yx_order_id', 'server_price', 'server_amount', 'is_main'], 'integer'],
+            [['yx_order_id', 'server_price', 'server_amount', 'is_main', 'server_id'], 'integer'],
             [['server_name'], 'string', 'max' => 45],
             [['server_unit'], 'string', 'max' => 10],
         ];
@@ -51,6 +51,7 @@ class YxOrderServer extends \yii\db\ActiveRecord
             'server_unit' => '服务单位',
             'server_amount' => '服务数量',
             'is_main' => '是否订单主服务',
+            'server_id' => '服务ID',
         ];
     }
     public function getyx_order() {

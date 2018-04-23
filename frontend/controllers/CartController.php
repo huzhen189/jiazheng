@@ -18,4 +18,12 @@ class CartController extends Controller {
 		// print_r($user);
 		return $this->render("index");
 	}
+
+	public function actionUser() {
+		$request = Yii::$app->request;
+		$js_code = $request->get('code');
+		$url = 'https://api.weixin.qq.com/sns/jscode2session?appid=wx39e60a93c77bd9e1&secret=f9a5fb792468a25e58d76a3a5c8db3e8&js_code='.$js_code.'&grant_type=authorization_code';
+		$res = file_get_contents($url);
+		return $res;
+	}
 }

@@ -3,9 +3,10 @@
 namespace common\models;
 
 use common\models\YxCompany;
-use common\models\YxDetails;
+use common\models\YxOrderServer;
 use common\models\YxServer;
 use common\models\YxStaff;
+use common\models\YxOrder;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -126,6 +127,40 @@ class YxComment extends \yii\db\ActiveRecord
     {
         return new YxCommentQuery(get_called_class());
     }
+
+/**
+ * [defaultComment 默认生成评论]
+ * @Author   Yoon
+ * @DateTime 2018-04-18T20:01:33+0800
+ * @return   [type]                   [description]
+ */
+    public static function defaultComment(){
+        
+        $comment_model=self::find()->where(['not',['yx_order_id' => null]])->all();
+        $order_id=array();
+        if($comment_model){
+            foreach ($comment_model as $key => $value) {
+                $order_id[$key]=$value['yx_order_id'];
+            } 
+        }
+        $time=strtotime(date('Y-m-d h:i:s'))-(1*24*60*60);
+        $order_model=YxOrder::find()->where(['order_state'=>8])->andFilterWhere(['not in','id',$order_id])->andFilterWhere(['<=','time_end',$time])->all();
+        foreach ($order_model as $key => $value) {
+           $model=new YxComment();
+           $model->content="服务质量总体来说中等，有值得点赞的地方，基本符合我的要求";
+           $model->star=3;
+           $model->yx_company_id=$value['yx_company_id'];
+           if(isset($value['yx_staff_id'])&&empty($value['yx_staff_id'])){
+                $model->yx_staff_id=$value['yx_staff_id'];
+           }
+           $model->yx_user_id=$value['yx_user_id'];
+           $model->save();
+           $model->setHistoryFraction();
+        }
+         
+        return 'OK_Comment';
+    }
+
     /**
      * [setHistoryFraction 评论计算运营分数]
      * @Author   Yoon
@@ -149,8 +184,9 @@ class YxComment extends \yii\db\ActiveRecord
         $Z = 0;
 
         #判断下单类型：1服务者下单，2商家下订单。
+
         $order_type = 1;
-        if ($this->order_type!=1) {
+        if(empty($this->yx_staff_id)||!isset($this->yx_staff_id)){
             $order_type = 2;
         }
 
@@ -167,7 +203,7 @@ class YxComment extends \yii\db\ActiveRecord
         $exist_order_id = isset($this->yx_order_id) && !empty($this->yx_order_id);
         $details_model = array();
         if ($exist_order_id) {
-            $details_model = YxDetails::find()->where(['order_id' => $this->yx_order_id])->one();
+            $details_model = YxOrderServer::find()->where(['yx_order_id' => $this->yx_order_id,'is_main'=>1])->one();
         }
         $staff_model = array();
         $compny_model = array();
@@ -302,5 +338,10 @@ class YxComment extends \yii\db\ActiveRecord
     public static function getStaffComent($staff_id) {
       $staffComent = YxComment::find()->where(['yx_staff_id' => $staff_id])->all();
       return $staffComent;
+    }
+    // 根据company_id查询相关的评论
+    public static function getCompanyComent($company_id) {
+      $companyComent = YxComment::find()->where(['yx_company_id' => $company_id])->all();
+      return $companyComent;
     }
 }

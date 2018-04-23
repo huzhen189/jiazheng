@@ -114,15 +114,17 @@ class YxCompanyController extends CheckController
             }
 
             #修改搜索关键词
-            $str_server_id = $model->all_server_id . ',' . $model->main_server_id;
-            if(empty($model->all_server_id)){
-                $str_server_id=$model->main_server_id;
-            }
-            $model->query = YxStaff::getAllServer($str_server_id);
+            // $str_server_id = $model->all_server_id . ',' . $model->main_server_id;
+            // if(empty($model->all_server_id)){
+            //     $str_server_id=$model->main_server_id;
+            // }
+            // $model->query = YxStaff::getAllServer($str_server_id);
+            
             $model->business_licences = $model->business_licences[0];
             $model->image = $model->image[0];
             $model->cmp_user_id=$cmp_user_id;
             if ($model->save()) {
+                $model->setKeywords();
                 return $this->redirect(['index']);
             }
         }
@@ -171,14 +173,15 @@ class YxCompanyController extends CheckController
             }
 
             #修改搜索关键词
-            $str_server_id = $model->all_server_id . ',' . $model->main_server_id;
-            if(empty($model->all_server_id)){
-                $str_server_id=$model->main_server_id;
-            }
-            $model->query = YxStaff::getAllServer($str_server_id);
+            // $str_server_id = $model->all_server_id . ',' . $model->main_server_id;
+            // if(empty($model->all_server_id)){
+            //     $str_server_id=$model->main_server_id;
+            // }
+            // $model->query = YxStaff::getAllServer($str_server_id);
             $model->business_licences = $model->business_licences[0];
             $model->image = $model->image[0];
             if ($model->save()) {
+                $model->setKeywords();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
@@ -273,14 +276,15 @@ class YxCompanyController extends CheckController
             }
 
             #修改搜索关键词
-            $str_server_id = $model2->all_server_id . ',' . $model2->main_server_id;
-            if(empty($model2->all_server_id)){
-                $str_server_id=$model2->main_server_id;
-            }
-            $model2->query = YxStaff::getAllServer($str_server_id);
+            // $str_server_id = $model2->all_server_id . ',' . $model2->main_server_id;
+            // if(empty($model2->all_server_id)){
+            //     $str_server_id=$model2->main_server_id;
+            // }
+            // $model2->query = YxStaff::getAllServer($str_server_id);
             $model2->business_licences = $model2->business_licences[0];
             $model2->image = $model2->image[0];
             if ($model2->save()) {
+                $model->setKeywords();
                 return $this->redirect(['index']);
             }
         }

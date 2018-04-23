@@ -69,7 +69,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 return YxUser::getName($model->sex,'getUserSex');
             },
         ],
-            'age',
+        [   
+            'label'=>'出生日期',
+            'attribute' => 'birthday',
+            'format'=>['date', 'Y-m-d']
+        ],
             'phone',
             'address',
             'nickname',

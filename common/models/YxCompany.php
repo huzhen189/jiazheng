@@ -4,6 +4,7 @@ namespace common\models;
 
 use common\models\Region;
 use common\models\YxServer;
+use common\models\YxStaff;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -88,7 +89,7 @@ class YxCompany extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'address', 'telephone', 'charge_phone', 'charge_man', 'wechat', 'image'], 'required'],
+            [['name', 'address', 'telephone', 'charge_phone', 'charge_man', 'wechat', 'image','main_server_id'], 'required'],
             [['total_fraction', 'province', 'city', 'district', 'created_at', 'updated_at', 'status', 'models', 'base_fraction', 'history_fraction', 'clinch', 'price', 'banck_card','ext_fraction','ext_history_fraction'], 'integer'],
             [['longitude', 'latitude', 'operating_radius'], 'number'],
             [['name', 'telephone', 'wechat', 'number'], 'string', 'max' => 20],
@@ -256,6 +257,13 @@ class YxCompany extends \yii\db\ActiveRecord
         }
         return $arr_Parent;
     }
+    /**
+     * [getAllServer 取所有一级服务]
+     * @Author   Yoon
+     * @DateTime 2018-04-21T16:01:56+0800
+     * @param    [type]                   $all_server_id [description]
+     * @return   [type]                                  [description]
+     */
     public static function getAllServer($all_server_id)
     {
         $arr_server_id = explode(',', $all_server_id);
@@ -334,8 +342,32 @@ class YxCompany extends \yii\db\ActiveRecord
         if(empty($price_count)) $price_count=0;
         return $price_count;
     }
+/**
+ * [setKeywords 设置关键词]
+ * @Author   Yoon
+ * @DateTime 2018-04-21T17:05:03+0800
+ */
+  public function setKeywords(){
+    $keywords="";
+    $cmpServer_model=YxCmpServer::find()->where(['company_id'=>$this->id])->all();
+    $str_server_id=$this->main_server_id;
+    if(!empty($this->all_server_id)||!isset($this->all_server_id)){
+        $str_server_id=$this->main_server_id.",".$this->all_server_id;
+    }
+    $keywords=YxStaff::getAllServer($str_server_id);
+    if(isset($cmpServer_model)&&!empty($cmpServer_model)){
+        foreach ($cmpServer_model as $key => $value) {
+            $keywords=$keywords.",".$value['server']['server_name'];
+        }
+    }
 
-    
+    $this->query=$keywords;
+    $this->save();
+  } 
+
+
+
+
     public static function getOneName($id = 0)
     {
         $result = static::findOne($id);

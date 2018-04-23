@@ -3,6 +3,7 @@
 	use yii\bootstrap\Tabs;
 	use common\models\YxStaff;
 	use common\models\YxServer;
+	use common\models\YxStaffServer;
 	date_default_timezone_set('PRC');
 ?>
 <?= Html::cssFile('/static/css/staff.css') ?>
@@ -26,9 +27,11 @@
 					<div class="service">
 						<p>服务：<select class="server-price" id="order_server">
 							<?php foreach ($dataProvider as $key => $value): ?>
-								<option class="server-name" value="<?=$value['server_id']?>" price-data="<?=number_format($value['server_price']/100,2)?>" <?php if($serverId==$value['server_id']){
-									echo 'selected';
-								}?>><?=$value['server_name']?></option>
+								<option class="server-name" value="<?=$value['server_id']?>" price-data="<?=number_format($value['server_price']/100,2)?>"
+									<?php if($serverId==$value['server_id']){
+										echo 'selected';
+									}?>><?= YxServer::getServerName($value['server_id'])?>
+								</option>
 							<?php endforeach; ?>
 						</select></p>
 					</div>
@@ -63,16 +66,31 @@
 						<select id="order_day" style="height:25px;margin-right:10px;">
 							<?php
 								for ($i=0; $i < 7; $i++) {
-									echo '<option value="'.strtotime(date('Y-m-d',strtotime("+$i day"))).'">'.date('Y-m-d',strtotime("+$i day")).' '.YxStaff::getChineseWeek(date("w",strtotime("+$i day"))).'</option>';
+									echo '<option data-sub="'.$i.'" value="'.strtotime(date('Y-m-d',strtotime("+$i day"))).'">'.date('Y-m-d',strtotime("+$i day")).' '.YxStaff::getChineseWeek(date("w",strtotime("+$i day"))).'</option>';
 								}
 							?>
 						</select>
-						<button class="btn btn-defaul">可选</button>
+					</div>
+
+					<div class="hour-no" style="margin-top: 10px;">
+						<span>上门时间：</span>
+						<select id="hour-time">
+
+						</select>
+					</div>
+					<div class="hour-no" style="margin-top: 10px;">
+						<span>服务：</span>
+						<input type="number" id="hour-count" style="width:50px;" value="1" step="1" min="1" />
+						<span><?=$serverUnit;?></span>
+					</div>
+					<div class="hour-is" style="margin-top: 10px;">
 						<button class="btn btn-danger disabled">不可选</button>
+						<button class="btn btn-defaul">可选</button>
 						<button class="btn btn-danger">已选</button>
+						<div class="hour-all row" id="time_unit_list">
+						</div>
 					</div>
-					<div class="hour-all row" id="time_unit_list">
-					</div>
+
 				</div>
 			</div>
 			<!-- 下单、预约 -->
@@ -134,6 +152,8 @@
 <script type="text/javascript">
 	var yx_staff_id = <?= $YxStaff->staff_id;?>;
 	var yx_company_id = <?= $YxStaff->company_id;?>;
+	var server_unit = '<?= YxStaffServer::getServerUnit($serverId);?>';
+	var order_type = 2;
 	function makeOrderBefor(){
 		var order_server = Number($("#order_server").val());
 		var order_day = Number($("#order_day").val());
@@ -146,25 +166,44 @@
 			alert("请选择服务日期~");
 			return;
 		}
-		if(!checkTimeSuccessive()){
-			return;
-		}
-		var time_unit_arr = $("#time_unit_list .selected");
-		for (var i = 0; i < time_unit_arr.length; i++) {
-				time_unit.push(Number($(time_unit_arr[i]).attr("date-time")));
-		}
-		console.log(" 服务  order_server : "+order_server);
-		console.log(" 服务人员  yx_staff_id : "+yx_staff_id);
-		console.log(" 服务日期  order_day : "+order_day);
-		console.log(" 服务时长  time_unit : ");
-		console.log(time_unit);
-		var extra_server = [
-			{
-				"id":1,
-				"amount":1
+		if(server_unit == "小时") {
+			if(!checkTimeSuccessive()){
+				return;
 			}
-		];
-		var order_type = 1; //下单类型：1商家下单，2服务者下单，3商家预约
+			var time_unit_arr = $("#time_unit_list .selected");
+			for (var i = 0; i < time_unit_arr.length; i++) {
+					time_unit.push(Number($(time_unit_arr[i]).attr("date-time")));
+			}
+			// 开始时间戳
+			var start_time = order_day + time_unit_arr.length*3600;
+			// 服务时间
+			var amount = time_unit_arr.length;
+		}else {
+			var hourTime = Number($("#hour-time").find("option:selected").val());
+			// 开始时间戳
+			var start_time = order_day + hourTime*3600;
+			// 服务时间
+			var amount = Number($("#hour-count").val());
+		}
+		// 附加服务
+		var extra_server = [];
+		var addServer = $(".one-server");
+		var server_num,server_seleced;
+		for (var i = 0; i < addServer.length; i++) {
+			server_seleced = $(addServer[i])[0].querySelector("input");
+			server_num = $(addServer[i])[0].querySelector('.server_num input');
+			if(server_seleced.checked){
+				extra_server.push({
+				    'id':server_num.getAttribute('serverid'),
+				    'amount':server_num.value
+				})
+			}
+		}
+		console.log(order_server);
+		console.log(yx_company_id);
+		console.log(start_time);
+		console.log(amount);
+		console.log(extra_server);
 		$.ajax({
 				type  : "POST",
 				url   : "/yx-order/create",
@@ -173,10 +212,10 @@
 						"order_server":order_server,
 						"yx_company_id":yx_company_id,
 						"yx_staff_id":yx_staff_id,
-						"start_time":order_day,
-						"amount":time_unit,
+						"start_time":start_time,
+						"amount":amount,
 						"extra_server":extra_server,
-						"order_type":extra_server,
+						"order_type":order_type
 				},
 				success:function(json) {
 					if(json.code == -1){
@@ -217,38 +256,67 @@
 			window.location.href = "/staff/index?staff_id="+$("#staff_id").attr('staff_id')+"&server_id="+$(".server-price option:selected").attr('value');
 		});
 
-		$("#reservation").click(function() {
-			alert("预约");
+		$("#reserve").click(function() {
+			order_type = 3;
+			makeOrderBefor();
 		})
 
 		// 显示发送当天的时间戳，得到当天的各个小时的状态
-		function getHourAll(dayTime,yx_staff_id){
-			var listDom = $("#time_unit_list");
-			listDom.html("");
-			$.ajax({
-					type  : "POST",
-					url   : "/staff/get_staff_times",
-					dataType:"json",
-					data:{"dayTime":dayTime,"yx_staff_id":yx_staff_id},
-				 	success:function(json) {
-							var time_datas = json.time_datas;
-							for(let i = 7,j = 0;i < 23;i++,j++) {
-								if(time_datas[i] == 0) {
-									listDom.append(
-													'<div class="hour-one col-md-3 col-lg-3">'+
-															'<button class="btn btn-danger disabled hour-one-button" date-time="'+i+'" disabled="disabled" onclick="changeTimeUnitBtn(this)">'+returnNum(i)+'点-'+returnNum(i+1)+'点</button>'+
-													'</div>'
-									)
-								}else {
-									listDom.append(
-													'<div class="hour-one col-md-3 col-lg-3">'+
-															'<button class="btn btn-default hour-one-button" date-time="'+i+'" data-choosed="0" onclick="changeTimeUnitBtn(this)">'+returnNum(i)+'点-'+returnNum(i+1)+'点</button>'+
-													'</div>'
-									)
+		function getHourAll(dayTime){
+			if(server_unit == "小时") {
+				var listDom = $("#time_unit_list");
+				$('.hour-no').css("display","none");
+				listDom.html("");
+				// 当天已过的时间不能下单
+				var orderDay = $("#order_day").children("option:first-child").val();
+				var nowDate = new Date();
+				var nowHour = nowDate.getHours();
+				$.ajax({
+						type  : "POST",
+						url   : "/staff/get_staff_times",
+						dataType:"json",
+						data:{"dayTime":dayTime},
+						success:function(json) {
+								var time_datas = json.time_datas;
+								for(let i = 7,j = 0;i < 23;i++,j++) {
+									if(time_datas[i] == 0 || (i < nowHour+1 && dayTime == orderDay)) {
+										listDom.append(
+														'<div class="hour-one col-md-3 col-lg-3">'+
+																'<button class="btn btn-danger disabled hour-one-button" date-time="'+i+'" disabled="disabled" onclick="changeTimeUnitBtn(this)">'+returnNum(i)+'点-'+returnNum(i+1)+'点</button>'+
+														'</div>'
+										)
+									}else {
+										listDom.append(
+														'<div class="hour-one col-md-3 col-lg-3">'+
+																'<button class="btn btn-default hour-one-button" date-time="'+i+'" data-choosed="0" onclick="changeTimeUnitBtn(this)">'+returnNum(i)+'点-'+returnNum(i+1)+'点</button>'+
+														'</div>'
+										)
+									}
 								}
-							}
+						}
+				});
+			}else {
+				$('.hour-is').css("display","none");
+				// 找到当前的时间（小时）
+				var myDate = new Date();
+				var hour = myDate.getHours();
+				// 具体时间（小时）select
+				var hourTime = $("#hour-time");
+				hourTime.html("");
+				// 日期select
+				var dataSub = $('#order_day').find("option:selected").attr('data-sub');
+				if(dataSub == 0) {
+					for (var i = 8; i < 22; i++) {
+						if(i > hour) {
+							hourTime.append('<option value="'+i+'">'+i+':00</option>')
+						}
 					}
-			});
+				}else {
+					for (var i = 8; i < 22; i++) {
+						hourTime.append('<option value="'+i+'">'+i+':00</option>')
+					}
+				}
+			}
 		}
 		getHourAll($("#order_day").val(),yx_staff_id);
 		// 切换时间查看每天各个小时的状态

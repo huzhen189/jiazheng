@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
         // 'staff_id',
         [
             'label' => '服务名称',
-            'attribute' => 'server_name',
+            'attribute' => 'server.server_name',
         ],
         [
             'label' => '服务图片',

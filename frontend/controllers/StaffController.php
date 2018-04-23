@@ -33,7 +33,6 @@ class StaffController extends Controller {
 		$dataProvider = $searchModel->getServerAll($staff_id);
 		// 服务人员的评论
 		$comment = YxComment::getStaffComent($staff_id);
-
 		if(!$server_id) {
 			$server_unit = YxStaffServer::getServerUnit($dataProvider[0]['server_id']);
 			$server_price = YxStaffServer::getStaffPrice($staff_id,$dataProvider[0]['server_id']);

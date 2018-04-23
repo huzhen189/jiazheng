@@ -25,7 +25,6 @@ use common\models\YxServer;
  * @property string $city 城市
  * @property string $img 头像
  * @property int $sex 性别
- * @property int $age 年龄
  * @property string $phone 联系电话
  * @property string $address 收货地址
  * @property string $nickname 昵称
@@ -56,7 +55,7 @@ class YxUser extends ActiveRecord implements IdentityInterface
     {
         return [
             // [['username', 'password_hash', 'create_at', 'update_at', 'province', 'city', 'sex'], 'required'],
-            // [['role', 'create_at', 'update_at', 'sex', 'age'], 'integer'],
+            // [['role', 'create_at', 'update_at', 'sex'], 'integer'],
             // [['username'], 'string', 'max' => 50],
             // [['auth_key'], 'string', 'max' => 32],
             // [['password_hash', 'password_reset_token', 'img', 'address'], 'string', 'max' => 255],
@@ -90,7 +89,6 @@ class YxUser extends ActiveRecord implements IdentityInterface
             'city' => '城市',
             'img' => '头像',
             'sex' => '性别',
-            'age' => '年龄',
             'phone' => '电话',
             'address' => '地址',
             'nickname' => '昵称',

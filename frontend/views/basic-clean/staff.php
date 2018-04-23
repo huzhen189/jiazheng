@@ -58,6 +58,7 @@
 
 			<div class="address-server-all">
 				<div class="server-all">
+					服务类型：
 					<select class="select-service" style="height: 25px;" server_parent="<?= $serverParent;?>">
 						<?php foreach ($YxServerAll as $key => $value): ?>
 							<option value="<?= $value['server_id']?>" <?php if ($value['server_id']==$serverId) {
@@ -67,16 +68,16 @@
 					</select>
 				</div>
 				<div class="address">
- 					<form action="/index" method="get">
- 						服务地域:
-						<input type="text" list="area_list" />
-						<datalist id="area_list">
-							<option label="南山区" value="南山区" />
-							<option label="福田区" value="福田区" />
-							<option label="罗湖区" value="罗湖区" />
-						</datalist>
-						<button type="submit">提交</button>
- 					</form>
+					服务地域:
+					<select id="area_list" style="height: 25px;margin: 0 10px;">
+						<?php foreach ($countyAll as $key => $value) {
+							if($county == $key) {
+								echo '<option value="'.$key.'"  selected/>'.$value.'</option>';
+								continue;
+							}
+							echo '<option value="'.$key.'"  />'.$value.'</option>';
+						}?>
+					</select>
 				</div>
 			</div>
 
@@ -125,7 +126,11 @@
 	  });
 		$(".select-service").change(function(event) {
 			// 切换服务
-			window.location.href = "/basic-clean/staff?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&sort=fraction";
+			window.location.href = "/basic-clean/staff?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&county="+$("#area_list option:selected").attr('value')+"&sort=fraction";
+		});
+		$("#area_list").change(function(event) {
+			// 切换地区
+			window.location.href = "/basic-clean/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&county="+$("#area_list option:selected").attr('value')+"&sort=fraction";
 		});
 	}
 </script>

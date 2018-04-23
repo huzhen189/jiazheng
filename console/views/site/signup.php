@@ -6,9 +6,9 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\bootstrap\Modal;
+use common\models\YxRules;
 
-$this->title = 'Signup';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>
 .control-label{
@@ -46,8 +46,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <span style="position: relative;"><?=$form->field($model, 'email');?></span>
 
                 <span style="position: relative;"><?=$form->field($model, 'password')->passwordInput();?></span>
+                  <?= Html::checkbox('agree', false, ['label' => '同意','style'=>"margin-left:80px"]);?>
+                  <?=Html::a('入驻协议', '#', [
+                      'id' => 'deny',
+                      'data-toggle' => 'modal',
+                      'data-target' => '#deny-modal',
+                  ]);?>
                 <div class="form-group">
-                    <?=Html::submitButton('注册', ['class' => 'btn btn-primary sginSubmit', 'name' => 'signup-button']);?>
+                    <?=Html::Button('注册', ['class' => 'btn btn-primary sginSubmit', 'name' => 'signup-button']);?>
                 </div>
 
             <?php ActiveForm::end();?>
@@ -58,5 +64,28 @@ $this->params['breadcrumbs'][] = $this->title;
 $(".field-signupform-username ").find(".control-label").html('<em><img src="http://p6htqszz4.bkt.clouddn.com/login_name.png"></em>')
 $(".field-signupform-email ").find(".control-label").html('<em><img src="http://p6htqszz4.bkt.clouddn.com/login_phone.png"></em>')
 $(".field-signupform-password").find(".control-label").html('<em><img src="http://p6htqszz4.bkt.clouddn.com/login_password.png"></em>')
-
+$("button[name='signup-button']").click(function(){
+    $("input[name='agree']").prop('checked')
+    if(!$("input[name='agree']").prop('checked')){
+      alert('请先阅读并同意入驻协议');
+      return;
+    }
+    $("#form-signup").submit();
+})
 </script>
+<?php
+
+Modal::begin([
+    'id' => 'deny-modal',
+    'header' => '<h4 class="modal-title">入驻协议</h4>',
+]);
+$verify=Yii::$app->request->csrfToken;
+$content=(YxRules::find()->where(['rules_title'=>'原象屋平台商家入驻协议'])->one())['rules_content'];
+// $content=str_replace(" ","",$content);
+$js = <<<JS
+    var data='{$content}';
+    $('.modal-body').html(data);
+JS;
+$this->registerJs($js);
+Modal::end();
+?>

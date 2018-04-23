@@ -16,7 +16,6 @@ class SignupForm extends \yii\db\ActiveRecord
     public $phone;
     public $nickname;
     public $sex;
-    public $age;
     public $code;
 
     public static function tableName()
@@ -30,9 +29,8 @@ class SignupForm extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'password', 'repassword', 'phone', 'nickname', 'sex', 'age','code'], 'required'],
+            [['username', 'password', 'repassword', 'phone', 'nickname', 'sex','code'], 'required'],
             [['phone','nickname','code'], 'trim'],
-            [['age'], 'integer','min'=>10,'max'=>140],
             [['username','password','repassword'], 'string','min' => 6, 'max' => 20],
             [['phone'], 'string','min' => 11, 'max' => 11],
             [['code'], 'string','min' => 6, 'max' => 6],
@@ -64,7 +62,6 @@ class SignupForm extends \yii\db\ActiveRecord
             'city' => '城市',
             'img' => '头像',
             'sex' => '性别',
-            'age' => '年龄',
             'phone' => '电话',
             'code' => '验证码',
             'address' => '地址',
@@ -92,11 +89,9 @@ class SignupForm extends \yii\db\ActiveRecord
         $user = new YxUser();
         $user->username = $this->username;
         $user->setPassword($this->password);
-        $user->email = $this->email;
         $user->phone = $this->phone;
         $user->nickname = $this->nickname;
         $user->sex = $this->sex;
-        $user->age = $this->age;
         $user->generateAuthKey();
 
         return $user->save() ? $user : null;

@@ -117,7 +117,6 @@ class YxStaffServerController extends Controller
             $model->staff_id=$staff_id;
             $model->server_price=$model->server_price * 100;
             $server_model=YxServer::find()->where(['server_id'=>$model->server_id])->one();
-            $model->server_name=$server_model->server_name;
             if ($model->save()) {
                 // $append_server_model=YxServer::find()->where(['server_parent'=>$model->server_id])->all();
                 // foreach ($append_server_model as $key => $value) {
@@ -171,7 +170,6 @@ class YxStaffServerController extends Controller
         $model = $this->findModel($staff_id, $server_id);
         $model->server_price = $model->server_price / 100;
         $server_model=YxServer::find()->where(['server_id'=>$model->server_id])->one();
-        $model->server_name=$server_model->server_name;
         if ($model->load(Yii::$app->request->post())) {
             $model->server_price = $model->server_price * 100;
             $model->staff_id = $staff_id;

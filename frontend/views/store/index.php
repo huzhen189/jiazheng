@@ -2,8 +2,14 @@
 	use yii\helpers\Html;
 	use common\models\YxCmpServer;
 ?>
+<div style="margin-bottom: 10px;border-bottom: 2px solid #000;">
+	<h2>“<?= $searchContent;?>”相关的商家</h2>
+</div>
 
-<div class="row">
+<div class="row" style="margin-right: 0px;margin-left: 0px;">
+	<?php if (count($companyAll) == 0) {
+		echo "<div><h4>无相关商家</h4></div>";
+	}?>
   <?php foreach ($companyAll as $company): ?>
     <div class="col-md-3 col-lg-3" style="margin-bottom: 20px;padding:0;">
       <div class="company-detail" style="width: 90%;padding: 10px 0;text-align: center;border: 1px solid #eeee;">

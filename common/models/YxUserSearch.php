@@ -18,7 +18,7 @@ class YxUserSearch extends YxUser
     public function rules()
     {
         return [
-            [['id', 'role', 'status', 'created_at', 'updated_at', 'sex', 'age'], 'integer'],
+            [['id', 'role', 'status', 'created_at', 'updated_at', 'sex'], 'integer'],
             [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'province', 'city', 'img', 'phone', 'address', 'nickname'], 'safe'],
         ];
     }
@@ -65,7 +65,7 @@ class YxUserSearch extends YxUser
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'sex' => $this->sex,
-            'age' => $this->age,
+
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])

@@ -9,6 +9,7 @@ use common\models\YxOrder;
 use common\models\Region;
 use common\models\YxCompany;
 use common\models\YxStaffServer;
+use common\models\YxServer;
 
 /**
  * This is the model class for table "yx_staff".
@@ -436,10 +437,12 @@ class YxStaff extends \yii\db\ActiveRecord
       $serverName = "";
       foreach ($YxStaffServer as $key => $value) {
         if($key == 0) {
-          $serverName = $serverName.$value['server_name'];
+          $serverId = $serverName.$value['server_id'];
+          $serverName = YxServer::getServerName($serverId);
           continue;
         }
-        $serverName = $serverName."、".$value['server_name'];
+        $serverId = $serverName.$value['server_id'];
+        $serverName = $serverName."、".YxServer::getServerName($serverId);
       }
       return $serverName;
     }

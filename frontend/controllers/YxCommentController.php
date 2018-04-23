@@ -4,7 +4,8 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\YxComment;
-use common\models\YxCommentSearch;
+use frontend\models\YxCommentSearch;
+use common\models\YxOrder;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -62,17 +63,28 @@ class YxCommentController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($order_id)
     {
         $model = new YxComment();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $order = YxOrder::findOne($order_id);
+        if(!$order){
+            return $this->goBack();
         }
-
+        $comment_count = YxComment::find()->where(['yx_order_id' => $order_id])->count();
+        if($comment_count > 0){
+            return $this->goBack();
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $order->order_state = 10;
+            $order->save();
+            return $this->redirect(['/yx-order/index', 'yx_user_id' => Yii::$app->user->id]);
+        }
         return $this->render('create', [
             'model' => $model,
+            'order' => $order,
         ]);
+
+
     }
 
     /**

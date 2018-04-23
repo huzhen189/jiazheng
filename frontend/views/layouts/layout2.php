@@ -2,7 +2,6 @@
 use frontend\assets\AppAsset;
 use yii\helpers\Html;
 use common\models\Region;
-
 AppAsset::register($this);
 $user_info = Yii::$app->user->identity;
 ?>
@@ -42,6 +41,11 @@ $user_info = Yii::$app->user->identity;
         <div class="login-text t_r">
 					<span id="js_isNotLogin">
 						<a href="http://www.yuanxiangwu.com/" rel="nofollow" class="header-title">原象屋首页</a>
+					</span>
+				</div>
+        <div class="login-text t_r">
+					<span id="js_isNotLogin">
+						<a href="/yx-order/index?yx_user_id=<?php echo Yii::$app->user->id; ?>" rel="nofollow" class="header-title">我的收藏</a>
 					</span>
 				</div>
 				<dl class="top_account t_r">
@@ -166,8 +170,6 @@ $user_info = Yii::$app->user->identity;
 
                                 <li><a>我的订单</a></li>
                                 <li><a>我的评论</a></li>
-                                <li><a>我的收藏</a></li>
-
                             </ul>
                         </div>
                         <div style="clear: both;"></div>
@@ -207,7 +209,6 @@ $user_info = Yii::$app->user->identity;
       $('#submit').click();
     }
   }
-
 </script>
 </html>
 <?php $this->endPage() ?>

@@ -8,6 +8,7 @@ use common\models\YxCompany;
 use common\models\YxCmpServer;
 use common\models\YxServer;
 use common\models\YxStaff;
+use common\models\YxComment;
 use Yii;
 
 /**
@@ -38,14 +39,17 @@ class CompanyController extends Controller {
 		$YxCompany = YxCompany::find()->where(['id' => $companyId])->one();
 		// 原象推荐
 		$recommendArr = YxCompany::find()->orderby('total_fraction desc')->limit(5)->all();
-        
+
+		// 服务人员的评论
+		$comment = YxComment::getCompanyComent($companyId);
 		return $this->render('index', [
 				'serverId' =>  $serverId,
 				'companyId' => $companyId,
 				'recommendArr' => $recommendArr,
 				'CompanyServerAll' => $CompanyServerAll,
 				'YxCompany' => $YxCompany,
-				'serverAdd' => $server_add
+				'serverAdd' => $server_add,
+				'comment' => $comment
 		]);
 	}
 

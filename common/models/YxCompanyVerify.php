@@ -203,6 +203,27 @@ class YxCompanyVerify extends \yii\db\ActiveRecord
     public static function getVerifyState() {
         return array( 1=>'待审核', 2=>'未通过', 3=>'已通过');
     }
+/**
+ * [setKeywords 设置关键词]
+ * @Author   Yoon
+ * @DateTime 2018-04-21T17:05:03+0800
+ */
+  public function setKeywords(){
+    $keywords="";
+    $cmpServer_model=YxCmpServer::find()->where(['company_id'=>$this->id])->all();
+    $str_server_id=$this->main_server_id;
+    if(!empty($this->all_server_id)||!isset($this->all_server_id)){
+        $str_server_id=$this->main_server_id.",".$this->all_server_id;
+    }
+    $keywords=YxStaff::getAllServer($str_server_id);
+    if(isset($cmpServer_model)&&!empty($cmpServer_model)){
+        foreach ($cmpServer_model as $key => $value) {
+            $keywords=$keywords.",".$value['server']['server_name'];
+        }
+    }
+    $this->query=$keywords;
+    $this->save();
+  } 
     /**
      * @inheritdoc
      * @return YxCompanyVerifyQuery the active query used by this AR class.

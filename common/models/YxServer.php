@@ -315,10 +315,10 @@ Array (
 
     // 搜索得到所有商家（oyzx）
     public static function getStores($companyName) {
-      $YxCompany = YxCompany::find()->select(['*'])
-                ->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
-                  ->where(['yx_company.status'=>2])->andWhere(['like', 'name', $companyName])->orderby('total_fraction desc')->all();
-      $YxCompanyId = '/store/index?company_all=';
+      $YxCompany = Yii::$app->db->createCommand('select t1.id from yx_company t1 INNER JOIN yx_cmp_server t2 on t1.id = t2.company_id where t1.status = 2 and (t1.name like "%'.$companyName.'%" or t1.query like "%'.$companyName.'%") order by t1.total_fraction')
+            ->queryAll();
+      $YxCompanyId = '/store/index?searchContent='.$companyName.'&company_all=';
+
       foreach ($YxCompany as $key => $value) {
         if($key == 0) {
           $YxCompanyId = $YxCompanyId.$value['id'];

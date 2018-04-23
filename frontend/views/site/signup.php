@@ -10,16 +10,39 @@ use yii\bootstrap\ActiveForm;
 $this->title = '请填写注册信息';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+  .site-signup .control-label{
+      width: 20%;
+      position: absolute;
+      height: 48px;
+      line-height: 48px;
+      text-align: center;
+      background: #40bbff;
+      border-radius: 3px;
+      color: #ffffff;
+  }
+  .site-signup .form-control{
+      width: 78%;
+      margin-left: 22%;
+      padding: 0px;
+      height: 46px;
+  }
+  .site-signup .help-block{
+      clear: both;
+  }
+  #signupform-getcode{
+      margin-top: 0px;
+      padding: 11px 16px;
+  }
+</style>
 <div class="site-signup">
     <h1><?= Html::encode($this->title) ?></h1>
 
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-5" >
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
                 <?= $form->field($model, 'username')->textInput(['autofocus' => true,'maxlength' => true]) ?>
-
-                <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
                 <?= $form->field($model, 'password')->passwordInput() ?>
 
@@ -33,8 +56,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?php $model->sex = $model->getUserSex(); ?>
                 <?= $form->field($model, 'sex')->dropDownList($model->sex) ?>
-
-                <?= $form->field($model, 'age') ?>
 
                 <div class="form-group">
                     <?= Html::submitButton('注册', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>

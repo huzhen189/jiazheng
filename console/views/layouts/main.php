@@ -29,7 +29,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
 NavBar::begin([
-    'brandLabel' => Yii::$app->name,
+    'brandLabel' => "原象屋商家后台",
     'brandUrl' => Yii::$app->homeUrl,
     'options' => [
         'class' => 'navbar-inverse navbar-fixed-top',
@@ -38,7 +38,6 @@ NavBar::begin([
         
 
 $menuItems = [
-    ['label' => '主页', 'url' => ['/site/index']],
 
     // ['label' => '人员审核', 'url' => ['/yx-staff-verify/index']],
     // ['label' => '省市区', 'url' => ['/region/index']],
@@ -65,12 +64,13 @@ $menuItems = [
 $user_info=Yii::$app->user->identity;
 if(!empty($user_info['company_id'])){
     $menuItems[] = ['label' => '服务人员', 'url' => ['/yx-staff/index']];
+    $menuItems[] = ['label' => '公司服务', 'url' => ['/yx-cmp-server/index']];
     $menuItems[] = ['label' => '成果展示', 'url' => ['/yx-cmp-res/index']];
     $menuItems[] = ['label' => '订单管理', 'url' => ['/yx-order/index']];
 }
 if (Yii::$app->user->isGuest) {
-    $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-    $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+    $menuItems[] = ['label' => '注册', 'url' => ['/site/signup']];
+    $menuItems[] = ['label' => '登录', 'url' => ['/site/login']];
 } else {
     $menuItems[]=['label' => '家政公司', 'url' => ['/yx-company/view']];
     $menuItems[] = ['label' => '审核',
@@ -80,10 +80,11 @@ if (Yii::$app->user->isGuest) {
             ['label' => '员工审核', 'url' => ['/yx-staff-verify/index']],
         ],
     ];
+    $menuItems[]=['label' => '重置密码', 'url' => ['/site/request-password-reset']];
     $menuItems[] = '<li>'
     . Html::beginForm(['/site/logout'], 'post')
     . Html::submitButton(
-        'Logout (' . Yii::$app->user->identity->username . ')',
+        '退出 (' . Yii::$app->user->identity->username . ')',
         ['class' => 'btn btn-link logout']
     )
     . Html::endForm()

@@ -12,6 +12,7 @@ use console\models\PasswordResetRequestForm;
 use console\models\ResetPasswordForm;
 use console\models\SignupForm;
 use console\models\ContactForm;
+use common\tools\Message;
 /**
  * Site controller
  */
@@ -166,14 +167,14 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
+
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-
-                return $this->goHome();
+            $user = $model->getToken();
+            if ($user != null) {
+                return $this->redirect('reset-password?token='.$user->password_reset_token);
             } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+                Yii::$app->session->setFlash('error', '验证失败');
             }
         }
 
@@ -206,5 +207,24 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    public function actionGetresetpwdcode(){
+      $code = -1;
+      $msg = "请勿频繁发送";
+      Yii::$app->response->format = 'json';
+      if(Yii::$app->request->isAjax) {
+          $params = Yii::$app->request->post();
+          if(!isset($params['email']) || strlen($params['email']) != 11){
+              $msg = "电话号码不正确";
+              return [ 'msg' => $msg, 'code' => $code];
+          }
+          $result = Message::SendResetPwdCodeMessage($params['email']);
+          if($result){
+              $code =  0;
+              $msg = "ok";
+          }
+      }
+      return [ 'msg' => $msg, 'code' => $code];
     }
 }

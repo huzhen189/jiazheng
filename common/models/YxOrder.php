@@ -128,13 +128,6 @@ class YxOrder extends \yii\db\ActiveRecord
         return $this->hasMany(YxComment::className(), ['yx_order_id' => 'id']);
     }
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getYxDetails()
-    {
-        return $this->hasOne(YxDetails::className(), ['order_id' => 'id']);
-    }
-    /**
      * @inheritdoc
      * @return YxOrderQuery the active query used by this AR class.
      */
@@ -158,11 +151,11 @@ class YxOrder extends \yii\db\ActiveRecord
 
     public static function getOrderState()
     {
-        return array(1 => '待付款', 2 => '待接单', 3 => '申请退款', 4 => '执行中', 5 => '未支付', 6 => '未接单', 7 => '已退款', 8 => '已完成');
+        return array(1 => '待付款', 2 => '待接单', 3 => '申请退款', 4 => '执行中', 5 => '废单', 6 => '未接单', 7 => '已退款', 8 => '已完成', 9 => '拒绝退款  ', 10 => '已评论');
     }
     public static function getOrderStatus()
     {
-        return array(1 => '未付款', 2 => '已付款', 3 => '商家同意', 4 => '服务中', 5 => '已完成', 6 => '退单中', 7 => '商家同意退单', 8 => '退单完成', 9 => '废单');
+        return array(1 => '待付款', 2 => '待接单', 3 => '退款中', 4 => '执行中', 5 => '废单', 6 => '未接单', 7 => '已退款', 8 => '已完成', 9 => '拒绝退款  ', 10 => '已评论');
     }
     public static function getOrderType()
     {
@@ -187,7 +180,7 @@ class YxOrder extends \yii\db\ActiveRecord
 
         $start_date = strtotime(date('Ymd'));
         $end_date = strtotime(date('Ymd', strtotime('+1 day')));
-        if ($order_type == 2) {
+        if ($order_type == 1) {
             $model = YxStaff::findOne($id);
             $server_count = self::find()
                 ->where(['yx_staff_id' => $id])
@@ -196,7 +189,7 @@ class YxOrder extends \yii\db\ActiveRecord
             $server_count++;
             $server_count = self::translate000($server_count);
             $order_number = $order_number . $model['staff_number'] . $server_count;
-        } else {
+        } elseif ($order_type == 2) {
             $model = YxCompany::findOne($id);
             $server_count = self::find()
                 ->where(['yx_company_id' => $id])
@@ -241,6 +234,25 @@ class YxOrder extends \yii\db\ActiveRecord
         $compny_model->updateCounters(['total_fraction' => $Z]);
         $compny_model->updateCounters(['history_fraction' => $Z]);
     }
+
+/**
+ * [noPayOrder 未支付订单]
+ * @Author   Yoon
+ * @DateTime 2018-04-18T20:01:33+0800
+ * @return   [type]                   [description]
+ */
+    public static function noPayOrder()
+    {
+        $time = strtotime(date('Y-m-d h:i:s')) - (30 * 60);
+        $order_model = YxOrder::find()->where(['order_state' => 1])->andFilterWhere(['<=', 'created_at', $time])->all();
+        foreach ($order_model as $key => $value) {
+            $order_model[$key]['order_state'] = 5;
+            $order_model[$key]->save();
+        }
+
+        return 'OK_PayOrder';
+    }
+
     public static function returnStaffFreeTimeArr($yx_staff_id,$dayTime){
         $timeDatas = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
         $dayOrders = YxOrder::find()->where(['yx_staff_id'=>$yx_staff_id])->andFilterWhere(['between', 'time_start', $dayTime, $dayTime+86400])->asArray()->orderBy('time_start DESC')->all();
@@ -255,6 +267,8 @@ class YxOrder extends \yii\db\ActiveRecord
         }
         return $timeDatas;
     }
+
+
     public static function finishOrder($pingId,$order_no){
         $orders = YxOrder::findOne(["order_no" => $order_no]);
         $orders->order_state = 2;

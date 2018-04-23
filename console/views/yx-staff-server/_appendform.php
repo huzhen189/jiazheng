@@ -24,18 +24,12 @@ $staff_id = $queryParams['staff_id'];
             $("select#yxstaffserver-server_id").html(data);
         });',
     ]);?>
-    <?php
-        foreach ($server_parent as $key => $value) {
-            $model->server_parent_id=$key;
-            break;
-        }
-    ?>
+    <?php $server_id = YxServer::getLvServer(3,$model->server_parent_id); ?>
+    <?= $form->field($model, 'server_id')->dropDownList($server_id) ?>
 
-    <?=$form->field($model, 'server_name')->textInput();?>
+    <?=$form->field($model, 'server_least')->textInput(['value'=>0]);?>
 
-    <?=$form->field($model, 'server_least')->textInput();?>
-
-    <?=$form->field($model, 'server_price')->textInput();?>
+    <?=$form->field($model, 'server_price')->textInput(['value'=>0]);?>
 
 
 

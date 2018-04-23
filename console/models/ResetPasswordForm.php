@@ -11,7 +11,7 @@ use common\models\YxCmpUser;
 class ResetPasswordForm extends Model
 {
     public $password;
-
+    public $repassword;
     /**
      * @var \common\models\User
      */
@@ -43,11 +43,18 @@ class ResetPasswordForm extends Model
     public function rules()
     {
         return [
-            ['password', 'required'],
-            ['password', 'string', 'min' => 6],
+            [['password','repassword'], 'required'],
+            [['password','repassword'], 'string', 'min' => 6, 'max' => 20],
+            [['repassword'], 'compare', 'compareAttribute' => 'password', 'message' => '两次输入的密码不一致！'],
         ];
     }
-
+    public function attributeLabels()
+    {
+        return [
+            'password' => '密码',
+            'repassword' => '确认密码',
+        ];
+    }
     /**
      * Resets password.
      *
