@@ -8,6 +8,7 @@ use common\models\YxUserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\Region;
 
 /**
  * YxUserController implements the CRUD actions for YxUser model.
@@ -24,6 +25,7 @@ class YxUserController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'update_city2' => ['POST'],
                 ],
             ],
         ];
@@ -82,19 +84,51 @@ class YxUserController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate_city($id)
-    {
-        $model = $this->findModel($id);
+     public function actionUpdate_city($id)
+     {
+         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->user->identity['id'] = $model['city'];
-            return $this->goBack();
-        }
+         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+             Yii::$app->user->identity['id'] = $model['city'];
+             return $this->goBack();
+         }
 
-        return $this->render('update_city', [
-            'model' => $model,
-        ]);
-    }
+         return $this->render('update_city', [
+             'model' => $model,
+         ]);
+     }
+
+     public function actionUpdate_city2()
+     {
+         $this->enableCsrfValidation = false;
+         Yii::$app->response->format = 'json';
+         $reJson = [ 'msg' => "失败", 'code' => -1];
+         if(Yii::$app->request->isAjax) {
+             $params = Yii::$app->request->post();
+             if(!isset($params['yx_user_id']) || $params['yx_user_id'] <= 0 || !isset($params['province']) || !isset($params['city'])){
+                 $reJson["msg"] = "用户信息有误";
+                 return $reJson;
+             }
+             $yx_user_id = $params['yx_user_id'];
+             $province = $params['province'];
+             $city = $params['city'];
+             $provinceId = Region::getOneId($province);
+             $cityId = Region::getOneId($city);
+             if($provinceId <= 0 || $cityId <= 0){
+                 $reJson["msg"] = "用户信息有误";
+                 return $reJson;
+             }
+             $model = $this->findModel($yx_user_id);
+             $model->province = $provinceId;
+             $model->city = $cityId;
+             if ($model->save()) {
+               $reJson["code"] = 0;
+               $reJson["msg"] = "成功";
+               return $reJson;
+             }
+         }
+         return $reJson;
+     }
 
     /**
      * Deletes an existing YxUser model.

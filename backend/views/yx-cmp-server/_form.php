@@ -12,22 +12,15 @@ use common\models\YxServer;
 <div class="yx-cmp-server-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
+    <?php  $server_parent_id=$model->server_parent_id?>
     <?php $server_parent = YxServer::getAllLvServer(1);?>
    <?=$form->field($model, 'server_parent_id')->dropDownList($server_parent, [
         'onchange' => '$.post("/yx-cmp-server/serverlink?server_id='. '"+$(this).val(),function(data){
             $("select#yxcmpserver-server_id").html(data);
         });',
     ]);?>
-
-    <?php
-        foreach ($server_parent as $key => $value) {
-            $model->server_parent_id=$key;
-            break;
-        }
-    ?>
     
-    <?php $server_child = YxServer::getLvServer(2,$model->server_parent_id);?>
+    <?php $server_child = YxServer::getLvServer(2,$server_parent_id);?>
     <?=$form->field($model, 'server_id')->dropDownList($server_child);?>
 
     <?= $form->field($model, 'server_least')->textInput(['value'=>0]) ?>

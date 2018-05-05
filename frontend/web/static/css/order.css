@@ -150,10 +150,10 @@ textarea{ resize:none;}
 .mian_server_box div{
 	display: block;
 	padding: 4px 12px;
-	height: 36px;
+	height: 26px;
 }
-.mian_server_box .server_name{
-    margin-top: 28px;
+.mian_server_box .staff_name{
+    margin-top: 20px;
 }
 .mian_server_box .server_price{
 		color: #E90;

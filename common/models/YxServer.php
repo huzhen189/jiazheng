@@ -342,9 +342,9 @@ Array (
       }
       return $ServerIdName;
     }
-    // 得到附加服务(oyzx)
+    // 是否有附加服务(oyzx),长期钟点工（119）、保姆（120）、月嫂（121）、育儿嫂（122）
     public static function getReserve($serverId) {
-      if($serverId == 82 || $serverId == 83 || $serverId == 72 || $serverId == 32 ) {
+      if($serverId == 119 || $serverId == 120 || $serverId == 121 || $serverId == 122 ) {
         return 1;
       }
       return 0;
@@ -361,11 +361,13 @@ Array (
       if($YxServer) {
         // 一级服务
         switch ($YxServer['server_id']) {
-          case 65:
-            $url = '/basic-clean/index?server_parent=65&sort=fraction';
+          case 103:
+            // 日常保洁
+            $url = '/basic-clean/index?server_parent=103&sort=fraction';
             return $url;
-          case 66:
-            $url = '/special-clean/index?server_parent=66&sort=fraction';
+          case 104:
+            // 专项保洁
+            $url = '/special-clean/index?server_parent=104&sort=fraction';
             return $url;
           default:
             $url = '/other-services/index?server_parent='.$YxServer['server_id'].'&sort=fraction';
@@ -374,11 +376,13 @@ Array (
       }else if($YxServerTwo) {
         // 二级服务
         switch (YxServer::getOneServerId($YxServerTwo['server_id'])) {
-          case 65:
-            $url = '/basic-clean/index?server_parent=65&server_id='.$YxServerTwo['server_id'].'&sort=fraction';
+          case 103:
+            // 日常保洁
+            $url = '/basic-clean/index?server_parent=103&server_id='.$YxServerTwo['server_id'].'&sort=fraction';
             return $url;
-          case 66:
-            $url = '/special-clean/index?server_parent=66&server_id='.$YxServerTwo['server_id'].'&sort=fraction';
+          case 104:
+            // 专项保洁
+            $url = '/special-clean/index?server_parent=104&server_id='.$YxServerTwo['server_id'].'&sort=fraction';
             return $url;
           default:
             $url = '/other-services/index?server_parent='.YxServer::getOneServerId($YxServerTwo['server_id']).'&server_id='.$YxServerTwo['server_id'].'&sort=fraction';

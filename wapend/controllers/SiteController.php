@@ -7,11 +7,18 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
+use common\models\UserLoginForm;
 use wapend\models\PasswordResetRequestForm;
 use wapend\models\ResetPasswordForm;
 use wapend\models\SignupForm;
 use wapend\models\ContactForm;
+use common\tools\Message;
+use common\models\YxBanner;
+use common\models\YxActivity;
+use common\models\YxRecomLeft;
+use common\models\YxRecomRight;
+use common\models\YxCompany;
+use common\models\YxStaff;
 
 /**
  * Site controller
@@ -72,7 +79,36 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        //return $this->render('index');
+        $this->getView()->title = "首页";
+    		$this->layout = "m";
+    		$YxBanner = YxBanner::find()->limit(4)->all();
+    		$YxRecomLeft = YxRecomLeft::find()->limit(4)->all();
+    		$YxActivity = YxActivity::find()->one();
+    		$YxRecomRight = YxRecomRight::find()->one();
+
+        // 获取地区
+        $YxCompany = YxCompany::find()->select(['*'])
+  								->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
+  									->where(['yx_company.status'=>2])->orderby('yx_company.total_fraction desc')->limit(4)->all();
+        $YxStaff = YxStaff::find()->select(['*'])
+  								->innerjoin('yx_staff_server', 'yx_staff_server.staff_id=yx_staff.staff_id')
+  									->where(['yx_staff.staff_state'=>1])->orderby('yx_staff.staff_fraction desc')->limit(8)->all();
+        // $user_info = Yii::$app->user->identity;
+        // $YxCompany = YxCompany::find()->select(['*'])
+  			// 					->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
+  			// 						->where(['yx_company.status'=>2,'yx_company.city'=>$user_info['city']])->orderby('yx_company.total_fraction desc')->limit(4)->all();
+        // $YxStaff = YxStaff::find()->select(['*'])
+  			// 					->innerjoin('yx_staff_server', 'yx_staff_server.staff_id=yx_staff.staff_id')
+  			// 						->where(['yx_staff.staff_state'=>1,'yx_staff.staff_city'=>$user_info['city']])->orderby('yx_staff.staff_fraction desc')->limit(8)->all();
+    		return $this->render("/index/index", [
+                'YxBanner' => $YxBanner,
+                'YxRecomLeft' => $YxRecomLeft,
+                'YxActivity' => $YxActivity,
+                'YxRecomRight' => $YxRecomRight,
+                'YxCompany' => $YxCompany,
+                'YxStaff' => $YxStaff
+            ]);
     }
 
     /**
@@ -82,11 +118,12 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        $this->layout = "m";
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
-        $model = new LoginForm();
+        $model = new UserLoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
@@ -161,6 +198,44 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+    public function actionGetsignupcode(){
+      $code = -1;
+      $msg = "请勿频繁发送";
+      Yii::$app->response->format = 'json';
+      if(Yii::$app->request->isAjax) {
+          $params = Yii::$app->request->post();
+          if(!isset($params['phone']) || strlen($params['phone']) != 11){
+              $msg = "电话号码不正确";
+              return [ 'msg' => $msg, 'code' => $code];
+          }
+          $result = Message::SendSignUpCodeMessage($params['phone']);
+          if($result){
+              $code =  0;
+              $msg = "ok";
+          }
+      }
+      Yii::$app->response->format = 'json';
+      return [ 'msg' => $msg, 'code' => $code];
+    }
+
+    public function actionGetresetpwdcode(){
+      $code = -1;
+      $msg = "请勿频繁发送";
+      Yii::$app->response->format = 'json';
+      if(Yii::$app->request->isAjax) {
+          $params = Yii::$app->request->post();
+          if(!isset($params['phone']) || strlen($params['phone']) != 11){
+              $msg = "电话号码不正确";
+              return [ 'msg' => $msg, 'code' => $code];
+          }
+          $result = Message::SendResetPwdCodeMessage($params['phone']);
+          if($result){
+              $code =  0;
+              $msg = "ok";
+          }
+      }
+      return [ 'msg' => $msg, 'code' => $code];
+    }
 
     /**
      * Requests password reset.
@@ -171,12 +246,11 @@ class SiteController extends Controller
     {
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-
-                return $this->goHome();
+            $user = $model->getToken();
+            if ($user != null) {
+                return $this->redirect('reset-password?token='.$user->password_reset_token);
             } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+                Yii::$app->session->setFlash('error', '验证失败');
             }
         }
 

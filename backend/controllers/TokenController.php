@@ -41,11 +41,19 @@ class TokenController extends Controller
          // 开发者在此处加入对支付异步通知的处理代码
          if(YxOrder::finishOrder($event->data->object->id,$event->data->object->order_no)){
            header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
+         }else {
+           header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+           exit("fail");
          }
          break;
      case "refund.succeeded":
          // 开发者在此处加入对退款异步通知的处理代码
-         header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
+         if(YxOrder::refundOrder($event->data->object->order_no)){
+           header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
+         }else {
+           header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+           exit("fail");
+         }
          break;
      default:
          header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');

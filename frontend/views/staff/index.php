@@ -22,7 +22,7 @@
 						<p>价格：<span id="order_money" style="color: rgb(255, 90, 0);"><?= number_format($serverPrice/100,2);?></span>元/<?=$serverUnit;?></p>
 					</div>
 					<div class="fraction">
-						<p>分数：<span style="color: rgb(255, 90, 0);"><?= number_format($YxStaff->staff_fraction,2);?></span>分</p>
+						<p>分数：<span style="color: rgb(255, 90, 0);"><?= number_format($YxStaff->staff_fraction/1000,2);?></span>分</p>
 					</div>
 					<div class="service">
 						<p>服务：<select class="server-price" id="order_server">
@@ -38,7 +38,7 @@
 				</div>
 				<div class="detail-header-right">
 					<div class="IDcard">
-						<p>身份证：<?= $YxStaff->staff_idcard;?></p>
+						<p>身份证：<?= YxStaff::getEncryptIdCard($YxStaff->staff_idcard);?></p>
 					</div>
 					<div class="row age-sex">
 						<p class="col-md-6 col-lg-6">年龄：<?= date("Y")-date("Y",$YxStaff->staff_age);?>岁</p>
@@ -153,7 +153,7 @@
 	var yx_staff_id = <?= $YxStaff->staff_id;?>;
 	var yx_company_id = <?= $YxStaff->company_id;?>;
 	var server_unit = '<?= YxStaffServer::getServerUnit($serverId);?>';
-	var order_type = 2;
+	var order_type = 1;
 	function makeOrderBefor(){
 		var order_server = Number($("#order_server").val());
 		var order_day = Number($("#order_day").val());

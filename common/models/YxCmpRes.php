@@ -29,7 +29,7 @@ class YxCmpRes extends \yii\db\ActiveRecord
         return [
             [['company_id'], 'integer'],
             [['cmp_res_img'], 'string', 'max' => 255],
-            [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => YxCompany::className(), 'targetAttribute' => ['company_id' => 'id']], 
+            [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => YxCompany::className(), 'targetAttribute' => ['company_id' => 'id']],
         ];
     }
 
@@ -44,13 +44,13 @@ class YxCmpRes extends \yii\db\ActiveRecord
             'cmp_res_img' => '成果图',
         ];
     }
-    
-    /** 
-    * @return \yii\db\ActiveQuery 
-    */ 
-   public function getCompany() 
-   { 
-       return $this->hasOne(YxCompany::className(), ['id' => 'company_id']); 
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+   public function getCompany()
+   {
+       return $this->hasOne(YxCompany::className(), ['id' => 'company_id']);
    }
     /**
      * {@inheritdoc}
@@ -60,4 +60,18 @@ class YxCmpRes extends \yii\db\ActiveRecord
     {
         return new YxCmpResQuery(get_called_class());
     }
+
+    // 得到公司所有的成果图，$flag是多少就显示多少张图片
+    public static function getCompanyRes($companyId,$flag) {
+      $YxCmpRes = YxCmpRes::find()->where(['company_id' => $companyId])->all();
+      $imgAll = [];
+      foreach ($YxCmpRes as $key => $value) {
+        if($key == $flag) {
+          break;
+        }
+        $imgAll[$key] = $value['cmp_res_img'];
+      }
+      return $imgAll;
+    }
+
 }

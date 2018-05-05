@@ -70,6 +70,18 @@ class Region extends \yii\db\ActiveRecord
         $result = static::findOne($id);
         if ($result) {
             return $result->name;
+        }else {
+            return '';
+        }
+
+    }
+    public static function getOneId($name = '')
+    {
+        $result = self::find()->andFilterWhere(['like', 'name', $name])->one();
+        if ($result) {
+            return $result['id'];
+        }else {
+            return 0;
         }
 
     }

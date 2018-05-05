@@ -199,7 +199,7 @@ if ($order_state == 2) {
 }
 if ($order_state == 3 || $order_state == 4) {
 
-    echo Html::a(Yii::t('app', '强制退款'), ['notoverorder', 'id' => $model->id], [
+    echo Html::a(Yii::t('app', '全额退款'), ['agreerefundorder', 'id' => $model->id], [
         'class' => 'btn btn-danger',
         'data' => [
             'confirm' => Yii::t('app', '您确定要强制退款?'),

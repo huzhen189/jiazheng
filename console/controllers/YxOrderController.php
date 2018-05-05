@@ -6,6 +6,7 @@ use common\models\YxOrder;
 use common\models\YxOrderSearch;
 use common\tools\CheckController;
 use common\tools\Helper;
+use common\tools\Message;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
@@ -289,7 +290,13 @@ class YxOrderController extends CheckController
         $model = YxOrder::findOne($id);
         $model->order_state = 4;
         $model->save();
-        $this->redirect(['view', 'id' => $id]);
+        $result = Message::SendOrderAcceptMessage($model['phone'], $model['order_no']);
+        if ($result) {
+            $this->redirect(['view', 'id' => $id]);
+        } else {
+            return var_dump($result);
+        }
+
     }
 /**
  * [actionNotacceptorder 拒绝订单]
@@ -314,24 +321,24 @@ class YxOrderController extends CheckController
  * @param    [type]                   $id [description]
  * @return   [type]                       [description]
  */
-    public function actionOverorder($id)
-    {
-        $model = YxOrder::findOne($id);
-        $model->order_state = 8;
-        $model->save();
-        $this->redirect(['yx-comment/create', 'order_id' => $id]);
-    }
+    // public function actionOverorder($id)
+    // {
+    //     $model = YxOrder::findOne($id);
+    //     $model->order_state = 8;
+    //     $model->save();
+    //     $this->redirect(['yx-comment/create', 'order_id' => $id]);
+    // }
 /**
- * [actionNotoverorder 强制退款]
+ * [actionAgreerefundorder 同意退款]
  * @Author   Yoon
  * @DateTime 2018-04-12T14:43:46+0800
  * @param    [type]                   $id [description]
  * @return   [type]                       [description]
  */
-    public function actionNotoverorder($id)
+    public function actionAgreerefundorder($id)
     {
         $model = YxOrder::findOne($id);
-        $model->order_state = 7;
+        $model->order_state = 11;
         $model->save();
         $this->redirect(['view', 'id' => $id]);
     }

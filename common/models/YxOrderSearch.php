@@ -61,7 +61,7 @@ class YxOrderSearch extends YxOrder
         }
         $yx_user_id = isset($params['yx_user_id']) ? $params['yx_user_id'] : $this->yx_user_id;
         $time_start=empty($this->time_start) ? 0:strtotime($this->time_start);
-        $time_end=empty($this->time_end) ? strtotime(date('Y-m-d H:i')):strtotime('+1 day',strtotime($this->time_end));
+        $time_end=empty($this->time_end) ? strtotime('+2 week',time()):strtotime('+1 day',strtotime($this->time_end));
         // grid filtering conditions
         $query->andFilterWhere([
             'yx_order.id' => $this->id,

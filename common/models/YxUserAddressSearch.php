@@ -19,7 +19,9 @@ class YxUserAddressSearch extends YxUserAddress
     {
         return [
             [['id', 'yx_user_id', 'province', 'city', 'district', 'is_delete'], 'integer'],
-            [['phone', 'address', 'consignee'], 'safe'],
+            [['phone'], 'string','min' => 11, 'max' => 11],
+            [['address'], 'string','min' => 6, 'max' => 255],
+            [['consignee'], 'string','min' => 2, 'max' => 20],
         ];
     }
 

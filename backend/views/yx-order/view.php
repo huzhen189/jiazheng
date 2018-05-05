@@ -118,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             continue;
                         }
                         $server_name=$server_name.$value['server_name'];
-                    }  
+                    }
                 }
                 return $server_name;
 
@@ -174,6 +174,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 return date('Y-m-d H:i', $model->time_start);
             },
         ],
+        'ping_id',
     ],
 ]);?>
     <p>
@@ -205,8 +206,9 @@ if ($order_state == 3 || $order_state == 4) {
             'method' => 'post',
         ],
     ]);
-
-    echo Html::a(Yii::t('app', '强制退款'), ['notoverorder', 'id' => $model->id], [
+}
+if ($order_state != 1 && $order_state != 2 && $order_state != 5 && $order_state != 7 && $order_state != 12 ) {
+    echo Html::a(Yii::t('app', '全额退款'), ['notoverorder', 'id' => $model->id], [
         'class' => 'btn btn-danger',
         'data' => [
             'confirm' => Yii::t('app', '您确定要强制退款?'),

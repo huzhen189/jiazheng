@@ -176,7 +176,7 @@ class YxOrderController extends CheckController
             $extra_server_info = [];  //附加服务的详情
             $extra_server_models = []; //生成订单详情的model
 
-            if($order_type == 2){  //服务者下单
+            if($order_type == 1){  //服务者下单
                 $mian_server = YxServer::getServerByStaff($yx_staff_id,$order_server);
                 foreach ($extra_server as $serverItem) {  //遍历前端提交的数据，获取附加服务的详情
                     $serverData = YxServer::getServerByStaff($yx_staff_id,$serverItem["id"]);
@@ -231,32 +231,32 @@ class YxOrderController extends CheckController
             }else {
                 $model->time_end = $model->time_start + 3 * 3600;
             }
-
-            if($order_type == 2){  //服务者下单
+            if($order_type == 1){  //服务者下单
                 $model->order_no = YxOrder::generateOrderNumber($mian_server["server_id"],$order_type,$yx_staff_id);
             }else {  //商家下单
                 $model->order_no = YxOrder::generateOrderNumber($mian_server["server_id"],$order_type,$yx_company_id);
             }
 
             switch ($order_type) {
-              case 1:    //商家下单
-                $model->order_money = $all_money;
-                # code...
-                break;
-              case 2:    //服务者下单
-                $model->yx_staff_id = $yx_staff_id;
-                $model->order_money = $all_money;
-                $yxStaff = YxCompany::findOne(['id'=>$yx_staff_id]);
-                if(!$yxCompany){
-                    $reJson["msg"] = "服务者信息有误";
-                    return $reJson;
-                }
-                $staffHasOrder = YxOrder::returnStaffOrderCountByTime($yx_staff_id,$model->time_start,$model->time_end);
-                if($staffHasOrder > 0){
-                    $reJson["msg"] = "服务人员该时间段繁忙，请重新选择下单时间";
-                    return $reJson;
-                }
-                break;
+              case 1:    //服务者下单
+                  $model->yx_staff_id = $yx_staff_id;
+                  $model->order_money = $all_money;
+                  $yxStaff = YxCompany::findOne(['id'=>$yx_staff_id]);
+                  if(!$yxCompany){
+                      $reJson["msg"] = "服务者信息有误";
+                      return $reJson;
+                  }
+                  $staffHasOrder = YxOrder::returnStaffOrderCountByTime($yx_staff_id,$model->time_start,$model->time_end);
+                  if($staffHasOrder > 0){
+                      $reJson["msg"] = "服务人员该时间段繁忙，请重新选择下单时间";
+                      return $reJson;
+                  }
+                  break;
+
+              case 2:    //商家下单
+                  $model->order_money = $all_money;
+                  # code...
+                  break;
               case 3:    //商家预约
                 $model->order_money = 30000;
                 break;
@@ -379,8 +379,8 @@ class YxOrderController extends CheckController
     {
         $isWechat = Helper::isWechatBrowser();
         $order = YxOrder::find()->with('yx_order_server')->where(["id"=>$id])->one();
-        if($order->order_type ==2){
-            $yxStaffName = YxStaff::findOne(['staff_id'=>$order->yx_staff_id])["name"];
+        if($order->order_type ==1){
+            $yxStaffName = YxStaff::findOne(['staff_id'=>$order->yx_staff_id])["staff_name"];
         }else {
             $yxStaffName = "商家指定";
         }

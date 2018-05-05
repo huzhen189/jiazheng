@@ -4,8 +4,11 @@
 	use yii\bootstrap\ActiveForm;
 	use yii\bootstrap\dropDownList;
 	use yii\widgets\LinkPager;
-
+	// 商家成果图
+	use common\models\YxCmpRes;
 	use common\models\YxCmpServer;
+	// 信息攻略
+	use common\models\YxRules;
 	$sortText = '排序';
 ?>
 
@@ -20,17 +23,17 @@
 				<div class="condition-inner">
 					<div class="condition-left">
 						<ul>
-							<li class="<?php if($sort == 'fraction'){
+							<li class="sequence <?php if($sort == 'fraction'){
 								echo "active";
-								}?>">
-								<a href="?server_parent=<?= $serverParent?>&server_id=<?= $serverId?>&sort=fraction">分数<?php if($sort == 'fraction'){
+								}?>" data-sort="fraction">
+								<a href="#">分数<?php if($sort == 'fraction'){
 										echo $sortText;
 								}?></a>
 							</li>
-							<li class="<?php if($sort == 'price'){
+							<li class="sequence <?php if($sort == 'price'){
 								echo "active";
-								}?>">
-								<a href="?server_parent=<?= $serverParent?>&server_id=<?= $serverId?>&sort=price">价格<?php if($sort == 'price'){
+								}?>" data-sort="price">
+								<a href="#">价格<?php if($sort == 'price'){
 										echo $sortText;
 								}?></a>
 							</li>
@@ -42,10 +45,10 @@
 								<a href="#">商家</a>
 							</li>
 							<li>
-								<a href="#">我的收藏</a>
+								<a href="/yx-order/index?yx_user_id=<?php echo Yii::$app->user->id; ?>">我的收藏</a>
 							</li>
 							<li>
-								<a href="#">信息攻略</a>
+								<a href="/yx-rules/view?id=<?php echo YxRules::getRulesInfo($serverId); ?>">信息攻略</a>
 							</li>
 						</ul>
 					</div>
@@ -65,15 +68,8 @@
 				</div>
 				<div class="address">
 					服务地域:
-					<select id="area_list" style="height: 25px;margin: 0 10px;">
-						<?php foreach ($countyAll as $key => $value) {
-							if($county == $key) {
-								echo '<option value="'.$key.'"  selected/>'.$value.'</option>';
-								continue;
-							}
-							echo '<option value="'.$key.'"  />'.$value.'</option>';
-						}?>
-					</select>
+					<?php echo $serviceArea;?>
+
 				</div>
 			</div>
 
@@ -95,8 +91,9 @@
 			                <p>最低价格：35元/小时</p>
 						</div>
 						<div class="store-result">
-							<img src="/static/img/achievement/achieve1.jpg" />
-							<img src="/static/img/achievement/achieve1.jpg" />
+							<?php foreach (YxCmpRes::getCompanyRes($model->id,2) as $key => $value): ?>
+								<?php echo '<img src="'.$value.'" />'; ?>
+							<?php endforeach; ?>
 						</div>
 					</div>
 			<?php endforeach; ?>
@@ -118,14 +115,37 @@
 </div>
 
 <script type="text/javascript">
+	// 判断用户是否登录
+	var userIs = <?= $userIs;?>;
 	window.onload = function() {
+		$(".sequence").click(function(event) {
+			// 切换服务
+			if(userIs == 1) {
+				window.location.href = "/special-clean/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&county="+$("#area_list option:selected").attr('value')+"&sort="+$(this).attr('data-sort');
+			}else {
+				window.location.href = "/special-clean/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&province="+$("#province_list option:selected").attr('value')+"&city="+$("#city_list option:selected").attr('value')+"&sort="+$(this).attr('data-sort');
+			}
+		});
 		$(".select-service").change(function(event) {
 			// 切换服务
-			window.location.href = "/special-clean/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&county="+$("#area_list option:selected").attr('value')+"&sort=fraction";
+			if(userIs == 1) {
+				window.location.href = "/special-clean/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&county="+$("#area_list option:selected").attr('value')+"&sort=fraction";
+			}else {
+				window.location.href = "/special-clean/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&province="+$("#province_list option:selected").attr('value')+"&city="+$("#city_list option:selected").attr('value')+"&sort=fraction";
+			}
+
 		});
 		$("#area_list").change(function(event) {
 			// 切换地区
 			window.location.href = "/special-clean/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&county="+$("#area_list option:selected").attr('value')+"&sort=fraction";
+		});
+		$("#province_list").change(function(event) {
+			// 切换地区
+			window.location.href = "/special-clean/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&province="+$("#province_list option:selected").attr('value')+"&city="+$("#city_list option:selected").attr('value')+"&sort=fraction";
+		});
+		$("#city_list").change(function(event) {
+			// 切换地区
+			window.location.href = "/special-clean/index?server_parent="+$(".select-service").attr('server_parent')+"&server_id="+$(".select-service option:selected").attr('value')+"&province="+$("#province_list option:selected").attr('value')+"&city="+$("#city_list option:selected").attr('value')+"&sort=fraction";
 		});
 	}
 </script>

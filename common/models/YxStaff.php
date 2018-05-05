@@ -422,6 +422,9 @@ class YxStaff extends \yii\db\ActiveRecord
 
     // 得到服务人员名字(oyzx)
     public static function getStaffName($staff_id) {
+      if($staff_id == 0){
+        return "商家指定";
+      }
       $staff = YxStaff::find()->where(['staff_id'=>$staff_id])->one();
       return $staff['staff_name'];
     }
@@ -459,5 +462,10 @@ class YxStaff extends \yii\db\ActiveRecord
         case 0 : return "星期日";
         default : return "你输入有误！";
       };
+    }
+
+    // 身份证加密
+    public static function getEncryptIdCard($IdCard) {
+      return str_replace(substr($IdCard,4,10),"**********",$IdCard);
     }
 }

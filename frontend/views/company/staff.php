@@ -3,6 +3,8 @@
 	use yii\widgets\LinkPager;
 	use common\models\YxStaff;
 	use common\models\YxStaffServer;
+	// 信息攻略
+	use common\models\YxRules;
 	$sortText = '排序';
 ?>
 
@@ -64,7 +66,7 @@
 							</li>
 							</li>
 							<li>
-								<a href="#">信息攻略</a>
+								<a href="/yx-rules/view?id=<?php echo YxRules::getRulesInfo($serverId); ?>">信息攻略</a>
 							</li>
 						</ul>
 					</div>
@@ -96,11 +98,11 @@
 							<img class="img-thumbnail" src="<?= $model->staff_img ?>" >
 						</div>
 						<h3 title="<?= $model->staff_name ?>"><?= $model->staff_name ?></h3>
-						<p title="价格: <?= YxStaffServer::getStaffPrice($model->staff_id,$serverId) ?>">价格: <?= YxStaffServer::getStaffPrice($model->staff_id,$serverId) ?>元</p>
-						<p title="分数: <?= $model->staff_fraction ?>">分数: <?= $model->staff_fraction ?></p>
+						<p title="价格: <?= number_format(YxStaffServer::getStaffPrice($model->staff_id,$serverId)/100,2) ?>">价格: <?= number_format(YxStaffServer::getStaffPrice($model->staff_id,$serverId)/100,2) ?>元</p>
+						<p title="分数: <?= number_format($model->staff_fraction/1000,2); ?>">分数: <?= number_format($model->staff_fraction/1000,2); ?></p>
 						<p title="主营业务: <?= YxStaff::getServerName($model->staff_id) ?>" class="staff-servers">主营业务: <?= YxStaff::getServerName($model->staff_id) ?></p>
 						<div class="staff-info">
-							<a href="/staff/index?staff_id=<?= $model->staff_id ?>" target="_blank">查看详情</a>
+							<a href="/staff/index?staff_id=<?= $model->staff_id ?>&server_id=<?= $serverId?>" target="_blank">查看详情</a>
 						</div>
 					</div>
 				</div>

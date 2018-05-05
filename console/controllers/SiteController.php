@@ -227,4 +227,25 @@ class SiteController extends Controller
       }
       return [ 'msg' => $msg, 'code' => $code];
     }
+
+
+    public function actionGetsignupcode(){
+      $code = -1;
+      $msg = "请勿频繁发送";
+      Yii::$app->response->format = 'json';
+      if(Yii::$app->request->isAjax) {
+          $params = Yii::$app->request->post();
+          if(!isset($params['email']) || strlen($params['email']) != 11){
+              $msg = "电话号码不正确";
+              return [ 'msg' => $msg, 'code' => $code];
+          }
+          $result = Message::SendSignUpCodeMessage($params['email']);
+          if($result){
+              $code =  0;
+              $msg = "ok";
+          }
+      }
+      Yii::$app->response->format = 'json';
+      return [ 'msg' => $msg, 'code' => $code];
+    }
 }

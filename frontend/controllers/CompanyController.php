@@ -88,7 +88,7 @@ class CompanyController extends Controller {
 		}
 		// 原象推荐
 		//$recommendArr = YxCompany::find()->orderby('total_fraction desc')->limit(5)->all();
-		$recommendArr = YxStaff::find()-> where (["company_id"=>$companyId])->orderby('staff_fraction desc')->limit(5)->all();
+		$recommendArr = YxStaff::find()->where (["company_id"=>$companyId])->orderby('staff_fraction desc')->limit(5)->all();
 		$pages = new Pagination([
 			'totalCount' => $YxStaff->count(),
 			'pageSize' => 8,

@@ -6,6 +6,8 @@
   use common\models\YxStaff;
 	use common\models\YxStaffServer;
   use common\models\YxCmpServer;
+	// 信息攻略
+	use common\models\YxRules;
 	$sortText = '排序';
 ?>
 
@@ -51,7 +53,7 @@
 							</li>
 							</li>
 							<li>
-								<a href="#">信息攻略</a>
+								<a href="/yx-rules/view?id=<?php echo YxRules::getRulesInfo($serverId); ?>">信息攻略</a>
 							</li>
 						</ul>
 					</div>
@@ -77,7 +79,7 @@
 		<div class="company-info">
     	<div class="company-image-text">
     			<div class="img">
-    				<?= Html::img('/static/img/store/store1.jpg', ['alt' => '商家']) ?>
+						<img src="<?= $YxCompany->image;?>" style="width:250px;height:140px;" alt="商家" />
     			</div>
     			<div class="company-detail">
     				<div class="name">
@@ -92,7 +94,7 @@
     							<p>价格：<?= number_format(YxCmpServer::getCompanyPrice($companyId,$serverId)/100,2);?>元/<?=YxStaffServer::getServerUnit($serverId)?></p>
     						</div>
     						<div class="fraction">
-    							<p>分数：<?= number_format($YxCompany->total_fraction,2);?>分</p>
+    							<p>分数：<?= number_format($YxCompany->total_fraction/1000,2);?>分</p>
     						</div>
     						<div class="server">
     							<p id="server-id" date-id="<?=$serverId?>">服务：<?=YxServer::getServerName($serverId)?></p>
@@ -202,7 +204,7 @@
 var yx_company_id = <?= $companyId;?>;
 var order_server = <?= $serverId;?>;
 var server_unit = '<?= YxStaffServer::getServerUnit($serverId);?>';
-var order_type = 1;
+var order_type = 2;
 function makeOrderBefor(){
 	var order_day = Number($("#order_day").val());
 	var time_unit = [];
@@ -301,6 +303,10 @@ function checkTimeSuccessive(){
 		return true;
 }
 window.onload = function() {
+	// 切换服务
+	$(".server-type").change(function(){
+		window.location.href = "/company/index?server_id="+$(this).find("option:selected").val()+"&company_id="+yx_company_id+"&sort=fraction";
+	});
 
 	$("#reserve").click(function() {
 		order_type = 3;

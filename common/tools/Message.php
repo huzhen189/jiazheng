@@ -4,24 +4,30 @@ require_once "../../aliyun-dysms-php-sdk-lite/SignatureHelper.php";
 use Aliyun\DySDKLite\SignatureHelper;
 use yii;
 
+
  class Message{
-   public static function SendSignUpCodeMessage($phone)
-   {
-      return self::SendCodeMessage($phone,"SMS_130775174");
-   }
-   public static function SendResetPwdCodeMessage($phone)
-   {
-      return self::SendCodeMessage($phone,"SMS_130765171");
-   }
 
-   public static function SendCodeMessage($phone,$templateCode)
-   {
+     public static function SendSignUpCodeMessage($phone){
+        return self::SendCodeMessage($phone,"SMS_130775174");
+     }
+
+     public static function SendResetPwdCodeMessage($phone){
+        return self::SendCodeMessage($phone,"SMS_130765171");
+     }
+
+     public static function SendOrderPayMessage($phone,$order_no){
+        return self::SendOrderMessage($phone,$order_no,"SMS_133960739");
+     }
+
+     public static function SendOrderAcceptMessage($phone,$order_no){
+        return self::SendOrderMessage($phone,$order_no,"SMS_133965828");
+     }
+
+   public static function SendCodeMessage($phone,$templateCode){
+     if(strlen($phone) != 11){
+       return false;
+     }
      $params = array ();
-
-     // *** 需用户填写部分 ***
-     // fixme 必填: 请参阅 https://ak-console.aliyun.com/ 取得您的AK信息
-     $accessKeyId = "LTAIYAT7oAnGFr0m";
-     $accessKeySecret = "FYJ2wAETGHJYGWJk3nXBsfSMm98ovE";
 
      // fixme 必填: 短信接收号码
      $params["PhoneNumbers"] = $phone;
@@ -46,7 +52,6 @@ use yii;
      // fixme 可选: 上行短信扩展码, 扩展码字段控制在7位或以下，无特殊需求用户请忽略此字段
      //$params['SmsUpExtendCode'] = "1234567";
 
-
      // *** 需用户填写部分结束, 以下代码若无必要无需更改 ***
      if(!empty($params["TemplateParam"]) && is_array($params["TemplateParam"])) {
         $params["TemplateParam"] = json_encode($params["TemplateParam"], JSON_UNESCAPED_UNICODE);
@@ -57,8 +62,43 @@ use yii;
 
      // 此处可能会抛出异常，注意catch
      $content = $helper->request(
-        $accessKeyId,
-        $accessKeySecret,
+        Yii::$app->params['aliyun_duanxin']['accessKeyId'],
+        Yii::$app->params['aliyun_duanxin']['accessKeySecret'],
+        "dysmsapi.aliyuncs.com",
+        array_merge($params, array(
+            "RegionId" => "cn-hangzhou",
+            "Action" => "SendSms",
+            "Version" => "2017-05-25",
+        ))
+     );
+     if($content->Code != "OK"){
+       return false;
+     }
+     return true;
+   }
+   public static function SendOrderMessage($phone,$order_no,$templateCode)
+   {
+     if(strlen($phone) != 11){
+       return false;
+     }
+     $params = array ();
+     $params["PhoneNumbers"] = $phone;
+     $params["SignName"] = "原象屋";
+     $params["TemplateCode"] = $templateCode;
+     $params['TemplateParam'] = Array (
+          "order_no" => $order_no,
+      );
+     if(!empty($params["TemplateParam"]) && is_array($params["TemplateParam"])) {
+        $params["TemplateParam"] = json_encode($params["TemplateParam"], JSON_UNESCAPED_UNICODE);
+     }
+
+     // 初始化SignatureHelper实例用于设置参数，签名以及发送请求
+     $helper = new SignatureHelper();
+
+     // 此处可能会抛出异常，注意catch
+     $content = $helper->request(
+       Yii::$app->params['aliyun_duanxin']['accessKeyId'],
+       Yii::$app->params['aliyun_duanxin']['accessKeySecret'],
         "dysmsapi.aliyuncs.com",
         array_merge($params, array(
             "RegionId" => "cn-hangzhou",
@@ -73,7 +113,6 @@ use yii;
      }
      return true;
    }
-
  }
 
 ?>

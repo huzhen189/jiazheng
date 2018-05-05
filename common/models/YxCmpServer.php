@@ -100,9 +100,9 @@ class YxCmpServer extends \yii\db\ActiveRecord
                 				<div>您可以勾选以下附加服务：</div><div class="choose-server row">';
         foreach ($YxServer as $key => $value) {
           $YxCmpServer = number_format(YxServer::getServerThirdCompany($companyId,$value['server_id'])/100,2);
-          $addContent = $addContent.'<div class="one-server col-md-3 col-lg-3"><input type="checkbox" name="server"/> '
+          $addContent = $addContent.'<div class="one-server col-md-6 col-lg-6"><input type="checkbox" name="server"/> '
             .YxServer::getServerName($value['server_id']). '<span  class="addserver"> '
-            .$YxCmpServer.'</span>元/小时 <span class="server_num"> <input type="number" style="width:50px;" serverId="'.$value['server_id'].'" step="1" min="1" max="10" />小时</span></div>';
+            .number_format($YxCmpServer/100,2).'</span>元/小时 <input type="number" style="width:50px;" serverId="'.$value['server_id'].'" step="1" min="1" max="10" /><span class="server_num"> 小时</span></div>';
         }
         $addContent = $addContent.'</div></div>';
       }

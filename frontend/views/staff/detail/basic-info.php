@@ -52,7 +52,7 @@
 			</tr>
 			<tr>
 			  <td class="title-name">入驻平台时间</td>
-			  <td><?= $YxStaff->staff_found;?></td>
+			  <td><?php echo date('Y-m-d', $YxStaff->staff_found);?></td>
 			</tr>
 			<tr>
 			  <td class="title-name">接受相关培训</td>
@@ -60,7 +60,7 @@
 			</tr>
 			<tr>
 			  <td class="title-name">身份实名认证</td>
-			  <td><?= $YxStaff->staff_idcard;?></td>
+			  <td><?=YxStaff::getEncryptIdCard ($YxStaff->staff_idcard);?></td>
 			</tr>
 			<tr>
 			  <td class="title-name">技能证书认证</td>

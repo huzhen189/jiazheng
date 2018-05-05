@@ -42,23 +42,25 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-lg-5" >
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true,'maxlength' => true]) ?>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
 
-                <?= $form->field($model, 'repassword')->passwordInput() ?>
 
                 <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
                 <button type="button" id="signupform-getcode" class="btn btn-primary btn-lg active">获取验证码</button>
                 <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model, 'nickname') ?>
+                <?= $form->field($model, 'password')->passwordInput() ?>
 
-                <?php $model->sex = $model->getUserSex(); ?>
-                <?= $form->field($model, 'sex')->dropDownList($model->sex) ?>
+                <?= $form->field($model, 'repassword')->passwordInput() ?>
+
+                <div style="height30px;">
+                    <input type="checkbox" id="rule_check" style="height:14px;width:14px;margin: 8px;float: left;" checked="true"/>
+                    <?= Html::a('原象屋平台服务协议	', ['/yx-rules/view?id=11'], ['style' => 'height:30px;line-height:30px;margin-left:10px;display: block;float: left;']) ?>
+                    <div style="clear:both;margin-bottom:30px;"></div>
+                </div>
 
                 <div class="form-group">
-                    <?= Html::submitButton('注册', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                    <?= Html::submitButton('注册', ['id' => 'signup_button','class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>
@@ -68,6 +70,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script>
     window.onload =function(){
+      $("#rule_check").click(function(){
+        console.log(this.checked)
+        if(this.checked){
+            $("#signup_button").attr("disabled",false);
+        }else {
+            $("#signup_button").attr("disabled","disabled");
+        }
+      })
       $("#signupform-getcode").click(function(){
         var phoneNum = $("#signupform-phone").val();
         if(phoneNum.length != 11){

@@ -29,13 +29,12 @@ class SignupForm extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'password', 'repassword', 'phone', 'nickname', 'sex','code'], 'required'],
-            [['phone','nickname','code'], 'trim'],
-            [['username','password','repassword'], 'string','min' => 6, 'max' => 20],
+            [['password', 'repassword', 'phone','code'], 'required'],
+            [['phone','code'], 'trim'],
+            [['password','repassword'], 'string','min' => 6, 'max' => 20],
             [['phone'], 'string','min' => 11, 'max' => 11],
             [['code'], 'string','min' => 6, 'max' => 6],
-            [['username','phone','nickname'], 'trim'],
-            [['username','phone','nickname'], 'unique'],
+            [['phone'], 'unique'],
             [['repassword'], 'compare', 'compareAttribute' => 'password', 'message' => '两次输入的密码不一致！'],
             [['code'], 'validateCode', 'message' => '请输入正确的验证码'],
 
@@ -87,11 +86,11 @@ class SignupForm extends \yii\db\ActiveRecord
             return null;
         }
         $user = new YxUser();
-        $user->username = $this->username;
+        $user->username = $this->phone;
         $user->setPassword($this->password);
         $user->phone = $this->phone;
-        $user->nickname = $this->nickname;
-        $user->sex = $this->sex;
+        $user->nickname = $this->phone;
+        $user->sex = 1;
         $user->generateAuthKey();
 
         return $user->save() ? $user : null;

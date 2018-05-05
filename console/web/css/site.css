@@ -257,7 +257,7 @@ a.desc:after {
     position:fixed; 
     top:50%; left:50%; 
     margin-left:-260px; 
-    margin-top:-189px; 
+    margin-top:-260px; 
     -moz-box-shadow:10px 10px 40px #ccc; 
     -webkit-box-shadow:10px 10px 40px #ccc;
     box-shadow:10px 10px 40px #ccc;
@@ -296,10 +296,10 @@ a.desc:after {
 }
 .sgin_C{ 
     width:520px; 
-    height:278px; 
+    height:450px; 
     background-color:#FFF; 
     border-radius:0px 0px 5px 5px;
-    padding-top:40px;
+    padding-top:20px;
 }
 .sgin_C span{ 
     display:block; 

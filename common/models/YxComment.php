@@ -224,7 +224,7 @@ class YxComment extends \yii\db\ActiveRecord
         } else {
             $compny_model = YxCompany::findOne($this->yx_company_id);
             if (!empty($exist_order_id)) {
-                if (strpos($compny_model->staff_main_server_id, strval($details_model['server_id']))) {
+                if (strpos($compny_model->main_server_id, strval($details_model['server_id']))) {
                     $is_main_server = 1;
                 }
             } else {

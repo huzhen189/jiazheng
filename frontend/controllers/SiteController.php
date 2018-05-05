@@ -19,6 +19,7 @@ use common\models\YxRecomLeft;
 use common\models\YxRecomRight;
 use common\models\YxCompany;
 use common\models\YxStaff;
+use common\models\YxNotice;
 
 /**
  * Site controller
@@ -86,27 +87,24 @@ class SiteController extends Controller
     		$YxRecomLeft = YxRecomLeft::find()->limit(4)->all();
     		$YxActivity = YxActivity::find()->one();
     		$YxRecomRight = YxRecomRight::find()->one();
-        // 获取地区
-        $YxCompany = YxCompany::find()->select(['*'])
-  								->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
+
+        $YxCompany = YxCompany::find()->select(['DISTINCT(yx_cmp_server.company_id),id,company_id,image,name,total_fraction,introduction'])
+  								->leftjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
   									->where(['yx_company.status'=>2])->orderby('yx_company.total_fraction desc')->limit(4)->all();
-        $YxStaff = YxStaff::find()->select(['*'])
-  								->innerjoin('yx_staff_server', 'yx_staff_server.staff_id=yx_staff.staff_id')
+                    // print_r($YxCompany);
+        $YxStaff = YxStaff::find()->select(['DISTINCT(yx_staff_server.staff_id),staff_img,staff_name,staff_fraction,staff_intro'])
+  								->leftjoin('yx_staff_server', 'yx_staff_server.staff_id=yx_staff.staff_id')
   									->where(['yx_staff.staff_state'=>1])->orderby('yx_staff.staff_fraction desc')->limit(8)->all();
-        // $user_info = Yii::$app->user->identity;
-        // $YxCompany = YxCompany::find()->select(['*'])
-  			// 					->innerjoin('yx_cmp_server', 'yx_cmp_server.company_id=yx_company.id')
-  			// 						->where(['yx_company.status'=>2,'yx_company.city'=>$user_info['city']])->orderby('yx_company.total_fraction desc')->limit(4)->all();
-        // $YxStaff = YxStaff::find()->select(['*'])
-  			// 					->innerjoin('yx_staff_server', 'yx_staff_server.staff_id=yx_staff.staff_id')
-  			// 						->where(['yx_staff.staff_state'=>1,'yx_staff.staff_city'=>$user_info['city']])->orderby('yx_staff.staff_fraction desc')->limit(8)->all();
+        // 公告
+        $YxNotice = YxNotice::find()->where(['notice_state' => 1])->limit(3)->all();
     		return $this->render("/index/index", [
                 'YxBanner' => $YxBanner,
                 'YxRecomLeft' => $YxRecomLeft,
                 'YxActivity' => $YxActivity,
                 'YxRecomRight' => $YxRecomRight,
                 'YxCompany' => $YxCompany,
-                'YxStaff' => $YxStaff
+                'YxStaff' => $YxStaff,
+                'YxNotice' => $YxNotice
             ]);
     }
 

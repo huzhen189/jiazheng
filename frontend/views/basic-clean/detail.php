@@ -5,6 +5,8 @@
 	use common\models\YxCmpServer;
 	use common\models\YxStaffServer;
 	use common\models\YxStaff;
+	// 信息攻略
+	use common\models\YxRules;
 ?>
 <?= Html::cssFile('/static/css/detail.css') ?>
 
@@ -24,7 +26,7 @@
 					<a class="active" href="#">商家详情</a>
 				</li>
 				<li>
-					<a href="#">信息攻略</a>
+					<a href="/yx-rules/view?id=<?php echo YxRules::getRulesInfo($serverId); ?>">信息攻略</a>
 				</li>
 			</ul>
 		</div>
@@ -33,7 +35,7 @@
 	<div class="store-basic">
 		<div class="store-info">
 			<div class="img">
-				<?= Html::img('/static/img/store/store1.jpg', ['alt' => '商家']) ?>
+				<img src="<?= $YxCompany->image;?>" alt="商家" />
 			</div>
 			<div class="basic">
 				<div class="name">
@@ -48,7 +50,7 @@
 							<p>价格：<?= number_format(YxCmpServer::getCompanyPrice($companyId,$serverId)/100,2);?>元/<?=YxStaffServer::getServerUnit($serverId)?></p>
 						</div>
 						<div class="fraction">
-							<p>分数：<?= number_format($YxCompany->total_fraction,2);?>分</p>
+							<p>分数：<?= number_format($YxCompany->total_fraction/1000,2);?>分</p>
 						</div>
 						<div class="server">
 							<p id="server-id" date-id="<?=$serverId?>">服务：<?=$ServerName?></p>
@@ -124,10 +126,10 @@
 					<h4><b>原象推荐：</b></h4>
 					<?php foreach ($recommendArr as $value): ?>
 						<div class="other-store">
-							<img src="/static/img/staff/staff1.jpg" />
+							<img src="<?= $value['staff_img'];?>" />
 							<div class="other-store-info">
-								<h5><a href="/company/index?company=<?= $value['id'] ?>"><?= $value['name'] ?></a></h5>
-								<p title="<?= $value['introduction'] ?>"><?= $value['introduction'] ?></p>
+								<h5><a href="/staff/index?staff_id=<?= $value['staff_id'] ?>"><?= $value['staff_name'] ?></a></h5>
+								<p title="<?= $value['staff_intro'] ?>"><?= $value['staff_intro'] ?></p>
 							</div>
 						</div>
 					<?php endforeach; ?>
@@ -163,7 +165,7 @@
 	var yx_company_id = <?= $companyId;?>;
 	var order_server = <?= $serverId;?>;
 	var server_unit = '<?= YxStaffServer::getServerUnit($serverId);?>';
-	var order_type = 1;
+	var order_type = 2;
 	function makeOrderBefor(){
 		var order_day = Number($("#order_day").val());
 		var time_unit = [];

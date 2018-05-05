@@ -5,6 +5,7 @@ namespace common\models;
 use common\models\YxCompany;
 use common\models\YxServer;
 use common\models\YxStaff;
+use common\tools\Message;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -151,15 +152,17 @@ class YxOrder extends \yii\db\ActiveRecord
 
     public static function getOrderState()
     {
-        return array(1 => '待付款', 2 => '待接单', 3 => '申请退款', 4 => '执行中', 5 => '废单', 6 => '未接单', 7 => '已退款', 8 => '已完成', 9 => '拒绝退款  ', 10 => '已评论');
+         return array(1 => '待付款', 2 => '待接单', 3 => '商家确认退款中', 4 => '执行中', 5 => '废单', 6 => '商家拒绝接单', 7 => '退款完成',
+        8 => '已完成', 9 => '拒绝退款', 10 => '已评论', 11 => '商家同意退款', 12 => '未接单退款完成');
     }
     public static function getOrderStatus()
     {
-        return array(1 => '待付款', 2 => '待接单', 3 => '退款中', 4 => '执行中', 5 => '废单', 6 => '未接单', 7 => '已退款', 8 => '已完成', 9 => '拒绝退款  ', 10 => '已评论');
+        return array(1 => '待付款', 2 => '待接单', 3 => '商家确认退款中', 4 => '执行中', 5 => '废单', 6 => '商家拒绝接单', 7 => '退款完成',
+        8 => '已完成', 9 => '拒绝退款', 10 => '已评论', 11 => '商家同意退款', 12 => '未接单退款完成');
     }
     public static function getOrderType()
     {
-        return array(1 => '商家下单', 2 => '员工下单', 3 => '商家预约');
+        return array(1 => '员工下单', 2 => '商家下单', 3 => '商家预约');
     }
 /**
  * [generateOrderNumber 生成订单编号]
@@ -197,7 +200,7 @@ class YxOrder extends \yii\db\ActiveRecord
                 ->count();
             $server_count++;
             $server_count = self::translate000($server_count);
-            $order_number = $order_number . $model->number . $server_count;
+            $order_number = $order_number . $model['number'] . $server_count;
         }
         return $order_number;
     }
@@ -271,8 +274,11 @@ class YxOrder extends \yii\db\ActiveRecord
 
     public static function finishOrder($pingId,$order_no){
         $orders = YxOrder::findOne(["order_no" => $order_no]);
+        if(!$orders) return false;
         $orders->order_state = 2;
         $orders->ping_id = $pingId;
+        $company = YxCompany::findOne($orders->yx_company_id);
+        Message::SendOrderPayMessage($company['charge_phone'],$order_no);
         return $orders->save();
     }
     public static function returnStaffOrderCountByTime($yx_staff_id,$startTime,$endTime){
@@ -281,7 +287,7 @@ class YxOrder extends \yii\db\ActiveRecord
         //$order_count = YxOrder::find()->andFilterWhere(['>=', 'time_start', $startTime])->andFilterWhere(['<=', 'time_end', $endTime])->count();
         $str1 = "time_start <= ".$startTime." and time_end > ".$startTime;
         $str2 = "time_start < ".$endTime." and time_end >= ".$endTime;
-        $query = YxOrder::find()->where(['yx_staff_id'=>$yx_staff_id])->andWhere(['or',$str1,$str2]);
+        $query = YxOrder::find()->where(['yx_staff_id'=>$yx_staff_id,'is_delete' => 0])->andWhere(['or',$str1,$str2])->andFilterWhere(['in', 'order_state',[1,2,3,4,6,9]]);;
         $order_count = $query->count();
         // $commandQuery = clone $query;
         // print_r( $commandQuery->createCommand()->getRawSql());
@@ -301,4 +307,11 @@ class YxOrder extends \yii\db\ActiveRecord
       return $yx_staff_server;
     }
 
+    static public function refundOrder($order_no)
+    {
+        $orders = YxOrder::findOne(["order_no" => $order_no]);
+        if(!$refundOrder)  return false;
+        $orders->order_state = 7;
+        return $orders->save();
+    }
 }

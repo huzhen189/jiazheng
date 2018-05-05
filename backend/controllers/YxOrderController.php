@@ -6,6 +6,7 @@ use common\models\YxOrder;
 use common\models\YxOrderSearch;
 use common\tools\CheckController;
 use common\tools\Helper;
+use common\tools\Message;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
@@ -123,8 +124,8 @@ class YxOrderController extends CheckController
     {
         $this->findModel($id)->delete();
         $queryParams = Yii::$app->request->post();
-        $index_url='index';
-        $uri='';
+        $index_url = 'index';
+        $uri = '';
         if (isset($queryParams['company_id'])) {
             $uri='?company_id='.$queryParams['company_id'];
         }
@@ -141,36 +142,45 @@ class YxOrderController extends CheckController
     public function actionPayment($id)
     {
         $isWechat = Helper::isWechatBrowser();
-        $order = $this->findModel($id);
+        $order = YxOrder::find()->with('yx_order_server')->where(["id"=>$id])->one();
+        if($order->order_type ==1){
+            $yxStaffName = YxStaff::findOne(['staff_id'=>$order->yx_staff_id])["staff_name"];
+        }else {
+            $yxStaffName = "商家指定";
+        }
+
+        $yxCompany = YxCompany::findOne(['id'=>$order->yx_company_id]);
         return $this->render('payment', [
             'model' => $order,
             'isWechat' => $isWechat,
+            'yxStaffName' => $yxStaffName,
+            'yxCompany' => $yxCompany,
         ]);
     }
     public function actionPaysuccess($id)
     {
         $order = $this->findModel($id);
         return $this->render('paysuccess', [
-            'model' => $order,
+            'model' => $order
         ]);
     }
 
-    public function actionPay($id, $channel)
+    public function actionPay($id,$channel)
     {
         $order = $this->findModel($id);
         \Pingpp\Pingpp::setApiKey(Yii::$app->params['ping++']['API_KEY']);
-        \Pingpp\Pingpp::setPrivateKeyPath(__DIR__ . '/../../' . Yii::$app->params['ping++']['PRIVATE_KEY_DIR']);
+        \Pingpp\Pingpp::setPrivateKeyPath(__DIR__ . '/../../'.Yii::$app->params['ping++']['PRIVATE_KEY_DIR']);
 
         $extra = [];
         switch ($channel) {
             case 'alipay_pc_direct':
                 $extra = array(
-                    'success_url' => Yii::$app->params['webuploader']['backendEndDomain'] . 'yx-order/paysuccess?id=' . $id,
+                    'success_url' => Yii::$app->params['webuploader']['frontendEndDomain'].'yx-order/paysuccess?id='.$id,
                 );
                 break;
             case 'wx_pub':
                 $cookies = Yii::$app->request->cookies;
-                $wx_code = $cookies->getValue('wx_code'); //下面有將怎麼獲取
+                $wx_code = $cookies->getValue('wx_code');//下面有將怎麼獲取
                 $wx_app_id = Yii::$app->params['wechat']['wx_app_id'];
                 $wx_app_secret = Yii::$app->params['wechat']['wx_app_secret'];
                 $open_id = WxpubOAuth::getOpenid($wx_app_id, $wx_app_secret, $wx_code);
@@ -179,76 +189,66 @@ class YxOrderController extends CheckController
                 //     'res' => $open_id,
                 // ]);
                 $extra = array(
-                    'open_id' => $open_id, // 用户在商户微信公众号下的唯一标识，获取方式可参考 pingpp-php/lib/WxpubOAuth.php
+                    'open_id' => $open_id,// 用户在商户微信公众号下的唯一标识，获取方式可参考 pingpp-php/lib/WxpubOAuth.php
                 );
                 break;
         }
         try {
-            $ch = \Pingpp\Charge::create(array(
-                'order_no' => '20180328' . $id,
-                'amount' => $order->order_money, //订单总金额, 人民币单位：分（如订单总金额为 1 元，此处请填 100）
-                'app' => array('id' => Yii::$app->params['ping++']['PAPP_ID']),
-                'channel' => $channel,
-                'currency' => 'cny',
-                'client_ip' => '127.0.0.1',
-                'subject' => $order->order_name,
-                'body' => date('Y-m-d H:i', $order->created_at),
-                'extra' => $extra,
-            ));
-            $chargeJson = json_encode($ch);
-            //Yii::$app->response->cookies->remove('wx_code');
-            return $this->render('pay', [
-                'model' => $order,
-                'chargeJson' => $chargeJson,
-            ]);
-        } catch (\Pingpp\Error\Base $e) {
-            //如果发起支付请求失败，则抛出异常
-            // 捕获报错信息
-            if ($e->getHttpStatus() != null) {
-                header('Status: ' . $e->getHttpStatus());
-                echo $e->getHttpBody();
-            } else {
-                echo $e->getMessage();
-            }
-        }
-    }
-    /**
-     * 判断是否在微信客户端打开链接
-     * 如果是就跳转到微信code的重定向url地址
-     * 如果不是就跳到支付宝支付界面
-     */
-    public function actionGetcode($id, $channel)
-    {
-        $isWechat = Helper::isWechatBrowser();
-        if ($isWechat) {
-            $url = Helper::GetWxCodeUrl($id, $channel);
-            header("Location: $url");
-            exit();
-        } else {
-            $this->redirect(['yx-order/pay?id=' . $id . '&channel=' . $channel]);
-        }
+          $ch = \Pingpp\Charge::create(array(
+            'order_no'  => $order->order_no,
+            'amount'    => $order->order_money,//订单总金额, 人民币单位：分（如订单总金额为 1 元，此处请填 100）
+            'app'       => array('id' => Yii::$app->params['ping++']['PAPP_ID']),
+            'channel'   => $channel,
+            'currency'  => 'cny',
+            'client_ip' => '127.0.0.1',
+            'subject'   => $order->order_name,
+            'body'      => date('Y-m-d H:i', $order->created_at),
+            'extra'     => $extra
+          ));
+          $chargeJson = json_encode($ch);
+          //Yii::$app->response->cookies->remove('wx_code');
+          return $this->render('pay', [
+              'model' => $order,
+              'chargeJson' => $chargeJson,
+          ]);
+        } catch (\Pingpp\Error\Base $e) { //如果发起支付请求失败，则抛出异常
+             // 捕获报错信息
+             if ($e->getHttpStatus() != NULL) {
+                 header('Status: ' . $e->getHttpStatus());
+                 echo $e->getHttpBody();
+             } else {
+                 echo $e->getMessage();
+             }
+         }
     }
 
-    /**
-     * 通过微信重定向url获取code，
-     * 并且把code设置为cookie
-     */
+    public function actionGetcode($id,$channel)
+   {
+       $isWechat = Helper::isWechatBrowser();
+       if($isWechat){
+           $url = Helper::GetWxCodeUrl($id,$channel);
+           header("Location: $url");
+           exit();
+       } else {
+           $this->redirect(['yx-order/pay?id='.$id.'&channel='.$channel]);
+       }
+   }
 
-    public function actionGetwxcode()
-    {
-        $yx_order_id = Yii::$app->request->get('yx_order_id');
-        $channel = Yii::$app->request->get('channel');
-        $code = Yii::$app->request->get('code');
-        if (!empty($code)) {
-            $cookies = Yii::$app->response->cookies;
-            $cookies->add(new \yii\web\Cookie([
-                'name' => 'wx_code',
-                'value' => $code,
-                'expire' => time() + 1800,
-            ]));
-        }
-        $this->redirect(['yx-order/pay?id=' . $yx_order_id . '&channel=' . $channel]);
-    }
+   public function actionGetwxcode()
+   {
+       $yx_order_id = Yii::$app->request->get('yx_order_id');
+       $channel = Yii::$app->request->get('channel');
+       $code = Yii::$app->request->get('code');
+       if(!empty($code)){
+           $cookies = Yii::$app->response->cookies;
+           $cookies->add(new \yii\web\Cookie([
+               'name' => 'wx_code',
+               'value' => $code,
+               'expire'=>time()+1800,
+           ]));
+       }
+       $this->redirect(['yx-order/pay?id='.$yx_order_id.'&channel='.$channel]);
+   }
 
     public function actionfinishOrder()
     {
@@ -286,7 +286,13 @@ class YxOrderController extends CheckController
         $model = YxOrder::findOne($id);
         $model->order_state = 4;
         $model->save();
-        $this->redirect(['view', 'id' => $id]);
+        $result = Message::SendOrderAcceptMessage($model['phone'], $model['order_no']);
+        if ($result) {
+            $this->redirect(['view', 'id' => $id]);
+        } else {
+            return var_dump($result);
+        }
+
     }
 /**
  * [actionNotacceptorder 拒绝订单]
@@ -328,9 +334,39 @@ class YxOrderController extends CheckController
     public function actionNotoverorder($id)
     {
         $model = YxOrder::findOne($id);
-        $model->order_state = 7;
-        $model->save();
-        $this->redirect(['view', 'id' => $id]);
+        \Pingpp\Pingpp::setApiKey(Yii::$app->params['ping++']['API_KEY']);
+        \Pingpp\Pingpp::setPrivateKeyPath(__DIR__ . '/../../'.Yii::$app->params['ping++']['PRIVATE_KEY_DIR']);
+        $url = 'view?id='.$id;
+          try {
+              $ch = \Pingpp\Charge::retrieve($model['ping_id']);
+              $re = $ch->refunds->create(
+                  array(
+                      'amount' => $model['order_money'],
+                      'description' => 'Refund Description'
+                  )
+              );
+              $refundJson = $re;
+
+              //Yii::$app->response->cookies->remove('wx_code');
+              // return $this->render('pay', [
+              //     'model' => $order,
+              //     'refundJson' => $refundJson,
+              // ]);
+          } catch (\Pingpp\Error\Base $e) {
+              //如果发起支付请求失败，则抛出异常
+              // 捕获报错信息
+              if ($e->getHttpStatus() != null) {
+                  header('Status: ' . $e->getHttpStatus());
+                  return $e->getHttpBody();
+              } else {
+                  return $e->getMessage();
+              }
+          }
+          $url = mb_substr($refundJson['failure_msg'],16,strlen($refundJson['failure_msg']),"UTF-8");
+          //return Html::a('退款链接', [$url], ['class' => 'btn btn-cancel']);;
+
+          //return $url;
+          $this->redirect($url);
     }
     /**
      * Finds the YxOrder model based on its primary key value.

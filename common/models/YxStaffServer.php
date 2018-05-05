@@ -139,13 +139,14 @@ class YxStaffServer extends \yii\db\ActiveRecord
                   ->andWhere(['yx_staff_server.server_parent_id' => $serverId])
                   ->andWhere(['<>','yx_staff_server.server_type',0])->all();
       if($YxServer) {
-        $addContent = '<div class="long-hourly" style="margin: 5px;">
-                				<div>您可以勾选以下附加服务：</div><div class="choose-server">';
+        $addContent = '<div class="long-hourly" style="margin: 5px;">'.
+                        '<div>您可以勾选以下附加服务：</div>'.
+                        '<div class="choose-server row">';
         foreach ($YxServer as $key => $value) {
           $YxStaffServer = YxServer::getServerThird($staffId,$value['server_id']);
-          $addContent = $addContent.'<div class="one-server"><input type="checkbox" name="server"> '
+          $addContent = $addContent.'<div class="one-server col-md-6 col-lg-6"><input type="checkbox" name="server" /> '
           .YxServer::getServerName($value['server_id']).' <span class="addserver">'
-          .$YxStaffServer.'</span>元/小时 <span class="server_num"><input type="number" style="width:50px;/>小时</span></div>';
+          .number_format($YxStaffServer/100,2).'</span>元/小时 <input type="number" style="width:50px;/><span class="server_num">小时</span></div>';
         }
         $addContent = $addContent.'</div></div>';
       }

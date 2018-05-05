@@ -145,7 +145,7 @@ class YxCmpServerController extends CheckController
             $model->server_price=$model->server_price * 100;
             $model->server_type=1;
             if ($model->save()) {
-                return $this->redirect(['appendview', 'staff_id' => $model->company_id, 'server_id' => $model->server_id]);
+                return $this->redirect(['appendview', 'company_id' => $model->company_id, 'server_id' => $model->server_id]);
             }
 
         }

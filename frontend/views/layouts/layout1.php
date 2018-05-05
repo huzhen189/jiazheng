@@ -4,6 +4,9 @@ use yii\helpers\Html;
 use common\models\Region;
 AppAsset::register($this);
 $user_info = Yii::$app->user->identity;
+if(!$user_info){
+  $user_info = array('city' => 1607);
+}
 ?>
 <?php $this->beginPage();?>
 <!DOCTYPE html>
@@ -15,6 +18,7 @@ $user_info = Yii::$app->user->identity;
     <?=Html::csrfMetaTags();?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head();?>
+    <script type="text/javascript" src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
 </head>
 <body>
 <?php $this->beginBody();?>
@@ -56,7 +60,7 @@ $user_info = Yii::$app->user->identity;
 					<dd style="">
 						<ul>
 							<li><a href="/yx-order/index?yx_user_id=<?php echo Yii::$app->user->id; ?>" rel="nofollow">我的订单</a></li>
-							<li><a href="#" rel="nofollow">我的评论</a></li>
+							<!-- <li><a href="#" rel="nofollow">我的评论</a></li> -->
               <li><a href="/yx-user-address/index?yx_user_id=<?= Yii::$app->user->id ?>" rel="nofollow">我的收货地址</a></li>
 						</ul>
 					</dd>
@@ -67,15 +71,13 @@ $user_info = Yii::$app->user->identity;
 					</dt>
 					<dd style="">
 						<ul>
-
-							<li><a href="#" rel="nofollow">入驻帮助</a></li>
-
+							<li><a href="/yx-rules/view?id=27" rel="nofollow">入驻帮助</a></li>
 						</ul>
 					</dd>
 				</dl>
 				<dl class="top_account t_r">
 					<dt>
-						<a href="#" class="header-title">联系客服</a>
+						<a href="/yx-rules/view?id=26" class="header-title">联系客服</a>
 					</dt>
 				</dl>
 			</div>
@@ -122,31 +124,31 @@ $user_info = Yii::$app->user->identity;
 		     		<a class="nav_t">全部服务</a>
 		     	</li>
 		     	<li>
-			     	<a href="/basic-clean/index?server_parent=65&sort=fraction" target="_blank" class="nav_t">日常保洁</a>
+			     	<a href="/basic-clean/index?server_parent=103&sort=fraction" target="_blank" class="nav_t">日常保洁</a>
 		      	</li>
 		      	<li>
-			     	<a href="/special-clean/index?server_parent=66&sort=fraction" target="_blank"  class="nav_t">专项保洁</a>
+			     	<a href="/special-clean/index?server_parent=104&sort=fraction" target="_blank"  class="nav_t">专项保洁</a>
 		      	</li>
 		     	<li>
-		     		<a href="/other-services/index?server_parent=67&sort=fraction" target="_blank"  class="nav_t">家电清洗</a>
+		     		<a href="/other-services/index?server_parent=108&sort=fraction" target="_blank"  class="nav_t">家电清洗</a>
 		      	</li>
 		     	<li>
-		     		<a href="/other-services/index?server_parent=68&sort=fraction" target="_blank"  class="nav_t">家居保养</a>
+		     		<a href="/other-services/index?server_parent=109&sort=fraction" target="_blank"  class="nav_t">家居保养</a>
 		      	</li>
 		     	<li>
-		     		<a href="/other-services/index?server_parent=71&sort=fraction" target="_blank" class="nav_t">保姆</a>
+		     		<a href="/other-services/index?server_parent=105&sort=fraction" target="_blank" class="nav_t">保姆</a>
 		     	</li>
 		     	<li>
-		     		<a href="/other-services/index?server_parent=69&sort=fraction" target="_blank"  class="nav_t">月嫂</a>
+		     		<a href="/other-services/index?server_parent=106&sort=fraction" target="_blank"  class="nav_t">月嫂</a>
 		     	</li>
 		     	<li>
-		     		<a href="/other-services/index?server_parent=70&sort=fraction" target="_blank"  class="nav_t">育儿嫂</a>
+		     		<a href="/other-services/index?server_parent=107&sort=fraction" target="_blank"  class="nav_t">育儿嫂</a>
 		     	</li>
 		     	<li>
-		     		<a href="/other-services/index?server_parent=18&sort=fraction" target="_blank"  class="nav_t">维修</a>
+		     		<a href="/other-services/index?server_parent=110&sort=fraction" target="_blank"  class="nav_t">维修</a>
 		     	</li>
 		     	<li>
-		     		<a href="/other-services/index?server_parent=19&sort=fraction" target="_blank"  class="nav_t">开锁</a>
+		     		<a href="/other-services/index?server_parent=111&sort=fraction" target="_blank"  class="nav_t">开锁</a>
 		     	</li>
 		    </ul>
 	   	</nav>
@@ -192,11 +194,11 @@ $user_info = Yii::$app->user->identity;
                             </header>
                             <nav>
                                 <ul style="list-style: outside none none;padding-left: 0px;">
-                                    <li class="first"><a>关于我们</a></li>
-                                    <li><a>隐私政策</a></li>
-                                    <li><a>退款条约</a></li>
-                                    <li><a>常见问题</a></li>
-                                    <li class=" last"><a>联系客服</a></li>
+                                    <li class="first"><a href="/yx-rules/view?id=5">关于我们</a></li>
+                                    <li><a href="/yx-rules/view?id=9">隐私政策</a></li>
+                                    <li><a href="/yx-rules/view?id=10">退款条约</a></li>
+                                    <li><a href="/yx-rules/view?id=6">常见问题</a></li>
+                                    <li class=" last"><a href="/yx-rules/view?id=26">联系客服</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -205,9 +207,8 @@ $user_info = Yii::$app->user->identity;
                                 <h3 class="title" style="color:  #000;font-size:  16px;font-weight: normal;line-height:  1.3;text-transform: uppercase;">我的账户</h3>
                             </header>
                             <ul style="list-style: outside  none none;padding-left: 0px;">
-
                                 <li><a>我的订单</a></li>
-                                <li><a>我的评论</a></li>
+                                <!-- <li><a>我的评论</a></li> -->
                             </ul>
                         </div>
                         <div style="clear: both;"></div>
@@ -215,6 +216,23 @@ $user_info = Yii::$app->user->identity;
                 </div>
             </div>
         </div>
+    </div>
+    <div style="width: 100%;background: #f2f2f2 none repeat scroll 0 0;text-align:center;color: #7f7f7f;overflow-x: hidden;">
+      <div>
+        <a href="#">关于原象</a>
+        <a href="/yx-rules/view?id=6">常见问题</a>
+        <a href="/yx-rules/view?id=7">服务协议</a>
+        <a href="/yx-rules/view?id=26">联系客服</a>
+        <span>客服热线：180-2542-5121</span>
+      </div>
+      <div>
+        <a href="http://www.yuanxiangwu.com/">Copyright  2017 - 2018 原象版权所有</a>
+        <a href="http://www.miitbeian.gov.cn/">粤ICP备18006463号</a>
+        <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030302000636">
+        <img src="/static/img/record.jpg"/>
+        粤公网安备 44030302000636号
+        </a>
+      </div>
     </div>
 </footer>
 
@@ -251,6 +269,33 @@ $user_info = Yii::$app->user->identity;
       $('#submit').click();
     }
   }
+  window.onload = function(){
+    var myCity = <?= $user_info['city']; ?>;
+    var myprovince = remote_ip_info['province'];
+    var mycity = remote_ip_info['city']
+    var mydistrict = remote_ip_info['district'];
+    console.log(myCity);
+    console.log(myprovince);
+    console.log(mycity);
+    console.log(mydistrict);
+    if(!myCity || myCity <= 0){
+      $.ajax({
+          type: "POST",
+          url: "/yx-user/update_city2",
+          datatype: 'json',
+          data:{
+            "yx_user_id":<?= Yii::$app->user->id;?>,
+            "province":myprovince,
+            "city":mycity,
+            "_csrf-frontend":"<?= Yii::$app->request->csrfToken ?>"
+          },
+          success:function(json) {
+            $("#top_nav .header-city").html(mycity + '<a href="/yx-user/update_city?id=<?= Yii::$app->user->id;?>">[切换]</a>');
+          }
+      });
+    }
+  }
+
 </script>
 </html>
 <?php $this->endPage() ?>

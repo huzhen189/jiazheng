@@ -65,18 +65,19 @@ class YxOrderSearch extends YxOrder
             'is_delete' => 0,
         ]);
         $this->order_state = isset($params['order_state']) ? $params['order_state'] : 0;
+        // array(0 => '全部', 1 => '未付款', 2 => '进行中', 3 => '已完成', 4 => '退单');
         switch ($this->order_state) {
             case 1:
-                $query->andFilterWhere(['order_state' => 1]);
+                $query->andFilterWhere(['in', 'order_state',[1,2]]);
                 break;
             case 2:
-                $query->andFilterWhere(['between', 'order_state',2,4]);
+                $query->andFilterWhere(['in', 'order_state',[4]]);
                 break;
             case 3:
-                $query->andFilterWhere(['order_state' => 5]);
+                $query->andFilterWhere(['in', 'order_state',[5,8,10]]);
                 break;
             case 4:
-                $query->andFilterWhere(['between', 'order_state',6,8]);
+                $query->andFilterWhere(['in', 'order_state',[3,6,7,9,11,12]]);
                 break;
             default:
                 break;

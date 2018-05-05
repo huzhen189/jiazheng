@@ -29,7 +29,7 @@ class YxStaffRes extends \yii\db\ActiveRecord
         return [
             [['staff_id'], 'integer'],
             [['staff_res_img'], 'string', 'max' => 255],
-            [['staff_id'], 'exist', 'skipOnError' => true, 'targetClass' => YxStaff::className(), 'targetAttribute' => ['staff_id' => 'staff_id']], 
+            [['staff_id'], 'exist', 'skipOnError' => true, 'targetClass' => YxStaff::className(), 'targetAttribute' => ['staff_id' => 'staff_id']],
         ];
     }
 
@@ -45,12 +45,12 @@ class YxStaffRes extends \yii\db\ActiveRecord
         ];
     }
     /**
-    * @return \yii\db\ActiveQuery 
-    */ 
-   public function getStaff() 
-   { 
-       return $this->hasOne(YxStaff::className(), ['staff_id' => 'staff_id']); 
-   } 
+    * @return \yii\db\ActiveQuery
+    */
+   public function getStaff()
+   {
+       return $this->hasOne(YxStaff::className(), ['staff_id' => 'staff_id']);
+   }
     /**
      * {@inheritdoc}
      * @return YxStaffResQuery the active query used by this AR class.
@@ -58,5 +58,18 @@ class YxStaffRes extends \yii\db\ActiveRecord
     public static function find()
     {
         return new YxStaffResQuery(get_called_class());
+    }
+
+    // 得到公司所有的成果图，$flag是多少就显示多少张图片
+    public static function getStaffRes($staffId,$flag) {
+      $YxStaffRes = YxStaffRes::find()->where(['staff_id' => $staffId])->all();
+      $imgAll = [];
+      foreach ($YxStaffRes as $key => $value) {
+        if($key == $flag) {
+          break;
+        }
+        $imgAll[$key] = $value['staff_res_img'];
+      }
+      return $imgAll;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace common\models;
-
+use common\models\YxServer;
 use Yii;
 
 /**
@@ -67,5 +67,18 @@ class YxRules extends \yii\db\ActiveRecord
     public static function getRulesTypeMap()
     {
         return array('1' => '规则', '2' => '信息攻略', '3' => '商家入驻', '4' => '联系客服','5'=>'关于我们');
+    }
+
+
+    // 信息攻略
+    public static function getRulesInfo($serverId) {
+      $Yxserver = YxServer::find()->where(["server_id" => $serverId,"server_type"=>2])->one();
+      $YxRules = YxRules::find()->where(['like', 'rules_title', $Yxserver['server_name']])->one();
+      // print_r($YxRules['rules_id']);
+      if (!$YxRules['rules_id']) {
+        $Yxserver = YxServer::find()->where(["server_id" => $Yxserver['server_parent'],"server_type"=>1])->one();
+        $YxRules = YxRules::find()->where(['like', 'rules_title', $Yxserver['server_name']])->one();
+      }
+      return $YxRules['rules_id'];
     }
 }

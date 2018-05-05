@@ -132,7 +132,7 @@ class YxServerController extends CheckController
             }
             unset($InsertParams['YxServer']['one_server']);
         }
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load($InsertParams)) {
             $model->server_pic = $model->server_pic[0];
             if ($model->save()) {
                 #修改三级服务

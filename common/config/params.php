@@ -24,5 +24,9 @@ return [
       'wx_app_id' => 'wxb9c3ebef62b8856d',
       'wx_app_secret' => '1b855985edc92a69685d33dda6170ca8',
       'redirect_url' => 'http://backend.yuanxiangwu.com/yx-order/getwxcode',
+    ],
+    'aliyun_duanxin' => [
+      'accessKeyId' => 'LTAIYAT7oAnGFr0m',
+      'accessKeySecret' => 'FYJ2wAETGHJYGWJk3nXBsfSMm98ovE',
     ]
 ];
